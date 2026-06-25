@@ -23,6 +23,8 @@ export interface Project {
 
   featured: boolean;
 
+  emoji?: string;
+
   architecture?: string[];
 
   challenges?: string[];

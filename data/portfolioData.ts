@@ -6,6 +6,8 @@ export const projects: Project[] = [
 
     title: "HealthBridge",
 
+    emoji: "🏥",
+
     subtitle:
       "ML-Based Kidney Donor Matching Platform",
 
@@ -50,6 +52,8 @@ export const projects: Project[] = [
 
     title: "Ezy Map",
 
+    emoji: "🚕",
+
     subtitle:
       "Multi-Service Taxi, Delivery and Marketplace Platform",
 
@@ -88,6 +92,8 @@ export const projects: Project[] = [
     id: "kvaudio",
 
     title: "KV Audio",
+
+    emoji: "🎵",
 
     subtitle:
       "Audio Equipment Rental Management Platform",
@@ -131,6 +137,8 @@ export const projects: Project[] = [
     id: "storybloom",
 
     title: "StoryBloom",
+
+    emoji: "📱",
 
     subtitle:
       "Flutter Storytelling Application",
