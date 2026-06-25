@@ -5,6 +5,8 @@ import CityOverview from "../components/CityOverview";
 import ExperienceTower from "../components/ExperienceTower";
 import DataCenter from "../components/DataCenter";
 import CreativeStudio from "../components/CreativeStudio";
+import FutureLab from "@/components/FutureLab";
+import ContactCenter from "../components/ContactCenter";
 
 export default function Home() {
   return (
@@ -19,6 +21,8 @@ export default function Home() {
         limit={6}
         showViewAll
       />
+      <FutureLab />
+      <ContactCenter />
     </main>
   );
 }

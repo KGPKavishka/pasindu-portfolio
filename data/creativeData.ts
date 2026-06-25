@@ -6,7 +6,7 @@ export const creativeWorks: CreativeWork[] = [
     title: "Digital Artwork I",
     category: "Art",
     image: "/creative/art/digital-art-1.jpg",
-    size: "large",
+    size: "medium",
     description: "Digital illustration artwork.",
     tools: ["Photoshop", "Digital Painting"],
   },
