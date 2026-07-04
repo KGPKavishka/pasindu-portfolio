@@ -1,5 +1,6 @@
 import { CreativeWork } from "@/types/creative";
 import CreativeCard from "./CreativeCard";
+import Reveal from "./Reveal";
 
 interface Props {
   works: CreativeWork[];
@@ -19,15 +20,20 @@ export default function CreativeGallery({
         gap-6
       "
     >
-      {works.map((work) => (
-        <CreativeCard
+      {works.map((work, index) => (
+        <Reveal
           key={work.id}
-          image={work.image}
-          title={work.title}
-          category={work.category}
-          size={work.size}
-          onClick={() => onSelect(work)}
-        />
+          delay={index * 0.08}
+          y={40}
+        >
+          <CreativeCard
+            image={work.image}
+            title={work.title}
+            category={work.category}
+            size={work.size}
+            onClick={() => onSelect(work)}
+          />
+        </Reveal>
       ))}
     </div>
   );

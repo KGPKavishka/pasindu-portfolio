@@ -1,5 +1,6 @@
 export const skills = [
   {
+    id: "frontend",
     title: "🖥️ Frontend Hub",
     level: 90,
     technologies: [
@@ -12,6 +13,7 @@ export const skills = [
   },
 
   {
+    id: "backend",
     title: "⚙️ Backend Hub",
     level: 85,
     technologies: [
@@ -23,6 +25,7 @@ export const skills = [
   },
 
   {
+    id: "database",
     title: "🗄️ Database Hub",
     level: 85,
     technologies: [
@@ -34,6 +37,7 @@ export const skills = [
   },
 
   {
+    id: "cloud",
     title: "☁️ Cloud Hub",
     level: 75,
     technologies: [
@@ -45,6 +49,7 @@ export const skills = [
   },
 
   {
+    id: "ai",
     title: "🧠 AI & Research Hub",
     level: 65,
     technologies: [

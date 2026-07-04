@@ -47,3 +47,7 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+html {
+  scroll-behavior: smooth;
+}

@@ -13,18 +13,14 @@ export default function ContactCard({
   value,
   href,
 }: Props) {
-  const isExternal =
-    href.startsWith("http");
+  const isExternal = href.startsWith("http");
 
-  const isResume =
-    href.endsWith(".pdf");
+  const isResume = href.endsWith(".pdf");
 
   return (
     <Link
       href={href}
-      target={
-        isExternal ? "_blank" : undefined
-      }
+      target={isExternal ? "_blank" : undefined}
       rel={
         isExternal
           ? "noopener noreferrer"
@@ -33,8 +29,11 @@ export default function ContactCard({
       download={isResume}
       className="
         group
+        flex
+        flex-col
+        justify-between
+        h-full
         relative
-        block
         overflow-hidden
         rounded-3xl
         border
@@ -43,13 +42,16 @@ export default function ContactCard({
         p-6
         transition-all
         duration-300
-        hover:-translate-y-1
-        hover:border-cyan-400
-        hover:shadow-2xl
+        hover:-translate-y-2
+        hover:border-cyan-500/40
+        hover:bg-white/10
+        hover:shadow-xl
         hover:shadow-cyan-500/10
       "
     >
+
       {/* Icon */}
+
       <div
         className="
           flex
@@ -59,47 +61,65 @@ export default function ContactCard({
           justify-center
           rounded-2xl
           bg-cyan-500/10
+          border
+          border-cyan-500/20
           text-3xl
-          transition-transform
+          transition-all
           duration-300
           group-hover:scale-110
+          group-hover:bg-cyan-500/20
+          group-hover:border-cyan-400/40
         "
       >
         {icon}
       </div>
 
       {/* Title */}
-      <h3 className="mt-6 text-xl font-semibold">
+
+      <h3 className="mt-6 text-xl font-bold">
         {title}
       </h3>
 
       {/* Value */}
-      <p className="mt-2 break-all text-gray-400">
+
+      <p className="mt-2 break-all text-gray-400 leading-7">
         {value}
       </p>
 
-      {/* Hover Indicator */}
+      {/* Divider */}
+
+      <div className="mt-6 border-t border-white/10" />
+
+      {/* CTA */}
+
       <div
         className="
-          mt-6
+          mt-5
           flex
           items-center
-          justify-end
-          text-sm
-          font-medium
-          text-cyan-400
-          opacity-0
-          translate-x-3
-          transition-all
-          duration-300
-          group-hover:opacity-100
-          group-hover:translate-x-0
+          justify-between
         "
       >
-        {isResume
-          ? "Download →"
-          : "Open →"}
+        <span className="text-sm text-gray-500">
+          {isResume
+            ? "Download File"
+            : "Open Link"}
+        </span>
+
+        <span
+          className="
+            text-cyan-400
+            font-semibold
+            transition-all
+            duration-300
+            translate-x-0
+            group-hover:translate-x-1
+          "
+        >
+          →
+        </span>
       </div>
+
     </Link>
   );
 }

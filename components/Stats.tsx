@@ -1,3 +1,5 @@
+import Reveal from "./Reveal";
+
 export default function Stats() {
   const stats = [
     {
@@ -19,29 +21,45 @@ export default function Stats() {
   ];
 
   return (
-    <section className="pb-24 px-6">
-      <div className="max-w-5xl mx-auto">
+    <Reveal delay={0.1}>
+      <section className="pb-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {stats.map((stat, index) => (
+              <Reveal
+                key={stat.label}
+                delay={index * 0.08}
+                y={30}
+              >
+                <div
+                  className="
+                    bg-white/5
+                    border
+                    border-white/10
+                    rounded-3xl
+                    p-5 sm:p-6
+                    text-center
+                    transition-all
+                    duration-300
+                    hover:-translate-y-2
+                    hover:border-cyan-500/30
+                    hover:shadow-lg
+                    hover:shadow-cyan-500/10
+                  "
+                >
+                  <h3 className="text-3xl sm:text-4xl font-bold text-cyan-400">
+                    {stat.value}
+                  </h3>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center"
-            >
-              <h3 className="text-4xl font-bold text-cyan-400">
-                {stat.value}
-              </h3>
-
-              <p className="text-gray-400 mt-2">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-
+                  <p className="mt-2 text-sm sm:text-base text-gray-400 leading-relaxed">
+                    {stat.label}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
-
-      </div>
-    </section>
+      </section>
+    </Reveal>
   );
 }
