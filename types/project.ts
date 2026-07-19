@@ -7,27 +7,29 @@ export interface Project {
 
   description: string;
 
+  heroImage: string;
+
+  emoji: string;
+
+  accentColor?: string;
+
   technologies: string[];
 
-  github?: string;
+  architecture: string[];
+
+  features: string[];
+
+  challenges: string[];
+
+  lessons: string[];
+
+  github: string;
 
   demo?: string;
 
-  image?: string;
+  screenshots: string[];
 
-  category:
-    | "research"
-    | "internship"
-    | "web"
-    | "mobile";
+  category?: string;
+  featured?: boolean;
 
-  featured: boolean;
-
-  emoji?: string;
-
-  architecture?: string[];
-
-  challenges?: string[];
-
-  achievements?: string[];
 }

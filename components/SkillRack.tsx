@@ -1,3 +1,10 @@
+import {
+  motion,
+  useInView,
+  animate,
+} from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+
 interface Props {
   title: string;
   level: number;
@@ -10,6 +17,28 @@ export default function SkillRack({
   technologies,
 }: Props) {
 
+  const ref = useRef(null);
+
+  const isInView = useInView(ref, {
+    once: true,
+  });
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    const controls = animate(0, level, {
+      duration: 1.2,
+      ease: "easeOut",
+      onUpdate(value) {
+        setCount(Math.round(value));
+      },
+    });
+
+    return () => controls.stop();
+  }, [isInView, level]);
+
   const getSkillLevel = () => {
     if (level >= 90) return "Expert";
     if (level >= 80) return "Advanced";
@@ -18,7 +47,8 @@ export default function SkillRack({
   };
 
   return (
-    <div
+    <motion.div
+      ref={ref}
       className="
         group
         h-full
@@ -70,9 +100,28 @@ export default function SkillRack({
 
       <div className="flex flex-wrap gap-2 mb-6">
 
-        {technologies.map((tech) => (
-          <span
+        {technologies.map((tech, index) => (
+          <motion.span
             key={tech}
+            initial={{
+              opacity: 0,
+              y: 12,
+              scale: 0.9,
+            }}
+            animate={
+              isInView
+                ? {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                }
+                : {}
+            }
+            transition={{
+              delay: index * 0.08,
+              duration: 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="
               px-3
               py-1
@@ -89,7 +138,7 @@ export default function SkillRack({
             "
           >
             {tech}
-          </span>
+          </motion.span>
         ))}
 
       </div>
@@ -122,17 +171,30 @@ export default function SkillRack({
 
         <div className="h-3 rounded-full bg-white/10 overflow-hidden">
 
-          <div
+          <motion.div
             className="
               h-full
               rounded-full
-              bg-cyan-400
-              transition-all
-              duration-700
-              group-hover:bg-cyan-300
+              bg-gradient-to-r
+              from-cyan-500
+              via-cyan-400
+              to-cyan-300
+              shadow-lg
+              shadow-cyan-400/30
             "
-            style={{
-              width: `${level}%`,
+            initial={{
+              width: 0,
+            }}
+            animate={
+              isInView
+                ? {
+                  width: `${level}%`,
+                }
+                : {}
+            }
+            transition={{
+              duration: 2.2,
+              ease: [0.22, 1, 0.36, 1],
             }}
           />
 
@@ -149,11 +211,11 @@ export default function SkillRack({
             group-hover:text-cyan-300
           "
         >
-          {level}%
+          {count}%
         </div>
 
       </div>
 
-    </div>
+    </motion.div>
   );
 }

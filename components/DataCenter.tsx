@@ -1,10 +1,12 @@
 import SkillRack from "./SkillRack";
 import { skills } from "../data/skillsData";
 import Reveal from "./Reveal";
+import RevealGroup from "./RevealGroup";
+import RevealItem from "./RevealItem";
 
 export default function DataCenter() {
   return (
-    <Reveal delay={0.3}>
+    <Reveal delay={0.5}>
       <section
         id="skills"
         className="py-24 px-6"
@@ -27,23 +29,25 @@ export default function DataCenter() {
             that power my software engineering ecosystem.
           </p>
 
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <RevealGroup stagger={0.3}>
 
-            {skills.map((skill, index) => (
-              <Reveal
-                key={skill.id}
-                delay={index * 0.08}
-                y={30}
-              >
-                <SkillRack
-                  title={skill.title}
-                  level={skill.level}
-                  technologies={skill.technologies}
-                />
-              </Reveal>
-            ))}
+            <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          </div>
+              {skills.map((skill) => (
+
+                <RevealItem key={skill.id}>
+                  <SkillRack
+                    title={skill.title}
+                    level={skill.level}
+                    technologies={skill.technologies}
+                  />
+                </RevealItem>
+
+              ))}
+
+            </div>
+
+          </RevealGroup>
 
         </div>
 

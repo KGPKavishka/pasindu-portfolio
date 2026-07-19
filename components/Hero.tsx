@@ -25,8 +25,8 @@ export default function Hero() {
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
       >
         {/* Glow Effects */}
-        <div className="absolute top-40 left-20 w-72 h-72 bg-cyan-500/20 blur-[120px]" />
-        <div className="absolute bottom-20 right-20 w-72 h-72 bg-purple-500/20 blur-[120px]" />
+        {/* <div className="absolute top-40 left-20 w-72 h-72 bg-cyan-500/20 blur-[120px]" />
+        <div className="absolute bottom-48 right-20 w-72 h-72 bg-purple-500/20 blur-[120px]" /> */}
 
         <div className="relative z-10 text-center px-6">
           <p className="mb-4 text-xs sm:text-sm uppercase tracking-[0.3em] text-cyan-400">

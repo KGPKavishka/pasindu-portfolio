@@ -53,16 +53,149 @@ export default function ContactCenter() {
                     {/* Bottom CTA */}
 
                     <Reveal delay={0.7}>
-                        <div className="mt-20 text-center">
+                        {/* CTA */}
+                        <div className="mt-24 text-center">
 
-                            <h3 className="text-3xl font-bold">
-                                Ready to Build Something Amazing?
-                            </h3>
+                            <span
+                                className="
+                                    uppercase
+                                    tracking-[0.3em]
+                                    text-cyan-400
+                                    text-sm
+                                    font-medium
+                                "
+                            >
+                                Let's Connect
+                            </span>
 
-                            <p className="mt-4 text-gray-400 max-w-xl mx-auto">
-                                I'm always open to discussing new projects,
-                                innovative ideas, and exciting opportunities.
+                            <h2
+                                className="
+                                    mt-4
+                                    text-4xl
+                                    md:text-5xl
+                                    font-bold
+                                "
+                            >
+                                Ready to Build Together?
+                            </h2>
+
+                            <p
+                                className="
+                                    mt-6
+                                    max-w-2xl
+                                    mx-auto
+                                    text-gray-400
+                                    leading-8
+                                "
+                            >
+                                Let's create scalable web applications,
+                                cloud platforms, mobile experiences,
+                                and AI-powered solutions.
+
+                                <br />
+                                <br />
+
+                                Whether you're looking for a backend engineer,
+                                full-stack developer, or collaboration partner,
+                                I'd love to hear from you.
                             </p>
+
+                            <div className="mt-10 flex justify-center">
+
+                                <a
+                                    href="mailto:pasindukv29@gmail.com"
+                                    className="
+                                        group
+                                        inline-flex
+                                        items-center
+                                        gap-3
+                                        rounded-full
+                                        border
+                                        border-cyan-400/30
+                                        bg-cyan-500/10
+                                        px-8
+                                        py-4
+                                        font-semibold
+                                        text-cyan-300
+                                        transition-all
+                                        duration-300
+                                        hover:-translate-y-1
+                                        hover:border-cyan-300
+                                        hover:bg-cyan-500/20
+                                        hover:shadow-xl
+                                        hover:shadow-cyan-500/20
+                                    "
+                                >
+                                    <span className="text-xl">
+                                        ✉
+                                    </span>
+
+                                    <span>
+                                        Get In Touch
+                                    </span>
+
+                                    <span
+                                        className="
+                                            transition-transform
+                                            duration-300
+                                            group-hover:translate-x-1
+                                        "
+                                    >
+                                        →
+                                    </span>
+
+                                </a>
+
+                            </div>
+
+                            <div className="mt-8 flex flex-wrap justify-center gap-3">
+
+                                <span
+                                    className="
+                                        rounded-full
+                                        border
+                                        border-emerald-500/30
+                                        bg-emerald-500/10
+                                        px-4
+                                        py-2
+                                        text-sm
+                                        text-emerald-300
+                                    "
+                                >
+                                    ● Available for Full-Time
+                                </span>
+
+                                <span
+                                    className="
+                                        rounded-full
+                                        border
+                                        border-cyan-500/30
+                                        bg-cyan-500/10
+                                        px-4
+                                        py-2
+                                        text-sm
+                                        text-cyan-300
+                                    "
+                                >
+                                    Remote Friendly
+                                </span>
+
+                                <span
+                                    className="
+                                        rounded-full
+                                        border
+                                        border-violet-500/30
+                                        bg-violet-500/10
+                                        px-4
+                                        py-2
+                                        text-sm
+                                        text-violet-300
+                                    "
+                                >
+                                    Sri Lanka 🇱🇰
+                                </span>
+
+                            </div>
 
                         </div>
                     </Reveal>

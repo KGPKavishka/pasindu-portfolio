@@ -8,6 +8,7 @@ import ProjectModal from "./ProjectModal";
 import { projects } from "../data/portfolioData";
 import { Project } from "../types/project";
 import Reveal from "./Reveal";
+import { AnimatePresence, LayoutGroup } from "framer-motion";
 
 export default function CityOverview() {
   const [selectedProject, setSelectedProject] =
@@ -36,35 +37,44 @@ export default function CityOverview() {
             make up my software engineering city.
           </p>
 
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          <LayoutGroup>
 
-            {projects.map((project, index) => (
-              <Reveal
-                key={project.id}
-                delay={index * 0.1}
-                y={40}
-              >
-                <BuildingCard
-                  emoji={project.emoji || "🏢"}
-                  title={project.title}
-                  description={project.description}
-                  onClick={() =>
-                    setSelectedProject(project)
-                  }
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
+              {projects.map((project, index) => (
+                <Reveal
+                  key={project.id}
+                  delay={index * 0.1}
+                  y={40}
+                >
+                  <BuildingCard
+                    emoji={project.emoji}
+                    title={project.title}
+                    subtitle={project.subtitle}
+                    description={project.description}
+                    heroImage={project.heroImage}
+                    technologies={project.technologies}
+                    accentColor={project.accentColor}
+                    onClick={() => setSelectedProject(project)}
+                  />
+                </Reveal>
+              ))}
+
+            </div>
+
+            <AnimatePresence mode="wait">
+
+              {selectedProject && (
+                <ProjectModal
+                  key={selectedProject.id}
+                  project={selectedProject}
+                  onClose={() => setSelectedProject(null)}
                 />
-              </Reveal>
-            ))}
+              )}
 
-          </div>
+            </AnimatePresence>
 
-          {selectedProject && (
-            <ProjectModal
-              project={selectedProject}
-              onClose={() =>
-                setSelectedProject(null)
-              }
-            />
-          )}
+          </LayoutGroup>
 
         </div>
       </section>
