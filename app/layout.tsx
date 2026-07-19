@@ -13,37 +13,41 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    "https://pasindu-portfolio-rho.vercel.app"
+  ),
+
   title: "Pasindu Kavishka | Software Engineer",
 
   description:
     "Portfolio of Pasindu Kavishka, a Software Engineer specializing in web development, mobile applications, backend engineering, cloud technologies, and AI-powered solutions.",
 
+  alternates: {
+    canonical: "/",
+  },
+
   openGraph: {
     title: "Pasindu Kavishka | Software Engineer",
-
     description:
-      "Building scalable web, mobile, cloud and AI-powered solutions.",
-
-    type: "website",
-
+      "Software Engineer specializing in web, mobile, backend, cloud, and AI-powered solutions.",
+    url: "/",
+    siteName: "Pasindu Kavishka Portfolio",
     images: [
       {
         url: "/og/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Pasindu Kavishka - Software Engineer Portfolio",
+        alt: "Pasindu Kavishka - Software Engineer",
       },
     ],
+    type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
-
     title: "Pasindu Kavishka | Software Engineer",
-
     description:
-      "Building scalable web, mobile, cloud and AI-powered solutions.",
-
+      "Software Engineer specializing in web, mobile, backend, cloud, and AI-powered solutions.",
     images: ["/og/og-image.png"],
   },
 };
