@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { createPortal } from "react-dom";
 
 interface Props {
   image: string;
@@ -25,37 +27,71 @@ export default function CreativeModal({
       }
     };
 
+    // Lock background page scrolling
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     window.addEventListener("keydown", handleEsc);
 
     return () => {
+      // Restore scrolling when modal closes
+      document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleEsc);
     };
   }, [onClose]);
 
-  return (
-    <div
+  return createPortal(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       onClick={onClose}
       className="
         fixed
         inset-0
-        z-50
-        bg-black/90
+        z-[100]
+        flex
+        items-center
+        justify-center
+        bg-black/80
         backdrop-blur-sm
-        overflow-y-auto
         p-6
       "
     >
-      <div
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 0.96,
+          y: 16,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          y: 0,
+        }}
+        exit={{
+          opacity: 0,
+          scale: 0.98,
+          y: 12,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 320,
+          damping: 28,
+        }}
         onClick={(e) => e.stopPropagation()}
         className="
-          max-w-5xl
-          mx-auto
-          bg-[#111827]
+          relative
+          bg-[#0b1020]
           border
           border-white/10
           rounded-3xl
-          overflow-hidden
-          mt-10
+          max-w-4xl
+          w-full
+          max-h-[90vh]
+          overflow-y-auto
+          shadow-2xl
+          shadow-cyan-500/10
         "
       >
         <button
@@ -74,12 +110,21 @@ export default function CreativeModal({
         </button>
 
         {/* IMAGE */}
-        <div className="relative w-full h-[600px] bg-black/30">
+        <div
+          className="
+            relative
+            w-full
+            h-[45vh]
+            min-h-[280px]
+            max-h-[500px]
+            bg-black/30
+          "
+        >
           <Image
             src={image}
             alt={title}
             fill
-            className="object-contain"
+            className="object-contain p-4"
           />
         </div>
 
@@ -125,7 +170,8 @@ export default function CreativeModal({
             </>
           )}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>,
+    document.body
   );
 }
