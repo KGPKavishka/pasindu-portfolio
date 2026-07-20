@@ -95,16 +95,31 @@ export default function CreativeModal({
         "
       >
         <button
-          onClick={onClose}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
           className="
             absolute
             top-6
-            right-8
-            text-3xl
-            text-gray-400
-            hover:text-cyan-400
-            transition-colors
+            right-6
+            z-20
+            flex
+            h-12
+            w-12
+            items-center
+            justify-center
+            rounded-full
+            bg-white/10
+            text-xl
+            text-gray-300
+            transition-all
+            duration-300
+            hover:bg-red-500/20
+            hover:text-red-300
           "
+          aria-label="Close modal"
         >
           ✕
         </button>
