@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Reveal from "./Reveal";
 
 export default function Hero() {
@@ -22,90 +23,346 @@ export default function Hero() {
     <Reveal>
       <section
         id="home"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="
+          relative
+          min-h-screen
+          flex
+          items-center
+          overflow-hidden
+          bg-[#030712]
+        "
       >
-        {/* Glow Effects */}
-        {/* <div className="absolute top-40 left-20 w-72 h-72 bg-cyan-500/20 blur-[120px]" />
-        <div className="absolute bottom-48 right-20 w-72 h-72 bg-purple-500/20 blur-[120px]" /> */}
+        {/* =========================
+            SPACE BACKGROUND
+        ========================== */}
 
-        <div className="relative z-10 text-center px-6">
-          <p className="mb-4 text-xs sm:text-sm uppercase tracking-[0.3em] text-cyan-400">
-            Software Engineer
-          </p>
+        {/* Main deep-space gradient */}
+        <div
+          className="
+            absolute
+            inset-0
+            bg-gradient-to-br
+            from-[#03131f]
+            via-[#030712]
+            to-[#08051a]
+          "
+        />
 
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold leading-none">
-            Pasindu
-          </h1>
+        {/* Left cyan atmospheric glow */}
+        <div
+          className="
+            absolute
+            -left-40
+            top-1/3
+            h-[500px]
+            w-[500px]
+            rounded-full
+            bg-cyan-500/10
+            blur-[140px]
+          "
+        />
 
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold leading-none">
-            Kavishka
-          </h1>
+        {/* Right violet planetary glow */}
+        <div
+          className="
+            absolute
+            -right-32
+            top-1/4
+            h-[600px]
+            w-[600px]
+            rounded-full
+            bg-violet-600/15
+            blur-[160px]
+          "
+        />
 
-          <p className="mx-auto mt-6 sm:mt-8 max-w-2xl text-base sm:text-lg text-gray-400 leading-relaxed px-2">
-            Building scalable web, mobile, cloud and AI-powered solutions.
-          </p>
+        {/* Small stars */}
+        <div className="absolute inset-0 pointer-events-none">
+          <span className="absolute left-[8%] top-[25%] h-1 w-1 rounded-full bg-cyan-300/70" />
+          <span className="absolute left-[18%] top-[62%] h-1 w-1 rounded-full bg-white/50" />
+          <span className="absolute left-[30%] top-[20%] h-[3px] w-[3px] rounded-full bg-cyan-300/50" />
+          <span className="absolute left-[42%] top-[75%] h-1 w-1 rounded-full bg-white/40" />
+          <span className="absolute left-[55%] top-[28%] h-[3px] w-[3px] rounded-full bg-cyan-300/60" />
+          <span className="absolute left-[66%] top-[65%] h-1 w-1 rounded-full bg-white/40" />
+          <span className="absolute left-[78%] top-[22%] h-[3px] w-[3px] rounded-full bg-cyan-300/60" />
+          <span className="absolute right-[8%] top-[70%] h-1 w-1 rounded-full bg-violet-300/60" />
+        </div>
 
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row justify-center gap-4">
-            <button
-              onClick={scrollToProjects}
+        {/* =========================
+            HERO PORTRAIT
+        ========================== */}
+
+        <div
+          className="
+            absolute
+            inset-y-0
+            right-0
+            hidden
+            md:block
+            w-[48%]
+            pointer-events-none
+            z-[2]
+          "
+        >
+          <Image
+            src="/images/pasindu-hero-new.png"
+            alt="Pasindu Kavishka"
+            fill
+            priority
+            sizes="48vw"
+            className="
+              object-contain
+              object-bottom
+            "
+          />
+
+          {/* Fade portrait toward center */}
+          <div
+            className="
+              absolute
+              inset-0
+              bg-gradient-to-r
+              from-[#030712]
+              via-[#030712]/20
+              to-transparent
+          "
+          />
+
+          {/* Bottom fade */}
+          <div
+            className="
+              absolute
+              inset-0
+              bg-gradient-to-t
+              from-[#030712]
+              via-transparent
+              to-transparent
+            "
+          />
+        </div>
+
+        {/* =========================
+            HERO CONTENT
+        ========================== */}
+
+        <div
+          className="
+            relative
+            z-10
+            w-full
+            max-w-7xl
+            mx-auto
+            px-6
+            sm:px-10
+            lg:px-16
+          "
+        >
+          <div
+            className="
+              max-w-3xl
+              text-center
+              md:text-left
+            "
+          >
+            {/* Intro Label */}
+            <div
               className="
-                w-full sm:w-auto
-                group
-                rounded-xl
-                bg-cyan-500
-                px-7
-                py-3
-                font-semibold
-                text-black
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:scale-105
-                hover:bg-cyan-400
-                hover:shadow-xl
-                hover:shadow-cyan-500/30
-                active:scale-95
+                mb-5
+                flex
+                items-center
+                justify-center
+                md:justify-start
+                gap-3
               "
             >
-              <span className="flex items-center justify-center gap-2">
-                Explore City
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </span>
-            </button>
+              <span
+                className="
+                  h-[1px]
+                  w-8
+                  bg-cyan-400
+                "
+              />
 
-            <button
-              onClick={downloadCV}
+              <p
+                className="
+                  text-xs
+                  sm:text-sm
+                  uppercase
+                  tracking-[0.35em]
+                  text-cyan-400
+                "
+              >
+                Software Engineer
+              </p>
+            </div>
+
+            {/* Name */}
+            <h1
               className="
-                w-full sm:w-auto
-                group
-                rounded-xl
-                border
-                border-white/20
-                bg-white/5
-                px-7
-                py-3
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:scale-105
-                hover:border-cyan-400
-                hover:bg-cyan-500/10
-                hover:shadow-lg
-                hover:shadow-cyan-500/10
-                active:scale-95
+                text-5xl
+                sm:text-6xl
+                lg:text-7xl
+                xl:text-8xl
+                font-bold
+                leading-[0.95]
+                tracking-tight
+                text-white
               "
             >
-              <span className="flex items-center justify-center gap-2">
-                Download CV
-                <span className="transition-transform duration-300 group-hover:translate-y-[2px]">
-                  ↓
+              Pasindu
+              <br />
+              Kavishka
+            </h1>
+
+            {/* Description */}
+            <p
+              className="
+                mt-7
+                max-w-xl
+                mx-auto
+                md:mx-0
+                text-base
+                sm:text-lg
+                leading-relaxed
+                text-gray-400
+              "
+            >
+              Building scalable web, mobile, cloud and
+              AI-powered solutions across a growing
+              digital ecosystem.
+            </p>
+
+            {/* Buttons */}
+            <div
+              className="
+                mt-9
+                flex
+                flex-col
+                sm:flex-row
+                justify-center
+                md:justify-start
+                gap-4
+              "
+            >
+              <button
+                onClick={scrollToProjects}
+                className="
+                  group
+                  rounded-xl
+                  bg-cyan-500
+                  px-7
+                  py-3
+                  font-semibold
+                  text-black
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:scale-105
+                  hover:bg-cyan-400
+                  hover:shadow-xl
+                  hover:shadow-cyan-500/30
+                  active:scale-95
+                "
+              >
+                <span className="flex items-center justify-center gap-2">
+                  Enter Digital City
+
+                  <span
+                    className="
+                      transition-transform
+                      duration-300
+                      group-hover:translate-x-1
+                    "
+                  >
+                    →
+                  </span>
                 </span>
-              </span>
-            </button>
+              </button>
+
+              <button
+                onClick={downloadCV}
+                className="
+                  group
+                  rounded-xl
+                  border
+                  border-white/15
+                  bg-white/5
+                  px-7
+                  py-3
+                  text-white
+                  backdrop-blur-sm
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:border-cyan-400/60
+                  hover:bg-cyan-500/10
+                  hover:shadow-lg
+                  hover:shadow-cyan-500/10
+                  active:scale-95
+                "
+              >
+                <span className="flex items-center justify-center gap-2">
+                  Download CV
+
+                  <span
+                    className="
+                      transition-transform
+                      duration-300
+                      group-hover:translate-y-[2px]
+                    "
+                  >
+                    ↓
+                  </span>
+                </span>
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* =========================
+            SCROLL INDICATOR
+        ========================== */}
+
+        <div
+          className="
+            absolute
+            bottom-8
+            left-1/2
+            z-10
+            hidden
+            -translate-x-1/2
+            md:flex
+            flex-col
+            items-center
+            gap-2
+            text-xs
+            uppercase
+            tracking-[0.25em]
+            text-gray-500
+          "
+        >
+          <span>Explore the Universe</span>
+
+          <span className="text-cyan-400 text-lg">
+            ↓
+          </span>
+        </div>
+
+        {/* Bottom Space Transition */}
+        <div
+          className="
+            absolute
+            bottom-0
+            left-0
+            right-0
+            h-48
+            pointer-events-none
+            bg-gradient-to-b
+            from-transparent
+            via-[#050816]/40
+            to-[#050816]
+          "
+        />
       </section>
     </Reveal>
   );
