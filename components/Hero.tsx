@@ -28,8 +28,9 @@ export default function Hero() {
           min-h-screen
           flex
           items-center
+          justify-center
           overflow-hidden
-          bg-[#030712]
+          bg-[#050816]
         "
       >
         {/* =========================
@@ -37,7 +38,7 @@ export default function Hero() {
         ========================== */}
 
         {/* Main deep-space gradient */}
-        <div
+        {/* <div
           className="
             absolute
             inset-0
@@ -46,10 +47,10 @@ export default function Hero() {
             via-[#030712]
             to-[#08051a]
           "
-        />
+        /> */}
 
         {/* Left cyan atmospheric glow */}
-        <div
+        {/* <div
           className="
             absolute
             -left-40
@@ -60,10 +61,10 @@ export default function Hero() {
             bg-cyan-500/10
             blur-[140px]
           "
-        />
+        /> */}
 
         {/* Right violet planetary glow */}
-        <div
+        {/* <div
           className="
             absolute
             -right-32
@@ -74,10 +75,10 @@ export default function Hero() {
             bg-violet-600/15
             blur-[160px]
           "
-        />
+        /> */}
 
         {/* Small stars */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* <div className="absolute inset-0 pointer-events-none">
           <span className="absolute left-[8%] top-[25%] h-1 w-1 rounded-full bg-cyan-300/70" />
           <span className="absolute left-[18%] top-[62%] h-1 w-1 rounded-full bg-white/50" />
           <span className="absolute left-[30%] top-[20%] h-[3px] w-[3px] rounded-full bg-cyan-300/50" />
@@ -86,7 +87,7 @@ export default function Hero() {
           <span className="absolute left-[66%] top-[65%] h-1 w-1 rounded-full bg-white/40" />
           <span className="absolute left-[78%] top-[22%] h-[3px] w-[3px] rounded-full bg-cyan-300/60" />
           <span className="absolute right-[8%] top-[70%] h-1 w-1 rounded-full bg-violet-300/60" />
-        </div>
+        </div> */}
 
         {/* =========================
             HERO PORTRAIT
@@ -117,7 +118,7 @@ export default function Hero() {
           />
 
           {/* Fade portrait toward center */}
-          <div
+          {/* <div
             className="
               absolute
               inset-0
@@ -126,10 +127,10 @@ export default function Hero() {
               via-[#030712]/20
               to-transparent
           "
-          />
+          /> */}
 
           {/* Bottom fade */}
-          <div
+          {/* <div
             className="
               absolute
               inset-0
@@ -138,7 +139,7 @@ export default function Hero() {
               via-transparent
               to-transparent
             "
-          />
+          /> */}
         </div>
 
         {/* =========================
@@ -347,22 +348,6 @@ export default function Hero() {
             ↓
           </span>
         </div>
-
-        {/* Bottom Space Transition */}
-        <div
-          className="
-            absolute
-            bottom-0
-            left-0
-            right-0
-            h-48
-            pointer-events-none
-            bg-gradient-to-b
-            from-transparent
-            via-[#050816]/40
-            to-[#050816]
-          "
-        />
       </section>
     </Reveal>
   );

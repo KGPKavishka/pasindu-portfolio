@@ -18,6 +18,9 @@ import ContactCenter from "../components/ContactCenter";
 import ScrollProgress from "../components/ScrollProgress";
 import BackToTop from "../components/BackToTop";
 import Footer from "@/components/Footer";
+import SpaceTransition from "@/components/SpaceTransition";
+import PlanetApproach from "@/components/PlanetApproach";
+import SceneCanvas from "@/components/Background/SceneCanvas";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -45,14 +48,17 @@ export default function Home() {
   return (
     <>
       <LoadingScreen isLoading={isLoading} />
-      <CursorGlow />
-      <AnimatedBackground />
+      {/* <CursorGlow /> */}
+      <SceneCanvas />
+      {/* <AnimatedBackground /> */}
 
       <main className="relative z-10 min-h-screen text-white">
         <Navbar />
         <ScrollProgress />
         <Hero />
         <Stats />
+        <SpaceTransition />
+        <PlanetApproach />
         <CityOverview />
         <ExperienceTower />
         <DataCenter />
