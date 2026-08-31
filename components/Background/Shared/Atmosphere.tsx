@@ -3,33 +3,36 @@
 export default function Atmosphere() {
   return (
     <>
-      {/* Cyan glow */}
+      {/* Distant cyan nebula */}
       <mesh position={[-35, 15, -70]}>
         <sphereGeometry args={[18, 32, 32]} />
         <meshBasicMaterial
-          color="#22d3ee"
+          color="#06b6d4"
           transparent
-          opacity={0.08}
+          opacity={0.035}
+          depthWrite={false}
         />
       </mesh>
 
-      {/* Purple glow */}
+      {/* Distant violet nebula */}
       <mesh position={[40, -10, -90]}>
         <sphereGeometry args={[25, 32, 32]} />
         <meshBasicMaterial
           color="#7c3aed"
           transparent
-          opacity={0.08}
+          opacity={0.03}
+          depthWrite={false}
         />
       </mesh>
 
-      {/* Blue nebula */}
+      {/* Distant blue nebula */}
       <mesh position={[0, 30, -120]}>
         <sphereGeometry args={[45, 32, 32]} />
         <meshBasicMaterial
           color="#1d4ed8"
           transparent
-          opacity={0.05}
+          opacity={0.02}
+          depthWrite={false}
         />
       </mesh>
     </>

@@ -22,7 +22,7 @@ export default function BuildingCard({
   onClick,
 }: BuildingCardProps) {
   return (
-    <div className="h-full">
+    <div className="h-full pointer-events-auto">
       <TiltCard
         className="
             h-full

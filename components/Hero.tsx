@@ -30,7 +30,6 @@ export default function Hero() {
           items-center
           justify-center
           overflow-hidden
-          bg-[#050816]
         "
       >
         {/* =========================

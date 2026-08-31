@@ -3,30 +3,49 @@
 export default function Lights() {
   return (
     <>
-      {/* Global ambient light */}
-      <ambientLight intensity={0.25} />
+      {/* ========================================= */}
+      {/* GLOBAL AMBIENT LIGHT */}
+      {/* ========================================= */}
 
-      {/* Main cyan key light */}
-      <directionalLight
-        position={[5, 4, 5]}
-        intensity={2}
-        color="#67e8f9"
-      />
+      <ambientLight intensity={0.65} color="#b8eaff" />
 
-      {/* Soft blue fill */}
+      {/* ========================================= */}
+      {/* MAIN CYAN KEY LIGHT */}
+      {/* ========================================= */}
+
+      <directionalLight position={[5, 8, 6]} intensity={4} color="#67e8f9" />
+
+      {/* ========================================= */}
+      {/* SOFT BLUE FRONT FILL */}
+      {/* ========================================= */}
+
       <pointLight
-        position={[-8, 3, 6]}
+        position={[-6, 4, 8]}
         intensity={15}
         distance={40}
-        color="#60a5fa"
+        color="#38bdf8"
       />
 
-      {/* Purple rim */}
+      {/* ========================================= */}
+      {/* PURPLE BACK / RIM LIGHT */}
+      {/* ========================================= */}
+
       <pointLight
-        position={[8, -4, -2]}
+        position={[8, 2, -6]}
         intensity={10}
-        distance={35}
+        distance={45}
         color="#8b5cf6"
+      />
+
+      {/* ========================================= */}
+      {/* CITY TOP LIGHT */}
+      {/* ========================================= */}
+
+      <pointLight
+        position={[0, 10, 2]}
+        intensity={8}
+        distance={35}
+        color="#22d3ee"
       />
     </>
   );

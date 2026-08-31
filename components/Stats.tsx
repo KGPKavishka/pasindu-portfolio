@@ -33,7 +33,6 @@ export default function Stats() {
         px-6
         pt-6
         pb-32
-        bg-[#050816]
         overflow-hidden
       "
     >

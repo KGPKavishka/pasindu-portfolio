@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Reveal from "./Reveal";
 
 export default function PlanetApproach() {
@@ -9,116 +8,12 @@ export default function PlanetApproach() {
             className="
                 relative
                 min-h-screen
-                overflow-hidden
-                bg-[#040915]
                 flex
                 items-center
                 justify-center
+                overflow-hidden
             "
         >
-            {/* ============================= */}
-            {/* Digital City Background */}
-            {/* ============================= */}
-
-            <div
-                className="
-                    absolute
-                    inset-0
-                    pointer-events-none
-                    overflow-hidden
-                "
-            >
-                {/* Digital City Image */}
-                <Image
-                    src="/images/digital-city-planet-desktop.jpg"
-                    alt="Digital City"
-                    fill
-                    sizes="100vw"
-                    className="
-                        object-cover
-                        object-center
-                        opacity-55
-                    "
-                    priority
-                />
-
-                {/* Base Dark Overlay */}
-                <div
-                    className="
-                        absolute
-                        inset-0
-                        bg-[#050816]/45
-                    "
-                />
-
-                {/* Center Readability */}
-                <div
-                    className="
-                        absolute
-                        inset-0
-                        bg-[radial-gradient(circle_at_center,rgba(5,8,22,0.15),rgba(5,8,22,0.55)_75%)]
-                    "
-                />
-
-                {/* ============================= */}
-                {/* TOP SCENE BLEND */}
-                {/* Continue from SpaceTransition */}
-                {/* ============================= */}
-
-                <div
-                    className="
-                        absolute
-                        inset-x-0
-                        top-0
-                        h-[32vh]
-                        sm:h-[35vh]
-                        md:h-[4vh]
-                        bg-[linear-gradient(to_bottom,#040915_0%,#040915_12%,transparent_100%)]
-                        pointer-events-none
-                    "
-                />
-
-                {/* ============================= */}
-                {/* BOTTOM SCENE BLEND */}
-                {/* Digital City -> Next Section */}
-                {/* ============================= */}
-
-                <div
-                    className="
-                        absolute
-                        inset-x-0
-                        bottom-0
-                        h-32
-                        sm:h-40
-                        md:h-48
-                        bg-gradient-to-b
-                        from-transparent
-                        via-[#050816]/45
-                        to-[#050816]
-                        pointer-events-none
-                    "
-                />
-            </div>
-
-            {/* ============================= */}
-            {/* Ambient Cyan Glow */}
-            {/* ============================= */}
-
-            <div
-                className="
-                    absolute
-                    left-1/2
-                    bottom-[-200px]
-                    -translate-x-1/2
-                    w-[900px]
-                    h-[500px]
-                    rounded-full
-                    bg-cyan-500/[0.08]
-                    blur-[160px]
-                    pointer-events-none
-                "
-            />
-
             {/* ============================= */}
             {/* Main Content */}
             {/* ============================= */}
@@ -174,8 +69,8 @@ export default function PlanetApproach() {
                                 leading-relaxed
                             "
                         >
-                            A software engineering ecosystem built from projects,
-                            experience, technology and innovation.
+                            A software engineering ecosystem built from
+                            projects, experience, technology and innovation.
                         </p>
 
                         {/* City Connection Status */}
@@ -188,7 +83,7 @@ export default function PlanetApproach() {
                                 rounded-full
                                 border
                                 border-cyan-400/20
-                                bg-black/20
+                                bg-cyan-400/[0.03]
                                 backdrop-blur-md
                                 px-5
                                 py-2
