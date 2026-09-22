@@ -4,27 +4,15 @@ import { useEffect, useState } from "react";
 import { Project } from "../types/project";
 
 import LoadingScreen from "@/components/LoadingScreen";
-// import CursorGlow from "@/components/CursorGlow";
-// import AnimatedBackground from "@/components/Background/AnimatedBackground";
 import Navbar from "../components/Navbar";
-import Hero from "../components/Hero";
-import Stats from "../components/Stats";
-import CityOverview from "../components/CityOverview";
-import ExperienceTower from "../components/ExperienceTower";
-import DataCenter from "../components/DataCenter";
-import CreativeStudio from "../components/CreativeStudio";
-import FutureLab from "@/components/FutureLab";
-import ContactCenter from "../components/ContactCenter";
 import ScrollProgress from "../components/ScrollProgress";
 import BackToTop from "../components/BackToTop";
-import Footer from "@/components/Footer";
-import SpaceTransition from "@/components/SpaceTransition";
-import PlanetApproach from "@/components/PlanetApproach";
 import SceneCanvas from "@/components/Background/SceneCanvas";
+import JourneyHUD from "@/components/JourneyHUD";
+import ProjectModal from "@/components/ProjectModal";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
@@ -50,11 +38,10 @@ export default function Home() {
   return (
     <>
       <LoadingScreen isLoading={isLoading} />
-      {/* <CursorGlow /> */}
       <SceneCanvas setSelectedProject={setSelectedProject} />
-      {/* <AnimatedBackground /> */}
 
-      <main className="relative z-10 min-h-screen text-white pointer-events-none">
+      {/* Minimal HUD Layer */}
+      <div className="fixed inset-0 z-10 pointer-events-none">
         <div className="pointer-events-auto">
           <Navbar />
         </div>
@@ -63,25 +50,23 @@ export default function Home() {
           <ScrollProgress />
         </div>
 
-        <Hero />
-        <Stats />
-        <SpaceTransition />
-        <PlanetApproach />
+        <JourneyHUD />
 
+        <BackToTop />
+      </div>
+
+      {/* Scroll Height Container - 800vh for smooth camera journey */}
+      <div className="h-[800vh]" />
+
+      {/* Project Modal */}
+      {selectedProject && (
         <div className="pointer-events-auto">
-          <CityOverview
-            selectedProject={selectedProject}
-            setSelectedProject={setSelectedProject}
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
           />
         </div>
-        <ExperienceTower />
-        <DataCenter />
-        <CreativeStudio limit={6} showViewAll />
-        <FutureLab />
-        <ContactCenter />
-        <Footer />
-        <BackToTop />
-      </main>
+      )}
     </>
   );
 }

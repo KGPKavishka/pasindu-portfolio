@@ -7,6 +7,7 @@ import { useRef } from "react";
 import CityWindows from "../CityWindows";
 import CityNeonStrips from "../CityNeonStrips";
 import CityRooftopDetails from "../CityRooftopDetails";
+import { scrollState } from "../../Shared/ScrollController";
 
 import { projects } from "../../../../data/portfolioData";
 import { Project } from "../../../../types/project";
@@ -81,7 +82,7 @@ export default function KVAudioDistrict({
   });
 
   return (
-    <group position={position}>
+    <group ref={groupRef} position={position}>
       {/* ========================================= */}
       {/* KV AUDIO MAIN BUILDING */}
       {/* ========================================= */}

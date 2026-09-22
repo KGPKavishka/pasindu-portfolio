@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 type Particle = {
   id: number;
@@ -14,24 +14,26 @@ type Particle = {
 };
 
 export default function Particles() {
-  const [particles, setParticles] = useState<Particle[]>([]);
+  const particles = useMemo<Particle[]>(
+    () =>
+      Array.from({ length: 20 }, (_, id) => {
+        const random = (offset: number) => {
+          const value = Math.sin((id + offset) * 12.9898) * 43758.5453;
+          return value - Math.floor(value);
+        };
 
-  useEffect(() => {
-    const generatedParticles = Array.from(
-      { length: 20 },
-      (_, i) => ({
-        id: i,
-        size: Math.random() * 4 + 2,
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        duration: Math.random() * 12 + 12,
-        delay: Math.random() * 8,
-        opacity: Math.random() * 0.4 + 0.2,
-      })
-    );
-
-    setParticles(generatedParticles);
-  }, []);
+        return {
+          id,
+          size: random(1) * 4 + 2,
+          left: random(2) * 100,
+          top: random(3) * 100,
+          duration: random(4) * 12 + 12,
+          delay: random(5) * 8,
+          opacity: random(6) * 0.4 + 0.2,
+        };
+      }),
+    [],
+  );
 
   return (
     <>

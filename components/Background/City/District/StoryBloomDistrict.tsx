@@ -1,8 +1,13 @@
 "use client";
 
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import * as THREE from "three";
+
 import CityWindows from "../CityWindows";
 import CityNeonStrips from "../CityNeonStrips";
 import CityRooftopDetails from "../CityRooftopDetails";
+import { scrollState } from "../../Shared/ScrollController";
 
 import { projects } from "../../../../data/portfolioData";
 import { Project } from "../../../../types/project";
@@ -16,10 +21,38 @@ export default function StoryBloomDistrict({
   position = [0, 1.1, 2.8],
   setSelectedProject,
 }: StoryBloomDistrictProps) {
+  const groupRef = useRef<THREE.Group>(null);
   const storyBloom = projects.find((project) => project.id === "storybloom");
 
+  useFrame(() => {
+    if (!groupRef.current) {
+      return;
+    }
+
+    const activation = THREE.MathUtils.smoothstep(
+      scrollState.current,
+      0.42,
+      0.52,
+    );
+    const scale = THREE.MathUtils.lerp(0.84, 1, activation);
+
+    groupRef.current.scale.setScalar(
+      THREE.MathUtils.lerp(groupRef.current.scale.x, scale, 0.08),
+    );
+    groupRef.current.position.y = THREE.MathUtils.lerp(
+      groupRef.current.position.y,
+      THREE.MathUtils.lerp(position[1] - 0.25, position[1], activation),
+      0.08,
+    );
+    groupRef.current.position.z = THREE.MathUtils.lerp(
+      groupRef.current.position.z,
+      THREE.MathUtils.lerp(position[2] + 0.2, position[2], activation),
+      0.08,
+    );
+  });
+
   return (
-    <group position={position}>
+    <group ref={groupRef} position={position}>
       {/* ========================================= */}
       {/* STORYBLOOM MAIN BUILDING */}
       {/* ========================================= */}

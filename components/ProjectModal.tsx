@@ -9,21 +9,14 @@ interface Props {
   onClose: () => void;
 }
 
-export default function ProjectModal({
-  project,
-  onClose,
-}: Props) {
-
-  const [selectedImage, setSelectedImage] =
-    useState<number | null>(null);
+export default function ProjectModal({ project, onClose }: Props) {
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
   const showPreviousImage = () => {
     if (!project.screenshots || selectedImage === null) return;
 
     setSelectedImage(
-      selectedImage === 0
-        ? project.screenshots.length - 1
-        : selectedImage - 1
+      selectedImage === 0 ? project.screenshots.length - 1 : selectedImage - 1,
     );
   };
 
@@ -31,9 +24,7 @@ export default function ProjectModal({
     if (!project.screenshots || selectedImage === null) return;
 
     setSelectedImage(
-      selectedImage === project.screenshots.length - 1
-        ? 0
-        : selectedImage + 1
+      selectedImage === project.screenshots.length - 1 ? 0 : selectedImage + 1,
     );
   };
 
@@ -51,10 +42,7 @@ export default function ProjectModal({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose, selectedImage]);
 
@@ -87,7 +75,6 @@ export default function ProjectModal({
       "
       onClick={onClose}
     >
-
       <motion.div
         initial={{
           opacity: 0,
@@ -111,6 +98,9 @@ export default function ProjectModal({
           mass: 0.8,
         }}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-modal-title"
         className="
           bg-[#0b1020]
           border
@@ -124,30 +114,22 @@ export default function ProjectModal({
           shadow-cyan-500/10
         "
       >
-
         {/* Header */}
         <div className="border-b border-white/10 p-8">
-
           <div className="flex items-start justify-between">
-
             <div>
+              <div className="text-5xl">{project.emoji}</div>
 
-              <div className="text-5xl">
-                {project.emoji}
-              </div>
-
-              <h2 className="mt-4 text-4xl font-bold">
+              <h2 id="project-modal-title" className="mt-4 text-4xl font-bold">
                 {project.title}
               </h2>
 
-              <p className="mt-2 text-lg text-cyan-400">
-                {project.subtitle}
-              </p>
-
+              <p className="mt-2 text-lg text-cyan-400">{project.subtitle}</p>
             </div>
 
             <button
               onClick={onClose}
+              aria-label="Close project details"
               className="
                 flex
                 h-12
@@ -165,13 +147,10 @@ export default function ProjectModal({
             >
               ✕
             </button>
-
           </div>
-
         </div>
 
         <div className="p-8 space-y-10">
-
           {/* Hero Image */}
           {project.heroImage && (
             <div
@@ -232,32 +211,21 @@ export default function ProjectModal({
                   {project.title}
                 </span>
               </div>
-
             </div>
           )}
 
           {/* Overview */}
           <div>
+            <h3 className="text-2xl font-bold mb-4">Overview</h3>
 
-            <h3 className="text-2xl font-bold mb-4">
-              Overview
-            </h3>
-
-            <p className="text-gray-300 leading-8">
-              {project.description}
-            </p>
-
+            <p className="text-gray-300 leading-8">{project.description}</p>
           </div>
 
           {/* Technologies */}
           <div>
-
-            <h3 className="text-2xl font-bold mb-4">
-              Technologies
-            </h3>
+            <h3 className="text-2xl font-bold mb-4">Technologies</h3>
 
             <div className="flex flex-wrap gap-3">
-
               {project.technologies.map((tech) => (
                 <span
                   key={tech}
@@ -275,133 +243,75 @@ export default function ProjectModal({
                   {tech}
                 </span>
               ))}
-
             </div>
-
           </div>
 
           {/* Architecture */}
           <div>
-
-            <h3 className="text-2xl font-bold mb-4">
-              Architecture
-            </h3>
+            <h3 className="text-2xl font-bold mb-4">Architecture</h3>
 
             <div className="space-y-3">
-
               {project.architecture.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3"
-                >
-                  <span className="text-cyan-400">
-                    →
-                  </span>
+                <div key={item} className="flex items-center gap-3">
+                  <span className="text-cyan-400">→</span>
 
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
+                  <span className="text-gray-300">{item}</span>
                 </div>
               ))}
-
             </div>
-
           </div>
 
           {/* Features */}
           <div>
-
-            <h3 className="text-2xl font-bold mb-4">
-              Key Features
-            </h3>
+            <h3 className="text-2xl font-bold mb-4">Key Features</h3>
 
             <div className="space-y-3">
-
               {project.features.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3"
-                >
-                  <span className="text-emerald-400">
-                    ✓
-                  </span>
+                <div key={item} className="flex items-start gap-3">
+                  <span className="text-emerald-400">✓</span>
 
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
+                  <span className="text-gray-300">{item}</span>
                 </div>
               ))}
-
             </div>
-
           </div>
 
           {/* Challenges */}
           <div>
-
-            <h3 className="text-2xl font-bold mb-4">
-              Challenges
-            </h3>
+            <h3 className="text-2xl font-bold mb-4">Challenges</h3>
 
             <div className="space-y-3">
-
               {project.challenges.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3"
-                >
-                  <span className="text-orange-400">
-                    •
-                  </span>
+                <div key={item} className="flex items-start gap-3">
+                  <span className="text-orange-400">•</span>
 
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
+                  <span className="text-gray-300">{item}</span>
                 </div>
               ))}
-
             </div>
-
           </div>
 
           {/* Lessons */}
           <div>
-
-            <h3 className="text-2xl font-bold mb-4">
-              Lessons Learned
-            </h3>
+            <h3 className="text-2xl font-bold mb-4">Lessons Learned</h3>
 
             <div className="space-y-3">
-
               {project.lessons.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3"
-                >
-                  <span className="text-violet-400">
-                    ★
-                  </span>
+                <div key={item} className="flex items-start gap-3">
+                  <span className="text-violet-400">★</span>
 
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
+                  <span className="text-gray-300">{item}</span>
                 </div>
               ))}
-
             </div>
-
           </div>
 
           {/* Screenshots */}
           {project.screenshots && project.screenshots.length > 0 && (
             <div>
-
-              <h3 className="text-2xl font-bold mb-6">
-                Project Gallery
-              </h3>
+              <h3 className="text-2xl font-bold mb-6">Project Gallery</h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-
                 {project.screenshots.map((image, index) => (
                   <div
                     key={index}
@@ -417,7 +327,6 @@ export default function ProjectModal({
                       bg-[#101827]
                     "
                   >
-
                     <Image
                       src={image}
                       alt={`${project.title} Screenshot ${index + 1}`}
@@ -441,12 +350,9 @@ export default function ProjectModal({
                         group-hover:opacity-100
                       "
                     />
-
                   </div>
                 ))}
-
               </div>
-
             </div>
           )}
 
@@ -557,14 +463,12 @@ export default function ProjectModal({
                 >
                   {selectedImage! + 1} / {project.screenshots.length}
                 </div>
-
               </div>
             </div>
           )}
 
           {/* Actions */}
           <div className="flex flex-wrap gap-4 pt-4">
-
             <a
               href={project.github}
               target="_blank"
@@ -583,14 +487,10 @@ export default function ProjectModal({
             >
               View GitHub
             </a>
-
           </div>
-
         </div>
-
       </motion.div>
-
     </motion.div>,
-    document.body
+    document.body,
   );
 }

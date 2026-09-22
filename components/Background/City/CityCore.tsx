@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { Project } from "../../../types/project";
 
 import { scrollState } from "../Shared/ScrollController";
+import CityEnergyRoutes from "./CityEnergyRoutes";
 import CityGround from "./CityGround";
 import HealthBridgeDistrict from "./District/HealthBridgeDistrict";
 import EzyMapDistrict from "./District/EzyMapDistrict";
@@ -25,20 +26,6 @@ export default function CityCore({ setSelectedProject }: CityCoreProps) {
     }
 
     const scroll = scrollState.current;
-
-    // =========================================
-    // DISTRICT ACTIVATION TIMELINE
-    // =========================================
-
-    const cityProgress = THREE.MathUtils.smoothstep(scroll, 0.15, 0.35);
-
-    const healthBridgeActivation = THREE.MathUtils.smoothstep(scroll, 0.3, 0.4);
-
-    const ezyMapActivation = THREE.MathUtils.smoothstep(scroll, 0.34, 0.44);
-
-    const kvAudioActivation = THREE.MathUtils.smoothstep(scroll, 0.38, 0.48);
-
-    const storyBloomActivation = THREE.MathUtils.smoothstep(scroll, 0.42, 0.52);
 
     // =========================================
     // CITY REVEAL
@@ -70,6 +57,7 @@ export default function CityCore({ setSelectedProject }: CityCoreProps) {
   return (
     <group ref={groupRef} position={[0, -1.2, -5]}>
       <CityGround />
+      <CityEnergyRoutes />
 
       {/* ========================================= */}
       {/* CENTRAL TOWER */}

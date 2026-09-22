@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
+import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { ReactNode } from "react";
 
 interface Props {
@@ -13,19 +8,14 @@ interface Props {
   className?: string;
 }
 
-export default function TiltCard({
-  children,
-  className = "",
-}: Props) {
+export default function TiltCard({ children, className = "" }: Props) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
   const rotateX = useTransform(y, [-50, 50], [4, -4]);
   const rotateY = useTransform(x, [-50, 50], [-4, 4]);
 
-  const handleMouseMove = (
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
 
     const px = e.clientX - rect.left - rect.width / 2;
@@ -58,10 +48,7 @@ export default function TiltCard({
         willChange: "transform",
       }}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
+      onMouseLeave={reset}
     >
       {children}
     </motion.div>
