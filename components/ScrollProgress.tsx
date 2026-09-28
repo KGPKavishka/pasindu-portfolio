@@ -1,17 +1,11 @@
 "use client";
 
-import {
-  motion,
-  useScroll,
-  useSpring,
-} from "framer-motion";
+import { motion } from "framer-motion";
+
+import { useJourney } from "./Journey/JourneyController";
 
 export default function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 25,
-  });
+  const { progress } = useJourney();
 
   return (
     <motion.div

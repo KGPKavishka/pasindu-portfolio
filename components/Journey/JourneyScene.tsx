@@ -2,18 +2,24 @@
 
 import { Canvas } from "@react-three/fiber";
 
-function TestSphere() {
-  return (
-    <mesh>
-      <sphereGeometry args={[1, 32, 32]} />
-      <meshStandardMaterial color="#4fd1c5" />
-    </mesh>
-  );
-}
+import SpaceEnvironment from "@/components/World/Space/SpaceEnvironment";
+import Planet from "@/components/World/Planet/Planet";
+import PlanetSurface from "@/components/World/Surface/PlanetSurface";
+import CityEnvironment from "@/components/World/City/CityEnvironment";
+import ProjectDistricts from "@/components/World/Districts/ProjectDistricts";
+import ProfessionalLandmarks from "@/components/World/Landmarks/ProfessionalLandmarks";
+import CreativeFutureLandmarks from "@/components/World/Landmarks/CreativeFutureLandmarks";
+import ContactLandmarks from "@/components/World/Landmarks/ContactLandmarks";
+import JourneyAtmosphere from "@/components/World/Atmosphere/JourneyAtmosphere";
+import JourneyCameraRig from "./JourneyCameraRig";
 
 export default function JourneyScene() {
   return (
-    <div className="fixed inset-0 z-0">
+    <div
+      className="pointer-events-none fixed inset-0 z-0"
+      aria-hidden="true"
+      data-layer="journey-environment"
+    >
       <Canvas
         camera={{
           position: [0, 0, 5],
@@ -25,17 +31,21 @@ export default function JourneyScene() {
           alpha: false,
         }}
       >
-        <color attach="background" args={["#020617"]} />
+        <color attach="background" args={["#01040b"]} />
+        <ambientLight intensity={0.18} color="#bdefff" />
 
-        <ambientLight intensity={0.4} />
+        <directionalLight position={[4, 6, 8]} intensity={1.4} color="#67e8f9" />
 
-        <pointLight
-          position={[3, 3, 5]}
-          intensity={20}
-          distance={20}
-        />
-
-        <TestSphere />
+        <JourneyCameraRig />
+        <JourneyAtmosphere />
+        <SpaceEnvironment />
+        <Planet />
+        <PlanetSurface />
+        <CityEnvironment />
+        <ProjectDistricts />
+        <ProfessionalLandmarks />
+        <CreativeFutureLandmarks />
+        <ContactLandmarks />
       </Canvas>
     </div>
   );

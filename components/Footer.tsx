@@ -104,7 +104,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-white/10 bg-[#050816]">
+    <footer className="border-t border-white/10 bg-[#050816]/55 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 py-16">
 
         {/* Header */}
