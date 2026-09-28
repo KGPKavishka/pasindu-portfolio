@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import CursorGlow from "@/components/CursorGlow";
 import AnimatedBackground from "@/components/Background/AnimatedBackground";
+import JourneyScene from "@/components/Journey/JourneyScene";
 
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
@@ -47,6 +48,7 @@ export default function Home() {
       <LoadingScreen isLoading={isLoading} />
       <CursorGlow />
       <AnimatedBackground />
+      <JourneyScene />
 
       <main className="relative z-10 min-h-screen text-white">
         <Navbar />
