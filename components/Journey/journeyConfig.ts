@@ -23,7 +23,10 @@ export type JourneySectionId =
   | "projects"
   | "experience"
   | "skills"
-  | "contact";
+  | "creative"
+  | "future"
+  | "contact"
+  | "journey-complete";
 
 export type JourneyLandmarkId =
   | "healthbridge"
@@ -126,6 +129,7 @@ export const journeyPhases = [
     label: "Creative Studio",
     start: 0.77,
     end: 0.85,
+    sectionId: "creative",
     landmarkId: "creative-studio",
   },
   {
@@ -133,6 +137,7 @@ export const journeyPhases = [
     label: "Future Lab",
     start: 0.85,
     end: 0.92,
+    sectionId: "future",
     landmarkId: "future-lab",
   },
   {
@@ -148,5 +153,6 @@ export const journeyPhases = [
     label: "Journey Complete",
     start: 0.98,
     end: 1,
+    sectionId: "journey-complete",
   },
 ] as const satisfies readonly JourneyPhase[];

@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
+import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
 import CitySkyline from "./CitySkyline";
 
 function EnergyRoute({
@@ -73,7 +74,39 @@ export default function CityEnvironment() {
       <EnergyRoute points={leftRoute} color="#22d3ee" />
       <EnergyRoute points={rightRoute} color="#2dd4bf" />
 
-      <group ref={coreRef} position={[0, 0, -112]}>
+      <group
+        position={[
+          journeyWorld.cityEntrance[0],
+          journeyWorld.groundY,
+          journeyWorld.cityEntrance[2],
+        ]}
+      >
+        {[-5.2, 5.2].map((x) => (
+          <mesh key={x} position={[x, 4.2, 0]}>
+            <boxGeometry args={[1.15, 8.4, 1.15]} />
+            <meshStandardMaterial
+              color="#06131b"
+              emissive="#0891b2"
+              emissiveIntensity={0.22}
+              metalness={0.72}
+              roughness={0.25}
+            />
+          </mesh>
+        ))}
+        <mesh position={[0, 8.1, 0]}>
+          <boxGeometry args={[11.5, 0.45, 0.65]} />
+          <meshBasicMaterial color="#22d3ee" transparent opacity={0.7} />
+        </mesh>
+        <mesh position={[0, 6.8, 0]}>
+          <boxGeometry args={[7.8, 0.08, 0.18]} />
+          <meshBasicMaterial color="#67e8f9" transparent opacity={0.42} />
+        </mesh>
+      </group>
+
+      <group
+        ref={coreRef}
+        position={[journeyWorld.cityCore[0], 0, journeyWorld.cityCore[2]]}
+      >
         <mesh>
           <cylinderGeometry args={[2.4, 3.2, 6, 8]} />
           <meshStandardMaterial

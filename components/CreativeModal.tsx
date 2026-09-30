@@ -42,6 +42,9 @@ export default function CreativeModal({
 
   return createPortal(
     <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`creative-${title.replaceAll(" ", "-")}-title`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -149,7 +152,10 @@ export default function CreativeModal({
             {category}
           </p>
 
-          <h2 className="text-4xl font-bold mb-5">
+          <h2
+            id={`creative-${title.replaceAll(" ", "-")}-title`}
+            className="text-4xl font-bold mb-5"
+          >
             {title}
           </h2>
 

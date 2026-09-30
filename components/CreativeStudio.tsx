@@ -72,7 +72,7 @@ export default function CreativeStudio({
 
   return (
     <Reveal delay={0.5}>
-      <section className="py-24 px-6">
+      <section id="creative" className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
 
           {/* Animated Header */}

@@ -30,10 +30,14 @@ export default function CreativeCard({
       : "object-cover";
 
   return (
-    <div
+    <button
+      type="button"
+      aria-label={`View ${title}`}
       onClick={onClick}
       className="
         group
+        block
+        w-full
         break-inside-avoid
         mb-6
         overflow-hidden
@@ -45,6 +49,10 @@ export default function CreativeCard({
         duration-300
         hover:-translate-y-1
         cursor-pointer
+        text-left
+        focus-visible:outline-2
+        focus-visible:outline-offset-2
+        focus-visible:outline-cyan-300
       "
     >
       <div className="relative overflow-hidden">
@@ -100,6 +108,6 @@ export default function CreativeCard({
           {title}
         </h3>
       </div>
-    </div>
+    </button>
   );
 }

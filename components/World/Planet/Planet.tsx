@@ -5,6 +5,7 @@ import { useRef } from "react";
 import * as THREE from "three";
 
 import { useJourney } from "@/components/Journey/JourneyController";
+import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
 
 export default function Planet() {
   const { size } = useThree();
@@ -33,7 +34,7 @@ export default function Planet() {
   });
 
   return (
-    <group position={[1, -0.2, -28]}>
+    <group position={[...journeyWorld.planet]}>
       <mesh ref={planetRef}>
         <sphereGeometry args={[4.8, segments, segments]} />
         <meshStandardMaterial

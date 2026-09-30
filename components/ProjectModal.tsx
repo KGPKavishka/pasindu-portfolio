@@ -70,6 +70,9 @@ export default function ProjectModal({
 
   return createPortal(
     <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`project-${project.id}-title`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -136,7 +139,7 @@ export default function ProjectModal({
                 {project.emoji}
               </div>
 
-              <h2 className="mt-4 text-4xl font-bold">
+              <h2 id={`project-${project.id}-title`} className="mt-4 text-4xl font-bold">
                 {project.title}
               </h2>
 
@@ -147,6 +150,8 @@ export default function ProjectModal({
             </div>
 
             <button
+              type="button"
+              aria-label={`Close ${project.title} project details`}
               onClick={onClose}
               className="
                 flex
@@ -403,18 +408,25 @@ export default function ProjectModal({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
                 {project.screenshots.map((image, index) => (
-                  <div
+                  <button
+                    type="button"
                     key={index}
+                    aria-label={`Open ${project.title} screenshot ${index + 1}`}
                     onClick={() => setSelectedImage(index)}
                     className="
                       group
+                      block
                       relative
                       h-52
+                      w-full
                       overflow-hidden
                       rounded-2xl
                       border
                       border-white/10
                       bg-[#101827]
+                      focus-visible:outline-2
+                      focus-visible:outline-offset-2
+                      focus-visible:outline-cyan-300
                     "
                   >
 
@@ -442,7 +454,7 @@ export default function ProjectModal({
                       "
                     />
 
-                  </div>
+                  </button>
                 ))}
 
               </div>
@@ -483,6 +495,8 @@ export default function ProjectModal({
                 />
 
                 <button
+                  type="button"
+                  aria-label="Previous screenshot"
                   onClick={showPreviousImage}
                   className="
                     absolute
@@ -502,6 +516,8 @@ export default function ProjectModal({
                   ‹
                 </button>
                 <button
+                  type="button"
+                  aria-label="Next screenshot"
                   onClick={showNextImage}
                   className="
                     absolute
@@ -523,6 +539,8 @@ export default function ProjectModal({
 
                 {/* Close */}
                 <button
+                  type="button"
+                  aria-label="Close screenshot viewer"
                   onClick={() => setSelectedImage(null)}
                   className="
                     absolute

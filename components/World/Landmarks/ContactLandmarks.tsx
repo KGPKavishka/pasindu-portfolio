@@ -4,39 +4,14 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-import { useJourney } from "@/components/Journey/JourneyController";
+import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
 import { contactItems } from "@/data/contactData";
 
 export default function ContactLandmarks() {
-  const { progress } = useJourney();
-  const contactRef = useRef<THREE.Group>(null);
   const completionRef = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
-    const journeyProgress = progress.get();
-    const contactReveal = THREE.MathUtils.smoothstep(
-      journeyProgress,
-      0.9,
-      0.98
-    );
-    const completionReveal = THREE.MathUtils.smoothstep(
-      journeyProgress,
-      0.97,
-      1
-    );
-
-    if (contactRef.current) {
-      contactRef.current.position.y = THREE.MathUtils.lerp(
-        -2,
-        0,
-        contactReveal
-      );
-    }
-
     if (completionRef.current) {
-      completionRef.current.scale.setScalar(
-        THREE.MathUtils.lerp(0.6, 1, completionReveal)
-      );
       completionRef.current.rotation.y = clock.getElapsedTime() * 0.035;
     }
   });
@@ -44,8 +19,7 @@ export default function ContactLandmarks() {
   return (
     <group>
       <group
-        ref={contactRef}
-        position={[0, -2, -296]}
+        position={[...journeyWorld.contact]}
         userData={{ contactCount: contactItems.length }}
       >
         <mesh position={[0, -0.35, 0]}>
@@ -115,7 +89,7 @@ export default function ContactLandmarks() {
         </mesh>
       </group>
 
-      <group ref={completionRef} position={[0, 2.5, -320]} scale={0.6}>
+      <group ref={completionRef} position={[...journeyWorld.complete]}>
         <mesh>
           <icosahedronGeometry args={[1.25, 1]} />
           <meshStandardMaterial

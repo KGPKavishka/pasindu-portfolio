@@ -1,10 +1,10 @@
 "use client";
 
-import { useFrame, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { useJourney } from "@/components/Journey/JourneyController";
+import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
 
 function seededRandom(seed: number) {
   const value = Math.sin(seed * 91.173) * 43758.5453;
@@ -14,10 +14,8 @@ function seededRandom(seed: number) {
 
 export default function CitySkyline() {
   const { size } = useThree();
-  const { progress } = useJourney();
   const buildingsRef = useRef<THREE.InstancedMesh>(null);
   const windowsRef = useRef<THREE.InstancedMesh>(null);
-  const groupRef = useRef<THREE.Group>(null);
   const count = size.width < 768 ? 28 : 52;
   const buildings = useMemo(
     () =>
@@ -65,15 +63,8 @@ export default function CitySkyline() {
     if (windowsRef.current) windowsRef.current.instanceMatrix.needsUpdate = true;
   }, [buildings]);
 
-  useFrame(() => {
-    if (!groupRef.current) return;
-
-    const reveal = THREE.MathUtils.smoothstep(progress.get(), 0.21, 0.32);
-    groupRef.current.position.y = THREE.MathUtils.lerp(-4, 0, reveal);
-  });
-
   return (
-    <group ref={groupRef} position={[0, -4, -88]}>
+    <group position={[0, journeyWorld.groundY, -88]}>
       <instancedMesh ref={buildingsRef} args={[undefined, undefined, count]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial

@@ -6,7 +6,7 @@ import Reveal from "./Reveal";
 export default function FutureLab() {
     return (
         <Reveal delay={0.4}>
-            <section className="py-24 px-6">
+            <section id="future" className="py-24 px-6">
                 <div className="max-w-7xl mx-auto">
 
                     {/* Heading */}

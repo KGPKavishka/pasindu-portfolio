@@ -4,27 +4,14 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-import { useJourney } from "@/components/Journey/JourneyController";
+import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
 
-const edgeLights = Array.from({ length: 18 }, (_, index) => index);
+const edgeLights = Array.from({ length: 9 }, (_, index) => index);
 
 export default function PlanetSurface() {
-  const { progress } = useJourney();
-  const groupRef = useRef<THREE.Group>(null);
   const markerRef = useRef<THREE.Mesh>(null);
 
   useFrame(({ clock }) => {
-    const surfaceProgress = THREE.MathUtils.smoothstep(progress.get(), 0.15, 0.24);
-
-    if (groupRef.current) {
-      groupRef.current.visible = surfaceProgress > 0.001;
-      groupRef.current.position.y = THREE.MathUtils.lerp(
-        -4.2,
-        -3,
-        surfaceProgress
-      );
-    }
-
     if (markerRef.current) {
       const pulse = 1 + Math.sin(clock.getElapsedTime() * 1.4) * 0.08;
       markerRef.current.scale.setScalar(pulse);
@@ -32,14 +19,14 @@ export default function PlanetSurface() {
   });
 
   return (
-    <group ref={groupRef} position={[0, -4.2, -72]} visible={false}>
+    <group position={[0, journeyWorld.groundY, -76]}>
       <gridHelper
-        args={[120, 60, "#0e7490", "#082f3d"]}
+        args={[64, 32, "#0e7490", "#082f3d"]}
         position={[0, 0, 0]}
       />
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>
-        <planeGeometry args={[7, 120]} />
+        <planeGeometry args={[7, 48]} />
         <meshStandardMaterial
           color="#030b11"
           roughness={0.82}
@@ -48,16 +35,16 @@ export default function PlanetSurface() {
       </mesh>
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-3.35, 0.06, 0]}>
-        <planeGeometry args={[0.08, 120]} />
+        <planeGeometry args={[0.08, 48]} />
         <meshBasicMaterial color="#22d3ee" transparent opacity={0.55} />
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[3.35, 0.06, 0]}>
-        <planeGeometry args={[0.08, 120]} />
+        <planeGeometry args={[0.08, 48]} />
         <meshBasicMaterial color="#22d3ee" transparent opacity={0.55} />
       </mesh>
 
       {edgeLights.map((index) => {
-        const z = 42 - index * 6;
+        const z = 20 - index * 5;
 
         return (
           <group key={index}>

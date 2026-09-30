@@ -1,40 +1,27 @@
 "use client";
 
-import { ReactNode, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import { ReactNode } from "react";
+import { useThree } from "@react-three/fiber";
 
-import { useJourney } from "@/components/Journey/JourneyController";
+import { JourneyWorldPoint, journeyWorld } from "@/components/Journey/journeyWorldConfig";
 import { projects } from "@/data/portfolioData";
 
 interface DistrictProps {
   projectId: string;
-  position: [number, number, number];
-  start: number;
-  end: number;
+  position: JourneyWorldPoint;
   children: ReactNode;
+}
+
+interface LandmarkProps {
+  isCompact: boolean;
 }
 
 function District({
   projectId,
   position,
-  start,
-  end,
   children,
 }: DistrictProps) {
-  const { progress } = useJourney();
-  const groupRef = useRef<THREE.Group>(null);
   const project = projects.find((item) => item.id === projectId);
-
-  useFrame(() => {
-    if (!groupRef.current) return;
-
-    const activation = THREE.MathUtils.smoothstep(progress.get(), start, end);
-    const scale = THREE.MathUtils.lerp(0.72, 1, activation);
-
-    groupRef.current.scale.setScalar(scale);
-    groupRef.current.position.y = THREE.MathUtils.lerp(-1.2, 0, activation);
-  });
 
   if (!project) return null;
 
@@ -42,12 +29,11 @@ function District({
 
   return (
     <group
-      ref={groupRef}
-      position={position}
+      position={[position[0], position[1], position[2]]}
       userData={{ projectId: project.id, title: project.title }}
     >
       <mesh position={[0, -0.35, 0]}>
-        <cylinderGeometry args={[4.5, 5, 0.7, 48]} />
+        <cylinderGeometry args={[4.5, 5, 0.7, 32]} />
         <meshStandardMaterial
           color="#041017"
           metalness={0.62}
@@ -55,7 +41,7 @@ function District({
         />
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, 0]}>
-        <ringGeometry args={[3.8, 3.98, 48]} />
+        <ringGeometry args={[3.8, 3.98, 32]} />
         <meshBasicMaterial color={accent} transparent opacity={0.62} />
       </mesh>
       {children}
@@ -88,7 +74,7 @@ function HealthBridgeLandmark() {
   );
 }
 
-function EzyMapLandmark() {
+function EzyMapLandmark({ isCompact }: LandmarkProps) {
   return (
     <group>
       <mesh position={[0, 2.7, 0]}>
@@ -103,7 +89,7 @@ function EzyMapLandmark() {
       </mesh>
       {[1.2, 2.7, 4.2].map((height) => (
         <mesh key={height} position={[0, height, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.75, 0.08, 12, 40]} />
+          <torusGeometry args={[1.75, 0.08, 8, isCompact ? 24 : 40]} />
           <meshBasicMaterial color="#fbbf24" />
         </mesh>
       ))}
@@ -115,7 +101,7 @@ function EzyMapLandmark() {
   );
 }
 
-function KVAudioLandmark() {
+function KVAudioLandmark({ isCompact }: LandmarkProps) {
   return (
     <group>
       <mesh position={[0, 2.6, 0]}>
@@ -131,11 +117,11 @@ function KVAudioLandmark() {
       {[-1.25, 1.25].map((x) => (
         <group key={x} position={[x, 2.7, 1.48]} rotation={[Math.PI / 2, 0, 0]}>
           <mesh>
-            <cylinderGeometry args={[0.85, 0.48, 0.25, 32]} />
+            <cylinderGeometry args={[0.85, 0.48, 0.25, isCompact ? 18 : 32]} />
             <meshBasicMaterial color="#a78bfa" />
           </mesh>
           <mesh position={[0, 0.16, 0]}>
-            <torusGeometry args={[1.05, 0.07, 12, 36]} />
+            <torusGeometry args={[1.05, 0.07, 8, isCompact ? 20 : 36]} />
             <meshBasicMaterial color="#c4b5fd" />
           </mesh>
         </group>
@@ -144,7 +130,7 @@ function KVAudioLandmark() {
   );
 }
 
-function StoryBloomLandmark() {
+function StoryBloomLandmark({ isCompact }: LandmarkProps) {
   return (
     <group position={[0, 2.1, 0]}>
       <mesh position={[0, -0.6, 0]}>
@@ -160,7 +146,9 @@ function StoryBloomLandmark() {
             position={[Math.cos(angle) * 1.4, 1.5, Math.sin(angle) * 1.4]}
             scale={[0.75, 1.5, 0.55]}
           >
-            <sphereGeometry args={[0.85, 24, 24]} />
+            <sphereGeometry
+              args={[0.85, isCompact ? 14 : 24, isCompact ? 14 : 24]}
+            />
             <meshStandardMaterial
               color="#10b981"
               emissive="#10b981"
@@ -171,7 +159,9 @@ function StoryBloomLandmark() {
         );
       })}
       <mesh position={[0, 1.5, 0]}>
-        <sphereGeometry args={[0.9, 24, 24]} />
+        <sphereGeometry
+          args={[0.9, isCompact ? 14 : 24, isCompact ? 14 : 24]}
+        />
         <meshBasicMaterial color="#6ee7b7" />
       </mesh>
     </group>
@@ -179,19 +169,22 @@ function StoryBloomLandmark() {
 }
 
 export default function ProjectDistricts() {
+  const { size } = useThree();
+  const isCompact = size.width < 768;
+
   return (
     <group>
-      <District projectId="healthbridge" position={[-7, 0, -128]} start={0.29} end={0.36}>
+      <District projectId="healthbridge" position={journeyWorld.healthbridge}>
         <HealthBridgeLandmark />
       </District>
-      <District projectId="ezymap" position={[7, 0, -148]} start={0.37} end={0.43}>
-        <EzyMapLandmark />
+      <District projectId="ezymap" position={journeyWorld.ezymap}>
+        <EzyMapLandmark isCompact={isCompact} />
       </District>
-      <District projectId="kvaudio" position={[-8, 0, -168]} start={0.44} end={0.5}>
-        <KVAudioLandmark />
+      <District projectId="kvaudio" position={journeyWorld.kvaudio}>
+        <KVAudioLandmark isCompact={isCompact} />
       </District>
-      <District projectId="storybloom" position={[7, 0, -188]} start={0.51} end={0.57}>
-        <StoryBloomLandmark />
+      <District projectId="storybloom" position={journeyWorld.storybloom}>
+        <StoryBloomLandmark isCompact={isCompact} />
       </District>
     </group>
   );

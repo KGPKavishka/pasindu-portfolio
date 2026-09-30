@@ -6,6 +6,7 @@ import SpaceEnvironment from "@/components/World/Space/SpaceEnvironment";
 import Planet from "@/components/World/Planet/Planet";
 import PlanetSurface from "@/components/World/Surface/PlanetSurface";
 import CityEnvironment from "@/components/World/City/CityEnvironment";
+import JourneyTransitRoute from "@/components/World/City/JourneyTransitRoute";
 import ProjectDistricts from "@/components/World/Districts/ProjectDistricts";
 import ProfessionalLandmarks from "@/components/World/Landmarks/ProfessionalLandmarks";
 import CreativeFutureLandmarks from "@/components/World/Landmarks/CreativeFutureLandmarks";
@@ -41,6 +42,7 @@ export default function JourneyScene() {
         <SpaceEnvironment />
         <Planet />
         <PlanetSurface />
+        <JourneyTransitRoute />
         <CityEnvironment />
         <ProjectDistricts />
         <ProfessionalLandmarks />

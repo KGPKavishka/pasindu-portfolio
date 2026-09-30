@@ -4,41 +4,18 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-import { useJourney } from "@/components/Journey/JourneyController";
+import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
 import { experiences } from "@/data/experienceData";
 import { skills } from "@/data/skillsData";
 
 export default function ProfessionalLandmarks() {
-  const { progress } = useJourney();
   const experienceRef = useRef<THREE.Group>(null);
-  const dataRef = useRef<THREE.Group>(null);
   const experience = experiences[0];
 
   useFrame(({ clock }) => {
-    const journeyProgress = progress.get();
-    const experienceReveal = THREE.MathUtils.smoothstep(
-      journeyProgress,
-      0.58,
-      0.68
-    );
-    const dataReveal = THREE.MathUtils.smoothstep(
-      journeyProgress,
-      0.67,
-      0.76
-    );
-
     if (experienceRef.current) {
-      experienceRef.current.position.y = THREE.MathUtils.lerp(
-        -3,
-        0,
-        experienceReveal
-      );
       experienceRef.current.rotation.y =
         Math.sin(clock.getElapsedTime() * 0.12) * 0.08;
-    }
-
-    if (dataRef.current) {
-      dataRef.current.position.y = THREE.MathUtils.lerp(-2.5, 0, dataReveal);
     }
   });
 
@@ -46,7 +23,7 @@ export default function ProfessionalLandmarks() {
     <group>
       <group
         ref={experienceRef}
-        position={[0, -3, -210]}
+        position={[...journeyWorld.experience]}
         userData={{ company: experience.company, role: experience.role }}
       >
         <mesh position={[0, -0.35, 0]}>
@@ -79,7 +56,7 @@ export default function ProfessionalLandmarks() {
         </mesh>
       </group>
 
-      <group ref={dataRef} position={[-7, -2.5, -232]}>
+      <group position={[...journeyWorld.data]}>
         <mesh position={[0, -0.3, 0]}>
           <boxGeometry args={[12, 0.6, 8]} />
           <meshStandardMaterial color="#030c12" metalness={0.62} roughness={0.35} />

@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import TypewriterText from "@/components/UI/TypewriterText";
 import { useJourney } from "./JourneyController";
 import { JourneyPhaseId } from "./journeyConfig";
+import { activateJourneyProject } from "./projectActivation";
 
 const systemMessages: Record<JourneyPhaseId, string> = {
   loading: "INITIALIZING JOURNEY",
@@ -27,6 +28,13 @@ const systemMessages: Record<JourneyPhaseId, string> = {
 export default function JourneyHUD() {
   const { currentPhase, direction } = useJourney();
   const reduceMotion = useReducedMotion();
+  const projectId =
+    currentPhase.landmarkId &&
+    ["healthbridge", "ezymap", "kvaudio", "storybloom"].includes(
+      currentPhase.landmarkId
+    )
+      ? currentPhase.landmarkId
+      : null;
 
   if (currentPhase.id === "loading") return null;
 
@@ -43,7 +51,7 @@ export default function JourneyHUD() {
           animate={{ opacity: 1, y: 0 }}
           exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
           transition={{ duration: reduceMotion ? 0 : 0.35 }}
-          className="absolute bottom-5 left-4 max-w-[calc(100vw-6rem)] border-l border-cyan-400/40 bg-[#020711]/55 px-4 py-3 backdrop-blur-md sm:bottom-8 sm:left-8"
+          className="absolute bottom-5 left-4 max-w-[calc(100vw-6rem)] border-l border-cyan-400/40 bg-[#020711]/65 px-4 py-3 backdrop-blur-md sm:bottom-8 sm:left-8"
         >
           <p className="text-[9px] font-medium uppercase text-cyan-300 sm:text-[10px]">
             <TypewriterText text={systemMessages[currentPhase.id]} />
@@ -57,6 +65,15 @@ export default function JourneyHUD() {
               {direction}
             </span>
           </div>
+          {projectId && (
+            <button
+              type="button"
+              onClick={() => activateJourneyProject(projectId)}
+              className="pointer-events-auto mt-3 border border-cyan-300/25 bg-cyan-300/5 px-3 py-1.5 text-[10px] font-medium uppercase text-cyan-100 transition-colors hover:border-cyan-300/55 hover:bg-cyan-300/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+            >
+              Open project record
+            </button>
+          )}
         </motion.div>
       </AnimatePresence>
     </div>

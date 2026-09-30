@@ -4,7 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { useJourney } from "@/components/Journey/JourneyController";
+import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
 import { creativeWorks } from "@/data/creativeData";
 import { futureSkills } from "@/data/futureData";
 
@@ -27,9 +27,7 @@ const futureColors: Record<string, string> = {
 };
 
 export default function CreativeFutureLandmarks() {
-  const { progress } = useJourney();
   const creativeRef = useRef<THREE.Group>(null);
-  const futureRef = useRef<THREE.Group>(null);
   const categories = useMemo(
     () =>
       Array.from(new Set(creativeWorks.map((work) => work.category))).map(
@@ -42,34 +40,9 @@ export default function CreativeFutureLandmarks() {
   );
 
   useFrame(({ clock }) => {
-    const journeyProgress = progress.get();
-    const creativeReveal = THREE.MathUtils.smoothstep(
-      journeyProgress,
-      0.74,
-      0.84
-    );
-    const futureReveal = THREE.MathUtils.smoothstep(
-      journeyProgress,
-      0.83,
-      0.92
-    );
-
     if (creativeRef.current) {
-      creativeRef.current.position.y = THREE.MathUtils.lerp(
-        -2.5,
-        0,
-        creativeReveal
-      );
       creativeRef.current.rotation.y =
         Math.sin(clock.getElapsedTime() * 0.1) * 0.06;
-    }
-
-    if (futureRef.current) {
-      futureRef.current.position.y = THREE.MathUtils.lerp(
-        -2.2,
-        0,
-        futureReveal
-      );
     }
   });
 
@@ -77,7 +50,7 @@ export default function CreativeFutureLandmarks() {
     <group>
       <group
         ref={creativeRef}
-        position={[-7, -2.5, -252]}
+        position={[...journeyWorld.creative]}
         userData={{ workCount: creativeWorks.length }}
       >
         <mesh position={[0, -0.35, 0]}>
@@ -139,8 +112,7 @@ export default function CreativeFutureLandmarks() {
       </group>
 
       <group
-        ref={futureRef}
-        position={[7, -2.2, -274]}
+        position={[...journeyWorld.future]}
         userData={{ skillCount: futureSkills.length }}
       >
         <mesh position={[0, -0.3, 0]}>

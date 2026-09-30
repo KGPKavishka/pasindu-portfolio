@@ -360,6 +360,10 @@ export default function Navbar() {
 
         <div className="md:hidden">
           <button
+            type="button"
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
             onClick={() =>
               setIsMenuOpen(!isMenuOpen)
             }
@@ -377,6 +381,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{
               opacity: 0,
               y: -20,
