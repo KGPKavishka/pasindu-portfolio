@@ -31,6 +31,7 @@ export default function CreativeGallery({
             title={work.title}
             category={work.category}
             size={work.size}
+            priority={index < 3}
             onClick={() => onSelect(work)}
           />
         </Reveal>

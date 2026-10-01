@@ -6,6 +6,7 @@ interface Props {
   category: string;
   size?: "small" | "medium" | "large";
   onClick?: () => void;
+  priority?: boolean;
 }
 
 export default function CreativeCard({
@@ -14,6 +15,7 @@ export default function CreativeCard({
   category,
   size = "medium",
   onClick,
+  priority = false,
 }: Props) {
   const imageHeight =
     size === "large"
@@ -30,21 +32,27 @@ export default function CreativeCard({
       : "object-cover";
 
   return (
-    <div
+    <button
+      type="button"
+      aria-label={`View ${title}`}
       onClick={onClick}
       className="
         group
+        block
+        w-full
         break-inside-avoid
         mb-6
         overflow-hidden
-        rounded-3xl
-        border border-white/10
-        bg-white/5
+        terminal-panel
         hover:border-cyan-400
         transition-all
         duration-300
         hover:-translate-y-1
         cursor-pointer
+        text-left
+        focus-visible:outline-2
+        focus-visible:outline-offset-2
+        focus-visible:outline-cyan-300
       "
     >
       <div className="relative overflow-hidden">
@@ -53,6 +61,8 @@ export default function CreativeCard({
           alt={title}
           width={800}
           height={600}
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          priority={priority}
           className={`
             w-full
             ${imageHeight}
@@ -92,14 +102,14 @@ export default function CreativeCard({
       </div>
 
       <div className="p-4">
-        <p className="text-cyan-400 text-sm">
+        <p className="terminal-kicker">
           {category}
         </p>
 
-        <h3 className="font-bold mt-1">
+        <h3 className="terminal-title mt-1 text-sm">
           {title}
         </h3>
       </div>
-    </div>
+    </button>
   );
 }
