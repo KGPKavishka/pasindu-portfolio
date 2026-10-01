@@ -21,6 +21,10 @@ export type JourneyPhaseId = (typeof journeyPhaseIds)[number];
 export type JourneySectionId =
   | "home"
   | "projects"
+  | "district-healthbridge"
+  | "district-ezy-map"
+  | "district-kv-audio"
+  | "district-story-bloom"
   | "experience"
   | "skills"
   | "creative"
@@ -81,7 +85,7 @@ export const journeyPhases = [
     label: "HealthBridge District",
     start: 0.32,
     end: 0.4,
-    sectionId: "projects",
+    sectionId: "district-healthbridge",
     landmarkId: "healthbridge",
   },
   {
@@ -89,7 +93,7 @@ export const journeyPhases = [
     label: "Ezy Map District",
     start: 0.4,
     end: 0.47,
-    sectionId: "projects",
+    sectionId: "district-ezy-map",
     landmarkId: "ezymap",
   },
   {
@@ -97,7 +101,7 @@ export const journeyPhases = [
     label: "KV Audio District",
     start: 0.47,
     end: 0.54,
-    sectionId: "projects",
+    sectionId: "district-kv-audio",
     landmarkId: "kvaudio",
   },
   {
@@ -105,7 +109,7 @@ export const journeyPhases = [
     label: "Story Bloom District",
     start: 0.54,
     end: 0.61,
-    sectionId: "projects",
+    sectionId: "district-story-bloom",
     landmarkId: "storybloom",
   },
   {

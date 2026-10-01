@@ -4,6 +4,8 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
+import { useJourney } from "@/components/Journey/JourneyController";
+
 interface PointLayerProps {
   count: number;
   color: string;
@@ -29,7 +31,9 @@ function PointLayer({
   depth,
   drift,
 }: PointLayerProps) {
+  const { progress } = useJourney();
   const pointsRef = useRef<THREE.Points>(null);
+  const materialRef = useRef<THREE.PointsMaterial>(null);
   const positions = useMemo(() => {
     const values = new Float32Array(count * 3);
 
@@ -45,9 +49,19 @@ function PointLayer({
   }, [count, depth, spread]);
 
   useFrame(({ clock }) => {
-    if (!pointsRef.current) return;
+    if (!pointsRef.current || !materialRef.current) return;
 
     pointsRef.current.rotation.y = clock.getElapsedTime() * drift;
+    const atmosphericEntry = THREE.MathUtils.smoothstep(
+      progress.get(),
+      0.14,
+      0.27
+    );
+    materialRef.current.opacity = THREE.MathUtils.lerp(
+      opacity,
+      opacity * 0.04,
+      atmosphericEntry
+    );
   });
 
   return (
@@ -59,12 +73,14 @@ function PointLayer({
         />
       </bufferGeometry>
       <pointsMaterial
+        ref={materialRef}
         color={color}
         size={size}
         sizeAttenuation
         transparent
         opacity={opacity}
         depthWrite={false}
+        fog={false}
       />
     </points>
   );

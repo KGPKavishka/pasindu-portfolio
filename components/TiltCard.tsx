@@ -58,10 +58,7 @@ export default function TiltCard({
         willChange: "transform",
       }}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
+      onMouseLeave={reset}
     >
       {children}
     </motion.div>

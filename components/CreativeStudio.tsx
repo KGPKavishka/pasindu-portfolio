@@ -70,6 +70,16 @@ export default function CreativeStudio({
     ).length;
   };
 
+  if (limit && showViewAll) {
+    return (
+      <section
+        id="creative"
+        className="min-h-[115vh]"
+        aria-label="Creative Studio waypoint"
+      />
+    );
+  }
+
   return (
     <Reveal delay={0.5}>
       <section id="creative" className="py-24 px-6">
@@ -81,30 +91,19 @@ export default function CreativeStudio({
             words={headingWords}
           />
 
-          <p className="text-gray-400 max-w-2xl mt-4 mb-12">
+          <p className="terminal-copy max-w-2xl mt-4 mb-8">
             {description}
           </p>
 
           {/* Filter Buttons */}
-          <div className="flex flex-wrap gap-3 mb-10">
+          <div className="mb-8 flex flex-wrap gap-2 border-y border-cyan-300/15 py-3">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() =>
                   setActiveCategory(category)
                 }
-                className={`
-                px-5
-                py-2
-                rounded-full
-                border
-                transition-all
-                duration-300
-                ${activeCategory === category
-                    ? "bg-cyan-500 text-black border-cyan-500"
-                    : "bg-white/5 border-white/10 hover:border-cyan-400 hover:bg-white/10"
-                  }
-              `}
+                className={`terminal-control ${activeCategory === category ? "border-cyan-100/70 bg-cyan-200/15 text-cyan-50" : ""}`}
               >
                 {category}
 
@@ -125,18 +124,7 @@ export default function CreativeStudio({
               <Link
                 href="/creative"
                 className="
-                px-8
-                py-4
-                rounded-full
-                border
-                border-cyan-400/30
-                bg-cyan-500/10
-                hover:bg-cyan-500/20
-                hover:border-cyan-400
-                transition-all
-                duration-300
-                font-medium
-                tracking-wide
+                terminal-control
               "
               >
                 View All Creative Works →

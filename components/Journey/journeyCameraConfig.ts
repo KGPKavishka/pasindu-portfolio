@@ -16,12 +16,14 @@ const target = (
 ): JourneyVector => [point[0], point[1] + yOffset, point[2]];
 
 export const journeyCameraKeyframes = [
-  { progress: 0, position: [0, 0.2, 12], target: [0, 0, -24], moment: "travel" },
-  { progress: 0.055, position: [0.25, 0.35, 8], target: target(journeyWorld.planet, 0.2), moment: "approach" },
+  { progress: 0, position: [0, 0.2, 12], target: [-6, 1.2, -32], moment: "travel" },
+  { progress: 0.03, position: [0.1, 0.28, 10], target: [-3, 0.7, -31], moment: "travel" },
+  { progress: 0.06, position: [0.3, 0.38, 7], target: target(journeyWorld.planet, 0.2), moment: "approach" },
   { progress: 0.1, position: [0.8, 0.45, 1], target: target(journeyWorld.planet, 0.15), moment: "focus" },
   { progress: 0.16, position: [1.2, 0.2, -16], target: target(journeyWorld.planet, 0.1), moment: "departure" },
-  { progress: 0.19, position: [5.5, 0.9, -29], target: [1, -1, -39], moment: "approach" },
-  { progress: 0.22, position: [2.8, 2.8, -46], target: [0, -2.2, -70], moment: "focus" },
+  { progress: 0.18, position: [4, 0.55, -21], target: [1, -0.7, -36], moment: "approach" },
+  { progress: 0.205, position: [7, 1.2, -32], target: [0.5, -1.6, -54], moment: "focus" },
+  { progress: 0.22, position: [4, 2.8, -46], target: [0, -2.2, -70], moment: "departure" },
   { progress: 0.245, position: [0.8, 3.2, -62], target: [0, -1.2, -88], moment: "departure" },
   { progress: 0.275, position: [0, 3.8, -78], target: target(journeyWorld.cityEntrance, 3.2), moment: "approach" },
   { progress: 0.3, position: [0, 4, -90], target: target(journeyWorld.cityCore, 3.6), moment: "focus" },

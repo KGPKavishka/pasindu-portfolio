@@ -33,9 +33,6 @@ export default function JourneyScene() {
         }}
       >
         <color attach="background" args={["#01040b"]} />
-        <ambientLight intensity={0.18} color="#bdefff" />
-
-        <directionalLight position={[4, 6, 8]} intensity={1.4} color="#67e8f9" />
 
         <JourneyCameraRig />
         <JourneyAtmosphere />

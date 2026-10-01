@@ -114,36 +114,25 @@ export default function ProjectModal({
           mass: 0.8,
         }}
         onClick={(e) => e.stopPropagation()}
-        className="
-          bg-[#0b1020]
-          border
-          border-white/10
-          rounded-3xl
-          max-w-4xl
-          w-full
-          max-h-[90vh]
-          overflow-y-auto
-          shadow-2xl
-          shadow-cyan-500/10
-        "
+        className="terminal-panel interface-dialog max-w-4xl w-full max-h-[90vh] overflow-y-auto"
       >
 
         {/* Header */}
-        <div className="border-b border-white/10 p-8">
+        <div className="border-b border-cyan-300/15 p-5 sm:p-8">
 
           <div className="flex items-start justify-between">
 
             <div>
 
-              <div className="text-5xl">
+              <div className="font-mono text-2xl text-cyan-100">
                 {project.emoji}
               </div>
 
-              <h2 id={`project-${project.id}-title`} className="mt-4 text-4xl font-bold">
+              <h2 id={`project-${project.id}-title`} className="terminal-title mt-3 text-xl sm:text-2xl">
                 {project.title}
               </h2>
 
-              <p className="mt-2 text-lg text-cyan-400">
+              <p className="terminal-meta mt-2 text-cyan-100">
                 {project.subtitle}
               </p>
 
@@ -153,20 +142,7 @@ export default function ProjectModal({
               type="button"
               aria-label={`Close ${project.title} project details`}
               onClick={onClose}
-              className="
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-                rounded-full
-                bg-white/10
-                text-xl
-                transition-all
-                duration-300
-                hover:bg-red-500/20
-                hover:text-red-300
-              "
+                className="terminal-control h-10 w-10 min-h-10 p-0 text-lg"
             >
               ✕
             </button>
@@ -175,18 +151,16 @@ export default function ProjectModal({
 
         </div>
 
-        <div className="p-8 space-y-10">
+        <div className="space-y-8 p-5 sm:p-8">
 
           {/* Hero Image */}
           {project.heroImage && (
             <div
               className="
                 relative
-                h-72
+                h-52 sm:h-72
                 overflow-hidden
-                rounded-2xl
-                border
-                border-white/10
+                terminal-image-frame
                 bg-[#0f172a]
               "
             >
@@ -195,6 +169,7 @@ export default function ProjectModal({
                 alt={project.title}
                 fill
                 priority
+                sizes="(max-width: 768px) calc(100vw - 3rem), 896px"
                 className="
                   object-cover
                   transition-transform
@@ -224,15 +199,7 @@ export default function ProjectModal({
                 "
               >
                 <span
-                  className="
-                    rounded-full
-                    bg-cyan-500/20
-                    px-4
-                    py-2
-                    text-sm
-                    text-cyan-300
-                    backdrop-blur
-                  "
+                    className="terminal-chip px-3 py-2"
                 >
                   {project.title}
                 </span>
@@ -244,7 +211,7 @@ export default function ProjectModal({
           {/* Overview */}
           <div>
 
-            <h3 className="text-2xl font-bold mb-4">
+                <h3 className="mb-3">
               Overview
             </h3>
 
@@ -257,7 +224,7 @@ export default function ProjectModal({
           {/* Technologies */}
           <div>
 
-            <h3 className="text-2xl font-bold mb-4">
+                <h3 className="mb-3">
               Technologies
             </h3>
 
@@ -266,16 +233,7 @@ export default function ProjectModal({
               {project.technologies.map((tech) => (
                 <span
                   key={tech}
-                  className="
-                    px-4
-                    py-2
-                    rounded-full
-                    bg-cyan-500/10
-                    border
-                    border-cyan-500/20
-                    text-sm
-                    text-cyan-300
-                  "
+                    className="terminal-chip px-2.5 py-1.5"
                 >
                   {tech}
                 </span>
@@ -288,7 +246,7 @@ export default function ProjectModal({
           {/* Architecture */}
           <div>
 
-            <h3 className="text-2xl font-bold mb-4">
+            <h3 className="mb-3">
               Architecture
             </h3>
 
@@ -316,7 +274,7 @@ export default function ProjectModal({
           {/* Features */}
           <div>
 
-            <h3 className="text-2xl font-bold mb-4">
+            <h3 className="mb-3">
               Key Features
             </h3>
 
@@ -344,7 +302,7 @@ export default function ProjectModal({
           {/* Challenges */}
           <div>
 
-            <h3 className="text-2xl font-bold mb-4">
+            <h3 className="mb-3">
               Challenges
             </h3>
 
@@ -401,7 +359,7 @@ export default function ProjectModal({
           {project.screenshots && project.screenshots.length > 0 && (
             <div>
 
-              <h3 className="text-2xl font-bold mb-6">
+              <h3 className="mb-4">
                 Project Gallery
               </h3>
 
@@ -434,6 +392,7 @@ export default function ProjectModal({
                       src={image}
                       alt={`${project.title} Screenshot ${index + 1}`}
                       fill
+                      sizes="(max-width: 768px) calc(100vw - 4rem), 33vw"
                       className="
                         object-cover
                         transition-transform
@@ -498,20 +457,7 @@ export default function ProjectModal({
                   type="button"
                   aria-label="Previous screenshot"
                   onClick={showPreviousImage}
-                  className="
-                    absolute
-                    left-4
-                    top-1/2
-                    -translate-y-1/2
-                    h-14
-                    w-14
-                    rounded-full
-                    bg-black/60
-                    text-3xl
-                    text-white
-                    transition
-                    hover:bg-cyan-500
-                  "
+                  className="terminal-control absolute left-4 top-1/2 h-10 w-10 min-h-10 -translate-y-1/2 p-0 text-xl"
                 >
                   ‹
                 </button>
@@ -519,20 +465,7 @@ export default function ProjectModal({
                   type="button"
                   aria-label="Next screenshot"
                   onClick={showNextImage}
-                  className="
-                    absolute
-                    right-4
-                    top-1/2
-                    -translate-y-1/2
-                    h-14
-                    w-14
-                    rounded-full
-                    bg-black/60
-                    text-3xl
-                    text-white
-                    transition
-                    hover:bg-cyan-500
-                  "
+                  className="terminal-control absolute right-4 top-1/2 h-10 w-10 min-h-10 -translate-y-1/2 p-0 text-xl"
                 >
                   ›
                 </button>
@@ -542,36 +475,13 @@ export default function ProjectModal({
                   type="button"
                   aria-label="Close screenshot viewer"
                   onClick={() => setSelectedImage(null)}
-                  className="
-                    absolute
-                    top-4
-                    right-4
-                    h-12
-                    w-12
-                    rounded-full
-                    bg-black/60
-                    text-white
-                    text-xl
-                    transition
-                    hover:bg-red-500
-                  "
+                  className="terminal-control absolute right-4 top-4 h-10 w-10 min-h-10 p-0"
                 >
                   ✕
                 </button>
 
                 <div
-                  className="
-                    absolute
-                    bottom-6
-                    left-1/2
-                    -translate-x-1/2
-                    rounded-full
-                    bg-black/70
-                    px-5
-                    py-2
-                    text-sm
-                    text-white
-                  "
+                  className="terminal-chip absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2"
                 >
                   {selectedImage! + 1} / {project.screenshots.length}
                 </div>
@@ -587,17 +497,7 @@ export default function ProjectModal({
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="
-                rounded-xl
-                bg-cyan-500
-                px-6
-                py-3
-                font-semibold
-                text-black
-                transition-all
-                duration-300
-                hover:scale-105
-              "
+              className="terminal-control"
             >
               View GitHub
             </a>
