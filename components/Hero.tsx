@@ -1,13 +1,32 @@
 "use client";
 
-import Reveal from "./Reveal";
+import { motion, useReducedMotion, useTransform } from "framer-motion";
+
+import TerminalPanel from "@/components/UI/TerminalPanel";
+import TypewriterText from "@/components/UI/TypewriterText";
+import { useJourney } from "./Journey/JourneyController";
 
 export default function Hero() {
+  const { currentPhase, progress } = useJourney();
+  const reduceMotion = useReducedMotion();
+  const introOpacity = useTransform(
+    progress,
+    reduceMotion ? [0, 0.08] : [0, 0.025, 0.075],
+    reduceMotion ? [1, 0] : [1, 1, 0]
+  );
+  const introY = useTransform(progress, [0, 0.08], [0, reduceMotion ? 0 : -28]);
+  const introScale = useTransform(
+    progress,
+    [0, 0.08],
+    [1, reduceMotion ? 1 : 0.96]
+  );
+  const isIntroActive = currentPhase.id === "space";
+
   const scrollToProjects = () => {
     document
       .getElementById("projects")
       ?.scrollIntoView({
-        behavior: "smooth",
+        behavior: reduceMotion ? "instant" : "smooth",
       });
   };
 
@@ -19,94 +38,45 @@ export default function Hero() {
   };
 
   return (
-    <Reveal>
-      <section
-        id="home"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      >
-        {/* Glow Effects */}
-        {/* <div className="absolute top-40 left-20 w-72 h-72 bg-cyan-500/20 blur-[120px]" />
-        <div className="absolute bottom-48 right-20 w-72 h-72 bg-purple-500/20 blur-[120px]" /> */}
+    <section id="home" className="relative min-h-[280vh]">
+      <div className="sticky top-0 flex h-screen items-end overflow-hidden px-6 pb-16 pt-28 sm:pb-20 lg:px-12">
+        <motion.div
+          style={{ opacity: introOpacity, y: introY, scale: introScale }}
+          className="relative z-10 max-w-md text-left"
+        >
+          <TerminalPanel className="p-4 sm:p-5">
+            <p className="terminal-kicker text-emerald-200">
+              <TypewriterText text="SYSTEM INITIALIZED" speed={34} restartKey="hero-system" />
+            </p>
+            <h1 className="terminal-title mt-2 text-xl sm:text-2xl">
+              Pasindu Kavishka
+            </h1>
+            <p className="terminal-meta mt-1 text-cyan-100/75">Software Engineer</p>
+            <p className="terminal-copy mt-3 max-w-sm">
+              Building scalable web, mobile, cloud and AI-powered solutions.
+            </p>
 
-        <div className="relative z-10 text-center px-6">
-          <p className="mb-4 text-xs sm:text-sm uppercase tracking-[0.3em] text-cyan-400">
-            Software Engineer
-          </p>
-
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold leading-none">
-            Pasindu
-          </h1>
-
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold leading-none">
-            Kavishka
-          </h1>
-
-          <p className="mx-auto mt-6 sm:mt-8 max-w-2xl text-base sm:text-lg text-gray-400 leading-relaxed px-2">
-            Building scalable web, mobile, cloud and AI-powered solutions.
-          </p>
-
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row justify-center gap-4">
-            <button
-              onClick={scrollToProjects}
-              className="
-                w-full sm:w-auto
-                group
-                rounded-xl
-                bg-cyan-500
-                px-7
-                py-3
-                font-semibold
-                text-black
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:scale-105
-                hover:bg-cyan-400
-                hover:shadow-xl
-                hover:shadow-cyan-500/30
-                active:scale-95
-              "
-            >
-              <span className="flex items-center justify-center gap-2">
-                Explore City
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </span>
-            </button>
-
-            <button
-              onClick={downloadCV}
-              className="
-                w-full sm:w-auto
-                group
-                rounded-xl
-                border
-                border-white/20
-                bg-white/5
-                px-7
-                py-3
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:scale-105
-                hover:border-cyan-400
-                hover:bg-cyan-500/10
-                hover:shadow-lg
-                hover:shadow-cyan-500/10
-                active:scale-95
-              "
-            >
-              <span className="flex items-center justify-center gap-2">
-                Download CV
-                <span className="transition-transform duration-300 group-hover:translate-y-[2px]">
-                  ↓
-                </span>
-              </span>
-            </button>
-          </div>
-        </div>
-      </section>
-    </Reveal>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                tabIndex={isIntroActive ? 0 : -1}
+                onClick={scrollToProjects}
+                className="terminal-control"
+              >
+                Explore City <span aria-hidden="true">→</span>
+              </button>
+              <button
+                type="button"
+                tabIndex={isIntroActive ? 0 : -1}
+                onClick={downloadCV}
+                className="terminal-control"
+              >
+                Download CV <span aria-hidden="true">↓</span>
+              </button>
+            </div>
+          </TerminalPanel>
+        </motion.div>
+      </div>
+    </section>
   );
 }

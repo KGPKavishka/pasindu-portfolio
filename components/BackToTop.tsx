@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 
 export default function BackToTop() {
   const [show, setShow] = useState(false);
+  const reduceMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +25,7 @@ export default function BackToTop() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: reduceMotion ? "instant" : "smooth",
     });
   };
 

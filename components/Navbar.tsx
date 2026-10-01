@@ -83,6 +83,7 @@ export default function Navbar() {
 
   return (
     <nav
+      aria-label="Primary navigation"
       className="
         fixed
         top-0
@@ -91,14 +92,14 @@ export default function Navbar() {
         z-50
 
         border-b
-        border-white/5
+        border-cyan-300/15
 
-        bg-[#050816]/65
+        bg-[#02070c]/80
 
-        backdrop-blur-3xl
+        backdrop-blur-xl
 
-        shadow-xl
-        shadow-black/20
+        shadow-lg
+        shadow-black/30
       "
     >
       <div
@@ -121,10 +122,12 @@ export default function Navbar() {
               w-12
               items-center
               justify-center
-              rounded-xl
+              rounded-none
               border
               border-cyan-400/25
               bg-cyan-500/10
+              font-mono
+              text-xs
               font-bold
               text-cyan-400
               shadow-lg
@@ -136,11 +139,11 @@ export default function Navbar() {
 
           <div>
 
-            <h1 className="text-lg font-semibold tracking-tight">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.08em]">
               Pasindu Kavishka
-            </h1>
+            </p>
 
-            <p className="text-[11px] tracking-wide uppercase text-gray-400">
+            <p className="terminal-kicker mt-0.5 text-[8px]">
               Software Engineer
             </p>
 
@@ -156,11 +159,10 @@ export default function Navbar() {
               md:flex
               items-center
               gap-2
-              rounded-full
               border
-              border-white/5
-              bg-white/[0.03]
-              p-1.5
+              border-cyan-300/15
+              bg-[#02070c]/55
+              p-1
               backdrop-blur-xl
             "
           >
@@ -171,11 +173,12 @@ export default function Navbar() {
               className="
                 relative
                 overflow-hidden
-                rounded-full
-                px-6
-                py-2.5
-                text-[14px]
-                font-medium
+                px-3
+                py-2
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.1em]
                 transition-colors
                 duration-300
               "
@@ -187,12 +190,10 @@ export default function Navbar() {
                     className="
                     absolute
                     inset-0
-                    rounded-full
-                    bg-cyan-400/15
                     border
-                    border-cyan-400/20
-                    shadow-lg
-                    shadow-cyan-400/10
+                    border-cyan-300/20
+                    bg-cyan-300/[0.07]
+                    shadow-[0_0_16px_rgba(34,211,238,0.08)]
                   "
                     transition={{
                       type: "spring",
@@ -219,11 +220,12 @@ export default function Navbar() {
               className="
                 relative
                 overflow-hidden
-                rounded-full
-                px-6
-                py-2.5
-                text-[14px]
-                font-medium
+                px-3
+                py-2
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.1em]
                 transition-colors
                 duration-300
               "
@@ -235,12 +237,10 @@ export default function Navbar() {
                     className="
                     absolute
                     inset-0
-                    rounded-full
-                    bg-cyan-400/15
                     border
-                    border-cyan-400/20
-                    shadow-lg
-                    shadow-cyan-400/10
+                    border-cyan-300/20
+                    bg-cyan-300/[0.07]
+                    shadow-[0_0_16px_rgba(34,211,238,0.08)]
                   "
                     transition={{
                       type: "spring",
@@ -267,11 +267,12 @@ export default function Navbar() {
               className="
                 relative
                 overflow-hidden
-                rounded-full
-                px-6
-                py-2.5
-                text-[14px]
-                font-medium
+                px-3
+                py-2
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.1em]
                 transition-colors
                 duration-300
               "
@@ -283,12 +284,10 @@ export default function Navbar() {
                     className="
                     absolute
                     inset-0
-                    rounded-full
-                    bg-cyan-400/15
                     border
-                    border-cyan-400/20
-                    shadow-lg
-                    shadow-cyan-400/10
+                    border-cyan-300/20
+                    bg-cyan-300/[0.07]
+                    shadow-[0_0_16px_rgba(34,211,238,0.08)]
                   "
                     transition={{
                       type: "spring",
@@ -315,11 +314,12 @@ export default function Navbar() {
               className="
                 relative
                 overflow-hidden
-                rounded-full
-                px-6
-                py-2.5
-                text-[14px]
-                font-medium
+                px-3
+                py-2
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.1em]
                 transition-colors
                 duration-300
               "
@@ -331,12 +331,10 @@ export default function Navbar() {
                     className="
                     absolute
                     inset-0
-                    rounded-full
-                    bg-cyan-400/15
                     border
-                    border-cyan-400/20
-                    shadow-lg
-                    shadow-cyan-400/10
+                    border-cyan-300/20
+                    bg-cyan-300/[0.07]
+                    shadow-[0_0_16px_rgba(34,211,238,0.08)]
                   "
                     transition={{
                       type: "spring",
@@ -360,10 +358,14 @@ export default function Navbar() {
 
         <div className="md:hidden">
           <button
+            type="button"
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
             onClick={() =>
               setIsMenuOpen(!isMenuOpen)
             }
-            className="text-white transition-colors hover:text-cyan-400"
+            className="terminal-control min-h-10 px-2"
           >
             {isMenuOpen ? (
               <X size={28} />
@@ -377,6 +379,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{
               opacity: 0,
               y: -20,
@@ -392,13 +395,13 @@ export default function Navbar() {
             transition={{
               duration: 0.25,
             }}
-            className="md:hidden border-t border-white/10 bg-[#050816]/95 backdrop-blur-md"
+            className="md:hidden border-t border-cyan-300/15 bg-[#02070c]/95 backdrop-blur-md"
           >
-            <div className="flex flex-col px-6 py-4 space-y-4">
+            <div className="flex flex-col gap-4 px-6 py-4">
               <a
                 href="#projects"
                 onClick={() => setIsMenuOpen(false)}
-                className="text-white transition-colors hover:text-cyan-400"
+                className="terminal-link"
               >
                 Projects
               </a>
@@ -406,7 +409,7 @@ export default function Navbar() {
               <a
                 href="#experience"
                 onClick={() => setIsMenuOpen(false)}
-                className="text-white transition-colors hover:text-cyan-400"
+                className="terminal-link"
               >
                 Experience
               </a>
@@ -414,7 +417,7 @@ export default function Navbar() {
               <a
                 href="#skills"
                 onClick={() => setIsMenuOpen(false)}
-                className="text-white transition-colors hover:text-cyan-400"
+                className="terminal-link"
               >
                 Skills
               </a>
@@ -422,7 +425,7 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={() => setIsMenuOpen(false)}
-                className="text-white transition-colors hover:text-cyan-400"
+                className="terminal-link"
               >
                 Contact
               </a>

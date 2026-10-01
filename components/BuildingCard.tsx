@@ -40,13 +40,21 @@ export default function BuildingCard({
             hover:shadow-cyan-500/20
         "
       >
-        <div
+        <button
+          type="button"
+          aria-label={`View ${title} project details`}
           onClick={onClick}
           className="
           relative
+          block
           h-full
+          w-full
           overflow-hidden
           rounded-3xl
+          text-left
+          focus-visible:outline-2
+          focus-visible:outline-offset-2
+          focus-visible:outline-cyan-300
         "
         >
 
@@ -259,7 +267,7 @@ export default function BuildingCard({
               </div>
             </div>
           </div>
-        </div>
+        </button>
       </TiltCard>
     </div>
   );

@@ -8,14 +8,12 @@ export default function AnimatedBackground() {
       className="
         fixed
         inset-0
-        z-0
+        z-[1]
         overflow-hidden
         pointer-events-none
       "
+      aria-hidden="true"
     >
-      {/* Base Background */}
-      <div className="absolute inset-0 bg-[#050816]" />
-
       {/* Left Soft Light */}
       <div
         className="
@@ -25,7 +23,7 @@ export default function AnimatedBackground() {
           h-[70rem]
           w-[70rem]
           rounded-full
-          opacity-30
+          opacity-20
         "
         style={{
           background:
@@ -42,7 +40,7 @@ export default function AnimatedBackground() {
           h-[65rem]
           w-[65rem]
           rounded-full
-          opacity-30
+          opacity-20
         "
         style={{
           background:
@@ -60,7 +58,7 @@ export default function AnimatedBackground() {
           w-[60rem]
           -translate-x-1/2
           rounded-full
-          opacity-25
+          opacity-15
         "
         style={{
           background:

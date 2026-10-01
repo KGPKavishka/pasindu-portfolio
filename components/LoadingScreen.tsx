@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import TerminalPanel from "@/components/UI/TerminalPanel";
 
 interface LoadingScreenProps {
   isLoading: boolean;
@@ -9,6 +10,8 @@ interface LoadingScreenProps {
 export default function LoadingScreen({
   isLoading,
 }: LoadingScreenProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <div
       className={`
@@ -19,7 +22,7 @@ export default function LoadingScreen({
         flex-col
         items-center
         justify-center
-        bg-[#050816]
+        bg-[#02070c]/95
         transition-all
         duration-700
         ${
@@ -29,114 +32,28 @@ export default function LoadingScreen({
         }
       `}
     >
-      {/* Soft Background Glow */}
-      <div
-        className="
-          absolute
-          h-72
-          w-72
-          rounded-full
-          bg-cyan-500/10
-          blur-[100px]
-        "
-      />
-
-      {/* Logo */}
       <motion.div
-        initial={{
-          opacity: 0,
-          scale: 0.8,
-          y: 10,
-        }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 0.6,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        className="
-          relative
-          text-7xl
-          font-black
-          tracking-widest
-          text-cyan-400
-        "
+        initial={false}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.45 }}
       >
-        Pasi
+        <TerminalPanel className="w-[min(28rem,calc(100vw-2rem))] p-6 sm:p-8">
+          <p className="terminal-kicker text-emerald-200">System // boot sequence</p>
+          <h1 className="terminal-title mt-3 text-xl sm:text-2xl">Pasindu Kavishka</h1>
+          <p className="terminal-meta mt-2">Loading Portfolio...</p>
+          <div className="mt-7 h-1 border border-cyan-200/20 bg-black/50">
+            <motion.div
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: reduceMotion ? 0 : 2, ease: "easeInOut" }}
+              className="h-full bg-gradient-to-r from-cyan-300 to-emerald-200 shadow-[0_0_12px_rgba(103,232,249,0.45)]"
+            />
+          </div>
+          <p className="terminal-kicker mt-3 text-white/45">
+            Initializing digital experience
+          </p>
+        </TerminalPanel>
       </motion.div>
-
-      {/* Loading Text */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          delay: 0.3,
-          duration: 0.6,
-        }}
-        className="
-          relative
-          mt-6
-          text-sm
-          text-gray-400
-          tracking-[0.3em]
-          uppercase
-        "
-      >
-        Loading Portfolio...
-      </motion.p>
-
-      {/* Progress Bar */}
-      <div
-        className="
-          relative
-          mt-10
-          w-64
-          h-[3px]
-          rounded-full
-          bg-white/10
-          overflow-hidden
-        "
-      >
-        <motion.div
-          initial={{ width: "0%" }}
-          animate={{ width: "100%" }}
-          transition={{
-            duration: 2,
-            ease: "easeInOut",
-          }}
-          className="
-            h-full
-            rounded-full
-            bg-gradient-to-r
-            from-cyan-500
-            via-cyan-300
-            to-cyan-400
-            shadow-[0_0_15px_rgba(34,211,238,0.7)]
-          "
-        />
-      </div>
-
-      {/* Loading Status */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          delay: 0.6,
-          duration: 0.5,
-        }}
-        className="
-          relative
-          mt-4
-          text-xs
-          text-gray-600
-          tracking-wider
-        "
-      >
-        Initializing digital experience
-      </motion.p>
     </div>
   );
 }
