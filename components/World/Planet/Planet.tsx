@@ -16,11 +16,11 @@ export default function Planet() {
   const cloudMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
   const atmosphereRef = useRef<THREE.MeshBasicMaterial>(null);
   const isCompact = size.width < 768;
-  const segments = isCompact ? 40 : 64;
+  const segments = isCompact ? 48 : 72;
+  const radius = journeyWorld.planetRadius;
 
   useFrame((_, delta) => {
     const journeyProgress = progress.get();
-    const detection = THREE.MathUtils.smoothstep(journeyProgress, 0.025, 0.1);
     const approach = THREE.MathUtils.smoothstep(journeyProgress, 0.06, 0.18);
     const entry = THREE.MathUtils.smoothstep(journeyProgress, 0.14, 0.22);
 
@@ -34,7 +34,6 @@ export default function Planet() {
     }
 
     if (planetMaterialRef.current) {
-      planetMaterialRef.current.opacity = THREE.MathUtils.lerp(0.12, 1, detection);
       planetMaterialRef.current.emissiveIntensity = THREE.MathUtils.lerp(
         0.025,
         0.2,
@@ -59,12 +58,11 @@ export default function Planet() {
   return (
     <group position={[...journeyWorld.planet]}>
       <mesh ref={planetRef}>
-        <sphereGeometry args={[4.8, segments, segments]} />
+        <sphereGeometry args={[radius, segments, segments]} />
+        {/* Opaque from the first frame so it reads as a solid silhouette against the quasar. */}
         <meshStandardMaterial
           ref={planetMaterialRef}
           color="#071a24"
-          transparent
-          opacity={0.12}
           roughness={0.88}
           metalness={0.08}
           emissive="#06222c"
@@ -73,7 +71,7 @@ export default function Planet() {
       </mesh>
 
       <mesh ref={cloudRef} scale={1.012} rotation={[0.08, 0, -0.06]}>
-        <icosahedronGeometry args={[4.8, isCompact ? 3 : 4]} />
+        <icosahedronGeometry args={[radius, isCompact ? 3 : 4]} />
         <meshStandardMaterial
           ref={cloudMaterialRef}
           color="#5ee5f2"
@@ -86,7 +84,7 @@ export default function Planet() {
       </mesh>
 
       <mesh scale={1.08}>
-        <sphereGeometry args={[4.8, segments, segments]} />
+        <sphereGeometry args={[radius, segments, segments]} />
         <meshBasicMaterial
           ref={atmosphereRef}
           color="#22d3ee"

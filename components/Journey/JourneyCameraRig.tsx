@@ -6,7 +6,12 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 import { useJourney } from "./JourneyController";
-import { JourneyVector, journeyCameraKeyframes } from "./journeyCameraConfig";
+import {
+  JourneyVector,
+  compactOpeningTargetShiftX,
+  journeyCameraKeyframes,
+} from "./journeyCameraConfig";
+import { useJourneyPointer } from "./journeyPointer";
 
 function interpolateCoordinate(
   previous: number,
@@ -47,6 +52,7 @@ export default function JourneyCameraRig() {
   const { camera, size } = useThree();
   const { progress } = useJourney();
   const reduceMotion = useReducedMotion();
+  const pointer = useJourneyPointer();
   const cameraRef = useRef(camera);
   const desiredPosition = useRef(new THREE.Vector3());
   const desiredTarget = useRef(new THREE.Vector3(0, 0, -24));
@@ -118,6 +124,29 @@ export default function JourneyCameraRig() {
       (isCompact ? 0.35 : 0) +
       (reduceMotion ? 0 : Math.sin(clock.getElapsedTime() * 0.12) * 0.05);
     desiredTarget.current.x *= isCompact ? 0.82 : 1;
+
+    // On narrow screens, aim the opening shot slightly right so the whole
+    // planet stays in frame; blends back to the regular path on scroll.
+    if (isCompact) {
+      desiredTarget.current.x +=
+        compactOpeningTargetShiftX *
+        (1 - THREE.MathUtils.smoothstep(journeyProgress, 0.03, 0.08));
+    }
+    // Opening-shot mouse parallax: translating the camera makes near debris
+    // swing opposite the pointer while distant stars barely move.
+    const heroParallax = reduceMotion
+      ? 0
+      : 1 - THREE.MathUtils.smoothstep(journeyProgress, 0.03, 0.08);
+
+    if (heroParallax > 0) {
+      const offsetX = pointer.x * 0.42 * heroParallax;
+      const offsetY = pointer.y * 0.24 * heroParallax;
+
+      desiredPosition.current.x += offsetX;
+      desiredPosition.current.y += offsetY;
+      desiredTarget.current.x += offsetX;
+      desiredTarget.current.y += offsetY;
+    }
 
     camera.position.lerp(
       desiredPosition.current,

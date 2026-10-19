@@ -3,6 +3,7 @@ export type JourneyWorldPoint = readonly [number, number, number];
 export const journeyWorld = {
   groundY: -3,
   planet: [1, -0.2, -28],
+  planetRadius: 4.8,
   landing: [0, -3, -52],
   cityEntrance: [0, -2.6, -102],
   cityCore: [0, -2.6, -112],

@@ -101,7 +101,7 @@ function PhasePanel({ phaseId }: PhasePanelProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
       transition={{ duration: reduceMotion ? 0 : 0.35 }}
-      className="terminal-panel absolute left-4 top-24 min-w-56 max-w-[calc(100vw-6rem)] border-l-2 border-l-emerald-300/50 px-3 py-2 sm:left-8 sm:min-w-72"
+      className="absolute left-4 top-24 min-w-56 max-w-[calc(100vw-6rem)] px-3 py-2 sm:left-8 sm:min-w-72"
     >
       <p className="terminal-kicker text-emerald-200 sm:text-[10px]">
         <TypewriterText
