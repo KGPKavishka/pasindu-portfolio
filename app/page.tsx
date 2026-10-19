@@ -17,7 +17,6 @@ import DataCenter from "../components/DataCenter";
 import CreativeStudio from "../components/CreativeStudio";
 import FutureLab from "@/components/FutureLab";
 import ContactCenter from "../components/ContactCenter";
-import ScrollProgress from "../components/ScrollProgress";
 import BackToTop from "../components/BackToTop";
 import Footer from "@/components/Footer";
 
@@ -49,11 +48,10 @@ export default function Home() {
       <LoadingScreen isLoading={isLoading} />
       <JourneyScene />
       <JourneyHUD />
+      <Navbar isPoweredOn={!isLoading} />
 
       <main className="relative z-10 min-h-screen bg-transparent text-white">
         <JourneyContentOverlay />
-        <Navbar />
-        <ScrollProgress />
         <Hero />
         <Stats />
         <CityOverview />
