@@ -3,6 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 
 import SpaceEnvironment from "@/components/World/Space/SpaceEnvironment";
+import OrbitalGateway from "@/components/World/Space/OrbitalGateway";
 import Planet from "@/components/World/Planet/Planet";
 import PlanetSurface from "@/components/World/Surface/PlanetSurface";
 import CityEnvironment from "@/components/World/City/CityEnvironment";
@@ -37,6 +38,7 @@ export default function JourneyScene() {
         <JourneyCameraRig />
         <JourneyAtmosphere />
         <SpaceEnvironment />
+        <OrbitalGateway />
         <Planet />
         <PlanetSurface />
         <JourneyTransitRoute />

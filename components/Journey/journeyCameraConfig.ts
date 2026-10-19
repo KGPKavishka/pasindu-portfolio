@@ -15,6 +15,9 @@ const target = (
   yOffset = 3.2
 ): JourneyVector => [point[0], point[1] + yOffset, point[2]];
 
+/** Extra x aim for the opening shot on narrow screens (keeps the planet in frame). */
+export const compactOpeningTargetShiftX = 1.6;
+
 export const journeyCameraKeyframes = [
   { progress: 0, position: [0, 0.2, 12], target: [-6, 1.2, -32], moment: "travel" },
   { progress: 0.03, position: [0.1, 0.28, 10], target: [-3, 0.7, -31], moment: "travel" },
