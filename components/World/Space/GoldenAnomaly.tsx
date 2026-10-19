@@ -86,16 +86,18 @@ const diskFragmentShader = /* glsl */ `
     structure += disk * grain * 0.35 * smoothstep(0.25, 0.8, r);
 
     // Core keeps visible texture instead of a flat white blob.
-    float coreTexture = 0.7 + 0.6 * fbm(q * 11.0 + uTime * 0.02);
+    float coreTexture = 0.6 + 0.8 * fbm(q * 11.0 + uTime * 0.02);
     float bulge = exp(-r * r * 26.0) * coreTexture;
     float core = exp(-r * r * 140.0) * coreTexture;
+    // Damp the dense centre so spiral structure reads all the way in.
+    float centreDamp = mix(0.55, 1.0, smoothstep(0.0, 0.3, r));
 
-    vec3 color = mix(uGold, uEmber, smoothstep(0.2, 0.85, r)) * structure * 0.95;
-    color += uGold * bulge * 0.6;
-    color += uCore * core * 0.8;
+    vec3 color = mix(uGold, uEmber, smoothstep(0.2, 0.85, r)) * structure * 0.8 * centreDamp;
+    color += uGold * bulge * 0.32;
+    color += uCore * core * 0.42;
 
     // Soft highlight roll-off: bright areas stay golden rather than clipping to white.
-    color = 1.0 - exp(-color * 1.5);
+    color = 1.0 - exp(-color * 1.15);
 
     gl_FragColor = vec4(color * uOpacity, 1.0);
     #include <colorspace_fragment>
@@ -111,9 +113,9 @@ const haloFragmentShader = /* glsl */ `
   void main() {
     vec2 p = vUv * 2.0 - 1.0;
     float r = length(p);
-    float glow = exp(-r * r * 55.0) * 0.42
-      + exp(-r * r * 10.0) * 0.1
-      + exp(-r * 3.2) * 0.03;
+    float glow = exp(-r * r * 55.0) * 0.26
+      + exp(-r * r * 10.0) * 0.08
+      + exp(-r * 3.2) * 0.025;
 
     glow *= 1.0 - smoothstep(0.75, 1.0, r);
 
@@ -215,7 +217,7 @@ export default function GoldenAnomaly({ layout, visibility }: GatewayLayerProps)
       uTime: { value: 0 },
       uOpacity: { value: 0 },
       uPinDistance: { value: 50 },
-      uCore: { value: new THREE.Color("#ffd27a") },
+      uCore: { value: new THREE.Color("#ffc95c") },
       uGold: { value: new THREE.Color("#ffaa00") },
       uEmber: { value: new THREE.Color("#b4410c") },
     }),

@@ -27,6 +27,11 @@ export interface GatewayAsteroid {
   seed: number;
 }
 
+export interface GatewayPlanet {
+  position: THREE.Vector3;
+  radius: number;
+}
+
 export interface OrbitalGatewayLayout {
   isCompact: boolean;
   origin: THREE.Vector3;
@@ -47,6 +52,11 @@ export interface OrbitalGatewayLayout {
     headWidth: number;
     /** Tail length as a fraction of the trajectory. */
     tailLength: number;
+  };
+  planets: {
+    gasGiant: GatewayPlanet;
+    terrestrial: GatewayPlanet;
+    moon: GatewayPlanet;
   };
   asteroids: GatewayAsteroid[];
   dust: {
@@ -141,14 +151,15 @@ export function createOrbitalGatewayLayout(
     journeyWorld.planetRadius / planetOffset.length()
   );
 
-  // Quasar core sits on the planet's limb (upper-right on landscape, top-left
-  // on portrait where the right side is off-screen) so the planet eclipses it.
+  // Quasar core sits just outside the planet's limb (upper-right on landscape,
+  // top-left on portrait where the right side is off-screen): the planet
+  // overlaps the outer disk but the core itself stays clearly visible.
   const limbAngle = THREE.MathUtils.degToRad(isPortrait ? 118 : 36);
   const limbOffset = right
     .clone()
     .multiplyScalar(Math.cos(limbAngle))
     .addScaledVector(up, Math.sin(limbAngle))
-    .multiplyScalar(Math.tan(planetAngularRadius * 1.02));
+    .multiplyScalar(Math.tan(planetAngularRadius * 1.6));
   const galaxyDirection = planetDirection.clone().add(limbOffset).normalize();
   const galaxyAngularRadius = isPortrait
     ? horizontalHalf * 0.78
@@ -216,6 +227,32 @@ export function createOrbitalGatewayLayout(
     };
   });
 
+  // Planet placements per orientation (yaw/pitch as fractions of the half
+  // field of view, sizes as angular radii in degrees). The terrestrial planet
+  // and moon are physically nearer than the main planet; the gas giant is far.
+  const sizeAt = (distance: number, angularDegrees: number) =>
+    distance * Math.tan(THREE.MathUtils.degToRad(angularDegrees));
+  const planetSlot = (
+    yaw: number,
+    pitch: number,
+    distance: number,
+    angularDegrees: number
+  ): GatewayPlanet => ({
+    position: place(yaw, pitch, distance),
+    radius: sizeAt(distance, angularDegrees),
+  });
+  const planets = isPortrait
+    ? {
+      gasGiant: planetSlot(0.5, 0.52, 100, 2.4),
+      terrestrial: planetSlot(-0.74, -0.03, 26, 3),
+      moon: planetSlot(0.76, 0.2, 36, 0.8),
+    }
+    : {
+      gasGiant: planetSlot(-0.6, 0.38, 100, 3.6),
+      terrestrial: planetSlot(0.62, -0.5, 26, 4.2),
+      moon: planetSlot(0.78, 0.32, 36, 0.9),
+    };
+
   const dustCount = isCompact ? 20 : 46;
   const dustPositions = new Float32Array(dustCount * 3);
   const dustColors = new Float32Array(dustCount * 3);
@@ -256,8 +293,9 @@ export function createOrbitalGatewayLayout(
     comet: {
       path: cometPath,
       headWidth: cometHeadWidth,
-      tailLength: 0.075,
+      tailLength: 0.06,
     },
+    planets,
     asteroids,
     dust: {
       positions: dustPositions,

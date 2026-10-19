@@ -240,7 +240,7 @@ export default function CosmicArc({ layout, visibility }: GatewayLayerProps) {
   const ribbonMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const particleMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const headMaterialRef = useRef<THREE.ShaderMaterial>(null);
-  const particleCount = isCompact ? 18 : 36;
+  const particleCount = isCompact ? 14 : 28;
 
   const ribbonGeometry = useMemo(() => createRibbonGeometry(), []);
   const particles = useMemo(

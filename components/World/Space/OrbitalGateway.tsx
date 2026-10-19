@@ -9,6 +9,7 @@ import { useJourney } from "@/components/Journey/JourneyController";
 import PlanetRimLight from "@/components/World/Planet/PlanetRimLight";
 import CosmicArc from "./CosmicArc";
 import DeepVoidBackdrop from "./DeepVoidBackdrop";
+import DistantPlanets from "./DistantPlanets";
 import ForegroundDebris from "./ForegroundDebris";
 import GoldenAnomaly from "./GoldenAnomaly";
 import {
@@ -17,17 +18,19 @@ import {
 } from "./orbitalGatewayLayout";
 
 const { smoothstep } = THREE.MathUtils;
+const QUASAR_LIGHT_INTENSITY = 2.2;
 
 /**
  * Opening "Orbital Gateway" shot of the journey: deep void, golden anomaly,
- * cosmic arc and foreground debris. Everything hands over to the planet
- * approach and is hidden once the camera leaves outer space.
+ * planet system, cosmic arc and foreground debris. Everything hands over to
+ * the planet approach and is hidden once the camera leaves outer space.
  */
 export default function OrbitalGateway() {
   const { size } = useThree();
   const { currentPhase, progress } = useJourney();
   const reduceMotion = useReducedMotion();
   const groupRef = useRef<THREE.Group>(null);
+  const quasarLightRef = useRef<THREE.PointLight>(null);
   const isReadyRef = useRef(false);
   const revealStartRef = useRef<number | null>(null);
   const visibility = useRef<GatewayVisibility>({
@@ -87,15 +90,33 @@ export default function OrbitalGateway() {
         state.comet > 0.001 ||
         state.debris > 0.001;
     }
+
+    if (quasarLightRef.current) {
+      quasarLightRef.current.intensity = QUASAR_LIGHT_INTENSITY * state.galaxy;
+    }
   });
 
   return (
-    <group ref={groupRef}>
-      <DeepVoidBackdrop layout={layout} visibility={visibility} />
-      <GoldenAnomaly layout={layout} visibility={visibility} />
-      <CosmicArc layout={layout} visibility={visibility} />
-      <PlanetRimLight layout={layout} visibility={visibility} />
-      <ForegroundDebris layout={layout} visibility={visibility} />
-    </group>
+    <>
+      {/* Warm key light from the quasar: each planet is lit from its own angle.
+          Kept outside the hidden group (intensity 0 instead) so the scene's
+          light count never changes and materials never recompile. */}
+      <pointLight
+        ref={quasarLightRef}
+        position={layout.galaxy.position}
+        color="#ffc27a"
+        intensity={0}
+        decay={0}
+      />
+
+      <group ref={groupRef}>
+        <DeepVoidBackdrop layout={layout} visibility={visibility} />
+        <GoldenAnomaly layout={layout} visibility={visibility} />
+        <DistantPlanets layout={layout} visibility={visibility} />
+        <CosmicArc layout={layout} visibility={visibility} />
+        <PlanetRimLight layout={layout} visibility={visibility} />
+        <ForegroundDebris layout={layout} visibility={visibility} />
+      </group>
+    </>
   );
 }
