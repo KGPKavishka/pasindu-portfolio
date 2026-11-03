@@ -15,6 +15,24 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* EVA design system (see docs/DESIGN_PLAN.md §4). New UI uses these tokens;
+     the older cyan terminal styles are retired phase by phase. */
+  --font-hud: var(--font-plex-mono), ui-monospace, monospace;
+  --font-radio: var(--font-plex-sans), system-ui, sans-serif;
+
+  --color-void: #050505;
+  --color-sunlight: #fff4e2;
+  --color-suit: #e9e6df;
+  --color-visor-gold: #c9a45c;
+  --color-regolith-light: #b08a68;
+  --color-regolith-mid: #8c6a4f;
+  --color-regolith-shadow: #3e2f25;
+  --color-dust-haze: #d9b79a;
+  --color-blue-hour: #6f8faf;
+  --color-caution: #e8a33d;
+  --color-signal: #ff4f00;
+  --color-nominal: #8db580;
 }
 
 body {
@@ -132,6 +150,27 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Radio transcript voice indicator (animated while a line is being spoken) */
+@keyframes radio-bar {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.radio-bar {
+  transform-origin: bottom;
+  transform: scaleY(0.25);
+}
+
+.radio-bar[data-active="true"] {
+  animation: radio-bar 0.9s ease-in-out infinite;
 }
 
 /* ====================================

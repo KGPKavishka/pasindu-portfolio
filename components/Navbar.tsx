@@ -153,8 +153,8 @@ function Reticle({ engaged }: { engaged: boolean }) {
             ease-out
             ${corner.position}
             ${engaged
-              ? `${corner.engaged} text-[#E0FFFF] opacity-100 [text-shadow:0_0_6px_rgba(0,255,255,0.85)]`
-              : `${corner.idle} text-cyan-400/45 opacity-70 group-hover:text-[#E0FFFF] group-hover:opacity-100 group-hover:[text-shadow:0_0_6px_rgba(0,255,255,0.85)] group-focus-visible:text-[#E0FFFF] group-focus-visible:opacity-100`
+              ? `${corner.engaged} text-sunlight opacity-100`
+              : `${corner.idle} text-caution/45 opacity-70 group-hover:text-sunlight group-hover:opacity-100 group-focus-visible:text-sunlight group-focus-visible:opacity-100`
             }
           `}
         >
@@ -171,7 +171,7 @@ function SignalBars() {
       {[0.4, 0.6, 0.8, 1].map((height) => (
         <span
           key={height}
-          className="w-[2px] bg-[#00FFFF] shadow-[0_0_4px_rgba(0,255,255,0.8)]"
+          className="w-[2px] bg-caution"
           style={{ height: `${height * 100}%` }}
         />
       ))}
@@ -251,7 +251,7 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
       <header className="pointer-events-none fixed left-0 top-0 z-50 w-full">
         <nav
           aria-label="Primary navigation"
-          className="mx-auto w-full max-w-[1440px] font-mono"
+          className="mx-auto w-full max-w-[1440px] font-hud"
         >
           <motion.div
             variants={visorVariants}
@@ -267,29 +267,29 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
               origin-top
               overflow-hidden
               border-t
-              border-cyan-400/40
-              bg-slate-950/45
+              border-visor-gold/45
+              bg-void/55
               backdrop-blur-md
             "
           >
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-cyan-400/5 to-transparent"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-sunlight/[0.05] to-transparent"
             />
 
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 opacity-60 bg-[repeating-linear-gradient(0deg,rgba(165,243,252,0.025)_0,rgba(165,243,252,0.025)_1px,transparent_1px,transparent_4px)]"
+              className="pointer-events-none absolute inset-0 opacity-60 bg-[repeating-linear-gradient(0deg,rgba(233,230,223,0.025)_0,rgba(233,230,223,0.025)_1px,transparent_1px,transparent_4px)]"
             />
 
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(0,255,255,0.7)_25%,rgba(224,255,255,0.95)_50%,rgba(167,139,250,0.5)_75%,transparent)]"
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(201,164,92,0.7)_25%,rgba(255,244,226,0.9)_50%,rgba(201,164,92,0.6)_75%,transparent)]"
             />
 
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-[3%] bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-300/25 to-transparent"
+              className="pointer-events-none absolute inset-x-[3%] bottom-0 h-px bg-gradient-to-r from-transparent via-suit/20 to-transparent"
             />
 
             {isPoweredOn && (
@@ -298,7 +298,7 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                 initial={{ x: "-120%", opacity: 0 }}
                 animate={{ x: "120%", opacity: [0, 1, 1, 0] }}
                 transition={{ duration: 1.4, delay: 0.35, ease: "easeInOut" }}
-                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-cyan-300/10 to-transparent"
+                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-sunlight/10 to-transparent"
               />
             )}
 
@@ -328,23 +328,23 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                   aria-hidden="true"
                   className="relative flex h-2 w-2 shrink-0"
                 >
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-nominal opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-nominal" />
                 </span>
 
                 <div className="min-w-0 leading-tight">
-                  <p className="truncate text-[11px] font-semibold tracking-[0.2em] text-[#E0FFFF] [text-shadow:0_0_10px_rgba(0,255,255,0.45)] sm:text-xs">
+                  <p className="truncate text-[11px] font-semibold tracking-[0.2em] text-suit [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] sm:text-xs">
                     <span aria-hidden="true">PASINDU K.</span>
                     <span className="sr-only">Pasindu Kavishka</span>
                   </p>
 
                   <p
                     aria-hidden="true"
-                    className="mt-0.5 truncate text-[10px] tracking-[0.14em] text-cyan-200/55"
+                    className="mt-0.5 truncate text-[10px] tracking-[0.14em] text-suit/50"
                   >
                     <span className="md:hidden xl:inline">EVA-01{" // "}</span>
                     SUIT:{" "}
-                    <span className="text-emerald-300/85">NOMINAL</span>
+                    <span className="text-nominal">NOMINAL</span>
                   </p>
                 </div>
               </motion.div>
@@ -371,7 +371,7 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                           text-[10px]
                           tracking-[0.08em]
                           outline-none
-                          focus-visible:bg-cyan-400/[0.06]
+                          focus-visible:bg-suit/[0.06]
                           xl:px-3
                           xl:tracking-[0.12em]
                         "
@@ -380,15 +380,15 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
 
                         <span
                           className={`relative z-10 transition-colors duration-300 ${isActive
-                            ? "text-[#E0FFFF] [text-shadow:0_0_12px_rgba(0,255,255,0.65)]"
-                            : "text-cyan-200/70 group-hover:text-[#E0FFFF] group-focus-visible:text-[#E0FFFF]"
+                            ? "text-sunlight [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]"
+                            : "text-suit/65 group-hover:text-sunlight group-focus-visible:text-sunlight"
                             }`}
                         >
                           [
                           <span
                             className={`transition-colors duration-300 ${isActive
-                              ? "text-[#00FFFF]"
-                              : "text-cyan-400/60 group-hover:text-[#00FFFF]"
+                              ? "text-caution"
+                              : "text-caution/55 group-hover:text-caution"
                               }`}
                           >
                             {waypoint.index}
@@ -408,9 +408,8 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                             }}
                             className="pointer-events-none absolute inset-x-2 -bottom-1.5 flex justify-center"
                           >
-                            <span className="absolute -bottom-1 h-4 w-full rounded-full bg-cyan-400/25 blur-md" />
-                            <span className="relative h-px w-full bg-gradient-to-r from-transparent via-[#00FFFF] to-transparent shadow-[0_0_8px_rgba(0,255,255,0.9)]" />
-                            <span className="absolute -top-[3px] h-1 w-1 rotate-45 bg-[#00FFFF] shadow-[0_0_6px_rgba(0,255,255,0.9)]" />
+                            <span className="relative h-px w-full bg-gradient-to-r from-transparent via-caution to-transparent" />
+                            <span className="absolute -top-[3px] h-1 w-1 rotate-45 bg-caution" />
                           </motion.span>
                         )}
                       </a>
@@ -425,22 +424,22 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                 className="hidden items-center justify-end gap-4 lg:flex"
               >
                 <div className="text-right leading-tight">
-                  <p className="text-[10px] tracking-[0.16em] text-cyan-200/55">
+                  <p className="text-[10px] tracking-[0.16em] text-suit/50">
                     SYS.VER{" // "}
-                    <span className="text-cyan-200">2.6.0</span>
+                    <span className="text-suit">2.6.0</span>
                   </p>
 
-                  <p className="mt-0.5 text-[11px] tracking-[0.12em] text-[#E0FFFF]">
-                    <span className="text-cyan-200/60">MET:</span>{" "}
+                  <p className="mt-0.5 text-[11px] tracking-[0.12em] text-suit">
+                    <span className="text-suit/55">MET:</span>{" "}
                     <MissionElapsedTime />
                   </p>
                 </div>
 
-                <div className="hidden items-center gap-2 border border-cyan-400/30 bg-cyan-400/[0.06] px-2 py-1 shadow-[0_0_12px_rgba(0,255,255,0.08)] min-[1360px]:flex">
+                <div className="hidden items-center gap-2 border border-suit/25 bg-suit/[0.05] px-2 py-1 min-[1360px]:flex">
                   <SignalBars />
-                  <span className="whitespace-nowrap text-[10px] tracking-[0.14em] text-cyan-200">
+                  <span className="whitespace-nowrap text-[10px] tracking-[0.14em] text-suit">
                     COM-LINK:{" "}
-                    <span className="text-emerald-300">ACTIVE</span>
+                    <span className="text-nominal">ACTIVE</span>
                   </span>
                 </div>
               </motion.div>
@@ -451,7 +450,7 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
               >
                 <p
                   aria-hidden="true"
-                  className="hidden text-[10px] tracking-[0.12em] text-cyan-200/80 sm:block"
+                  className="hidden text-[10px] tracking-[0.12em] text-suit/80 sm:block"
                 >
                   MET: <MissionElapsedTime />
                 </p>
@@ -471,17 +470,17 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                     items-center
                     justify-center
                     border
-                    border-cyan-400/35
-                    bg-cyan-400/[0.06]
-                    text-cyan-200
+                    border-suit/30
+                    bg-suit/[0.05]
+                    text-suit
                     transition-colors
                     duration-300
-                    hover:border-[#00FFFF]/70
-                    hover:text-[#E0FFFF]
+                    hover:border-caution/70
+                    hover:text-sunlight
                     focus-visible:outline
                     focus-visible:outline-1
                     focus-visible:outline-offset-2
-                    focus-visible:outline-[#00FFFF]
+                    focus-visible:outline-caution
                   "
                 >
                   {isMenuOpen ? (
@@ -519,15 +518,15 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                   mx-[4%]
                   mt-1
                   border
-                  border-cyan-400/25
-                  bg-slate-950/85
+                  border-suit/20
+                  bg-void/90
                   backdrop-blur-md
                   md:hidden
                 "
               >
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-cyan-400/5 to-transparent"
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-sunlight/[0.05] to-transparent"
                 />
 
                 <ul className="relative flex flex-col px-5 py-3">
@@ -550,14 +549,14 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                             transition-colors
                             duration-300
                             ${isActive
-                              ? "text-[#E0FFFF] [text-shadow:0_0_10px_rgba(0,255,255,0.6)]"
-                              : "text-cyan-200/70 hover:text-[#E0FFFF]"
+                              ? "text-sunlight"
+                              : "text-suit/65 hover:text-sunlight"
                             }
                           `}
                         >
                           <span
                             aria-hidden="true"
-                            className={isActive ? "text-[#00FFFF]" : "text-cyan-400/40"}
+                            className={isActive ? "text-caution" : "text-caution/40"}
                           >
                             {isActive ? "▸" : "·"}
                           </span>
@@ -570,14 +569,14 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
 
                 <div
                   aria-hidden="true"
-                  className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-cyan-400/15 px-5 py-2 text-[10px] tracking-[0.12em] text-cyan-200/60"
+                  className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-suit/15 px-5 py-2 text-[10px] tracking-[0.12em] text-suit/60"
                 >
                   <span className="whitespace-nowrap">
                     MET: <MissionElapsedTime />
                   </span>
                   <span className="flex items-center gap-2 whitespace-nowrap">
                     <SignalBars />
-                    COM-LINK: <span className="text-emerald-300">ACTIVE</span>
+                    COM-LINK: <span className="text-nominal">ACTIVE</span>
                   </span>
                 </div>
               </motion.div>

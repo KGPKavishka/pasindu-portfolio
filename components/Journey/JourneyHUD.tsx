@@ -150,7 +150,8 @@ function PhasePanel({ phaseId }: PhasePanelProps) {
 export default function JourneyHUD() {
   const { currentPhase } = useJourney();
 
-  if (currentPhase.id === "loading") return null;
+  // The radio transcript owns the opening (space) phase.
+  if (currentPhase.id === "loading" || currentPhase.id === "space") return null;
 
   return (
     <div

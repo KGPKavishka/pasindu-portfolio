@@ -6,6 +6,8 @@ import LoadingScreen from "@/components/LoadingScreen";
 import JourneyController from "@/components/Journey/JourneyController";
 import JourneyScene from "@/components/Journey/JourneyScene";
 import JourneyHUD from "@/components/Journey/JourneyHUD";
+import HelmetFrame from "@/components/Journey/HelmetFrame";
+import RadioTranscript from "@/components/Journey/RadioTranscript";
 import JourneyContentOverlay from "@/components/Journey/JourneyContentOverlay";
 
 import Navbar from "../components/Navbar";
@@ -47,7 +49,9 @@ export default function Home() {
     <JourneyController isLoading={isLoading}>
       <LoadingScreen isLoading={isLoading} />
       <JourneyScene />
+      <HelmetFrame />
       <JourneyHUD />
+      <RadioTranscript />
       <Navbar isPoweredOn={!isLoading} />
 
       <main className="relative z-10 min-h-screen bg-transparent text-white">

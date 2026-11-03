@@ -10,6 +10,7 @@ interface TypewriterTextProps {
   restartKey?: string | number;
   onComplete?: () => void;
   showCursor?: boolean;
+  cursorClassName?: string;
   className?: string;
 }
 
@@ -20,6 +21,7 @@ export default function TypewriterText({
   restartKey,
   onComplete,
   showCursor = true,
+  cursorClassName = "text-emerald-300",
   className,
 }: TypewriterTextProps) {
   const reduceMotion = useReducedMotion();
@@ -76,7 +78,7 @@ export default function TypewriterText({
       <span aria-hidden="true" className="col-start-1 row-start-1">
         {text.slice(0, visibleCharacters)}
         {showCursor && (
-          <span className="ml-0.5 inline-block animate-pulse text-emerald-300">
+          <span className={`ml-0.5 inline-block animate-pulse ${cursorClassName}`}>
             _
           </span>
         )}
