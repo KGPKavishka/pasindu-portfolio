@@ -43,4 +43,25 @@ export const storyBeats: readonly StoryBeat[] = [
     line: "Power on. O2 nominal. Comms clear.",
     trigger: { type: "boot", delay: 0.7 },
   },
+  {
+    id: "orbit-pk-intro",
+    act: 1,
+    speaker: "PK",
+    line: "This is Pasindu Kavishka. Software engineer.",
+    trigger: { type: "boot", delay: 1.3 },
+  },
+  {
+    id: "orbit-pk-focus",
+    act: 1,
+    speaker: "PK",
+    line: "I build scalable web, mobile, cloud and AI-powered solutions.",
+    trigger: { type: "boot", delay: 1.1 },
+  },
+  {
+    id: "orbit-control-hatch",
+    act: 1,
+    speaker: "CONTROL",
+    line: "Copy. Hatch is yours.",
+    trigger: { type: "boot", delay: 1.2 },
+  },
 ];

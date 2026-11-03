@@ -1,5 +1,8 @@
 export type JourneyWorldPoint = readonly [number, number, number];
 
+/** Direction toward the sun for the planet-approach shot (unit vector is derived at use). */
+export const journeySunDirection: JourneyWorldPoint = [0.8, 0.4, -0.45];
+
 export const journeyWorld = {
   groundY: -3,
   planet: [1, -0.2, -28],

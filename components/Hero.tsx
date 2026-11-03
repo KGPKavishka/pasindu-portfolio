@@ -54,16 +54,16 @@ function CornerBrackets() {
             absolute
             h-2.5
             w-2.5
-            border-cyan-400
+            border-signal
             transition-all
             duration-300
             ease-out
             group-hover:translate-x-0
             group-hover:translate-y-0
-            group-hover:border-white
+            group-hover:border-sunlight
             group-focus-visible:translate-x-0
             group-focus-visible:translate-y-0
-            group-focus-visible:border-white
+            group-focus-visible:border-sunlight
             ${corner}
           `}
         />
@@ -143,26 +143,26 @@ export default function Hero() {
                 variants={riseVariants}
                 className="
                   mt-5
-                  font-mono
+                  font-hud
                   text-[11px]
                   uppercase
                   tracking-[0.2em]
-                  text-cyan-400
-                  [text-shadow:0_0_12px_rgba(34,211,238,0.55)]
+                  text-caution
+                  [text-shadow:0_1px_10px_rgba(0,0,0,0.7)]
                   sm:text-xs
                   sm:tracking-[0.32em]
                 "
               >
                 <span className="whitespace-nowrap">
                   Software Engineer{" "}
-                  <span aria-hidden="true" className="text-cyan-400/50">{"//"}</span>
+                  <span aria-hidden="true" className="text-caution/50">{"//"}</span>
                 </span>{" "}
                 <span className="whitespace-nowrap">Digital Astronaut</span>
               </motion.p>
 
               <motion.p
                 variants={riseVariants}
-                className="mt-4 max-w-md font-sans text-sm leading-relaxed text-slate-300/75 [text-shadow:0_1px_10px_rgba(0,0,0,0.6)] sm:text-[15px]"
+                className="mt-4 max-w-md font-radio text-sm leading-relaxed text-suit/75 [text-shadow:0_1px_10px_rgba(0,0,0,0.8)] sm:text-[15px]"
               >
                 Building scalable web, mobile, cloud and AI-powered solutions.
               </motion.p>
@@ -175,34 +175,33 @@ export default function Hero() {
                   type="button"
                   tabIndex={isIntroActive ? 0 : -1}
                   onClick={scrollToProjects}
-                  aria-label="Initiate journey"
+                  aria-label="Begin EVA"
                   className="
                     group
                     relative
                     border
-                    border-cyan-500
-                    bg-transparent
+                    border-signal
+                    bg-void/30
                     px-6
                     py-3
                     whitespace-nowrap
-                    font-mono
+                    font-hud
                     text-[11px]
                     uppercase
                     tracking-[0.28em]
-                    text-cyan-200
-                    shadow-[0_0_24px_rgba(6,182,212,0.12)]
+                    text-suit
                     transition-colors
                     duration-300
-                    hover:bg-cyan-500/20
-                    hover:text-white
-                    focus-visible:bg-cyan-500/20
-                    focus-visible:text-white
+                    hover:bg-signal/20
+                    hover:text-sunlight
+                    focus-visible:bg-signal/20
+                    focus-visible:text-sunlight
                     focus-visible:outline-none
                     sm:text-xs
                   "
                 >
                   <CornerBrackets />
-                  [ Initiate Journey ]
+                  [ Begin EVA ]
                 </button>
 
                 <button
@@ -213,19 +212,19 @@ export default function Hero() {
                     inline-flex
                     items-center
                     gap-2
-                    font-mono
+                    font-hud
                     text-[11px]
                     uppercase
                     tracking-[0.24em]
-                    text-cyan-200/60
+                    text-suit/60
                     transition-colors
                     duration-300
-                    hover:text-white
-                    focus-visible:text-white
+                    hover:text-sunlight
+                    focus-visible:text-sunlight
                     focus-visible:outline
                     focus-visible:outline-1
                     focus-visible:outline-offset-4
-                    focus-visible:outline-cyan-400
+                    focus-visible:outline-caution
                   "
                 >
                   Download CV <span aria-hidden="true">↓</span>

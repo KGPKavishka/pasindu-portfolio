@@ -5,6 +5,7 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { useJourney } from "@/components/Journey/JourneyController";
+import { orbitStarMask } from "@/components/World/Orbit/orbitLayout";
 
 interface PointLayerProps {
   count: number;
@@ -16,10 +17,29 @@ interface PointLayerProps {
   drift: number;
 }
 
+type ShaderLike = Parameters<THREE.Material["onBeforeCompile"]>[0];
+
 function seededRandom(seed: number) {
   const value = Math.sin(seed * 12.9898) * 43758.5453;
 
   return value - Math.floor(value);
+}
+
+// Hides stars inside the orbit planet's cone (see orbitStarMask).
+function maskStarsBehindPlanet(shader: ShaderLike) {
+  shader.uniforms.uMaskDirection = orbitStarMask.direction;
+  shader.uniforms.uMaskCosine = orbitStarMask.cosine;
+  shader.vertexShader = shader.vertexShader
+    .replace(
+      "#include <common>",
+      "#include <common>\nuniform vec3 uMaskDirection;\nuniform float uMaskCosine;"
+    )
+    .replace(
+      "#include <fog_vertex>",
+      `#include <fog_vertex>
+  vec3 starDirection = normalize((modelMatrix * vec4(transformed, 1.0)).xyz - cameraPosition);
+  if (dot(starDirection, uMaskDirection) > uMaskCosine) gl_PointSize = 0.0;`
+    );
 }
 
 function PointLayer({
@@ -81,6 +101,7 @@ function PointLayer({
         opacity={opacity}
         depthWrite={false}
         fog={false}
+        onBeforeCompile={maskStarsBehindPlanet}
       />
     </points>
   );
@@ -94,7 +115,7 @@ export default function StarField() {
     <group>
       <PointLayer
         count={isCompact ? 280 : 620}
-        color="#d9f7ff"
+        color="#f2efe6"
         size={0.055}
         opacity={0.8}
         spread={70}
@@ -103,7 +124,7 @@ export default function StarField() {
       />
       <PointLayer
         count={isCompact ? 90 : 180}
-        color="#67e8f9"
+        color="#cfd8e8"
         size={0.11}
         opacity={0.28}
         spread={55}

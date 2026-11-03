@@ -3,7 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 
 import SpaceEnvironment from "@/components/World/Space/SpaceEnvironment";
-import OrbitalGateway from "@/components/World/Space/OrbitalGateway";
+import OrbitScene from "@/components/World/Orbit/OrbitScene";
 import Planet from "@/components/World/Planet/Planet";
 import PlanetSurface from "@/components/World/Surface/PlanetSurface";
 import CityEnvironment from "@/components/World/City/CityEnvironment";
@@ -14,6 +14,7 @@ import CreativeFutureLandmarks from "@/components/World/Landmarks/CreativeFuture
 import ContactLandmarks from "@/components/World/Landmarks/ContactLandmarks";
 import JourneyAtmosphere from "@/components/World/Atmosphere/JourneyAtmosphere";
 import JourneyCameraRig from "./JourneyCameraRig";
+import WorldGate from "./WorldGate";
 
 export default function JourneyScene() {
   return (
@@ -33,20 +34,22 @@ export default function JourneyScene() {
           alpha: false,
         }}
       >
-        <color attach="background" args={["#01040b"]} />
+        <color attach="background" args={["#050505"]} />
 
         <JourneyCameraRig />
         <JourneyAtmosphere />
         <SpaceEnvironment />
-        <OrbitalGateway />
+        <OrbitScene />
         <Planet />
-        <PlanetSurface />
-        <JourneyTransitRoute />
-        <CityEnvironment />
-        <ProjectDistricts />
-        <ProfessionalLandmarks />
-        <CreativeFutureLandmarks />
-        <ContactLandmarks />
+        <WorldGate from={0.14}>
+          <PlanetSurface />
+          <JourneyTransitRoute />
+          <CityEnvironment />
+          <ProjectDistricts />
+          <ProfessionalLandmarks />
+          <CreativeFutureLandmarks />
+          <ContactLandmarks />
+        </WorldGate>
       </Canvas>
     </div>
   );

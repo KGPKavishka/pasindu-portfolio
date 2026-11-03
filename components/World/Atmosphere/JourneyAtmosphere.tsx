@@ -14,15 +14,15 @@ export default function JourneyAtmosphere() {
   const directionalRef = useRef<THREE.DirectionalLight>(null);
   const colors = useMemo(
     () => ({
-      space: new THREE.Color("#01040b"),
+      space: new THREE.Color("#050505"),
       atmosphere: new THREE.Color("#063346"),
       surface: new THREE.Color("#03151c"),
       city: new THREE.Color("#021116"),
       creative: new THREE.Color("#100819"),
       future: new THREE.Color("#07091a"),
       complete: new THREE.Color("#010509"),
-      current: new THREE.Color("#01040b"),
-      spaceLight: new THREE.Color("#7dd3fc"),
+      current: new THREE.Color("#050505"),
+      spaceLight: new THREE.Color("#e9e6df"),
       atmosphereLight: new THREE.Color("#67e8f9"),
       surfaceLight: new THREE.Color("#bdefff"),
       currentLight: new THREE.Color("#7dd3fc"),
@@ -32,7 +32,7 @@ export default function JourneyAtmosphere() {
 
   useEffect(() => {
     const activeScene = sceneRef.current;
-    const fog = new THREE.Fog("#01040b", 18, 58);
+    const fog = new THREE.Fog("#050505", 18, 58);
     activeScene.fog = fog;
 
     return () => {
@@ -77,7 +77,7 @@ export default function JourneyAtmosphere() {
     if (ambientRef.current && directionalRef.current) {
       ambientRef.current.intensity = THREE.MathUtils.lerp(0.08, 0.24, entryIn);
       directionalRef.current.intensity = THREE.MathUtils.lerp(
-        THREE.MathUtils.lerp(0.45, 1.15, approachMix),
+        THREE.MathUtils.lerp(0, 1.15, approachMix),
         1.55,
         entryMix
       );
@@ -91,12 +91,12 @@ export default function JourneyAtmosphere() {
 
   return (
     <>
-      <ambientLight ref={ambientRef} intensity={0.08} color="#7dd3fc" />
+      <ambientLight ref={ambientRef} intensity={0.08} color="#e9e6df" />
       <directionalLight
         ref={directionalRef}
         position={[4, 6, 8]}
-        intensity={0.45}
-        color="#7dd3fc"
+        intensity={0}
+        color="#e9e6df"
       />
     </>
   );

@@ -1,104 +1,76 @@
 "use client";
 
 import { useFrame, useThree } from "@react-three/fiber";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { useJourney } from "@/components/Journey/JourneyController";
-import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
+import {
+  journeySunDirection,
+  journeyWorld,
+} from "@/components/Journey/journeyWorldConfig";
+import {
+  createPlanetUniforms,
+  getPlanetAlbedo,
+  planetFragmentShader,
+  planetVertexShader,
+} from "./planetShader";
 
+/**
+ * The planet the camera approaches after the orbit shot. Same baked surface and
+ * lighting model as the orbit planet; it fades in as the orbit view fades out,
+ * so the two read as one planet.
+ */
 export default function Planet() {
-  const { size } = useThree();
+  const { size, gl } = useThree();
   const { progress } = useJourney();
+  const groupRef = useRef<THREE.Group>(null);
   const planetRef = useRef<THREE.Mesh>(null);
-  const cloudRef = useRef<THREE.Mesh>(null);
-  const planetMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const cloudMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const atmosphereRef = useRef<THREE.MeshBasicMaterial>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
   const isCompact = size.width < 768;
   const segments = isCompact ? 48 : 72;
   const radius = journeyWorld.planetRadius;
+  const uniforms = useMemo(() => {
+    const planetUniforms = createPlanetUniforms(
+      new THREE.Vector3(...journeySunDirection),
+      getPlanetAlbedo(gl, isCompact ? 768 : 1024)
+    );
+
+    planetUniforms.uOpacity.value = 0;
+
+    return planetUniforms;
+  }, [gl, isCompact]);
 
   useFrame((_, delta) => {
-    const journeyProgress = progress.get();
-    const approach = THREE.MathUtils.smoothstep(journeyProgress, 0.06, 0.18);
-    const entry = THREE.MathUtils.smoothstep(journeyProgress, 0.14, 0.22);
+    const fade = THREE.MathUtils.smoothstep(progress.get(), 0.052, 0.07);
 
-    if (planetRef.current) {
-      planetRef.current.rotation.y += delta * 0.018;
-    }
+    if (groupRef.current) groupRef.current.visible = fade > 0.001;
+    if (fade <= 0.001) return;
 
-    if (cloudRef.current) {
-      cloudRef.current.rotation.y += delta * 0.026;
-      cloudRef.current.rotation.z = Math.sin(approach * Math.PI) * 0.04;
-    }
-
-    if (planetMaterialRef.current) {
-      planetMaterialRef.current.emissiveIntensity = THREE.MathUtils.lerp(
-        0.025,
-        0.2,
-        approach
-      );
-    }
-
-    if (cloudMaterialRef.current) {
-      cloudMaterialRef.current.opacity = THREE.MathUtils.lerp(
-        0.015,
-        0.1,
-        approach
-      );
-    }
-
-    if (atmosphereRef.current) {
-      atmosphereRef.current.opacity =
-        THREE.MathUtils.lerp(0.025, 0.22, approach) + entry * 0.16;
-    }
+    if (materialRef.current) materialRef.current.uniforms.uOpacity.value = fade;
+    if (planetRef.current) planetRef.current.rotation.y += delta * 0.018;
   });
 
   return (
-    <group position={[...journeyWorld.planet]}>
-      <mesh ref={planetRef}>
+    <group
+      ref={groupRef}
+      position={[...journeyWorld.planet]}
+      visible={false}
+    >
+      <mesh ref={planetRef} rotation={[0.5, 1.9, 0.25]}>
         <sphereGeometry args={[radius, segments, segments]} />
-        {/* Opaque from the first frame so it reads as a solid silhouette against the quasar. */}
-        <meshStandardMaterial
-          ref={planetMaterialRef}
-          color="#071a24"
-          roughness={0.88}
-          metalness={0.08}
-          emissive="#06222c"
-          emissiveIntensity={0.18}
-        />
-      </mesh>
-
-      <mesh ref={cloudRef} scale={1.012} rotation={[0.08, 0, -0.06]}>
-        <icosahedronGeometry args={[radius, isCompact ? 3 : 4]} />
-        <meshStandardMaterial
-          ref={cloudMaterialRef}
-          color="#5ee5f2"
+        <shaderMaterial
+          ref={materialRef}
+          uniforms={uniforms}
+          vertexShader={planetVertexShader}
+          fragmentShader={planetFragmentShader}
           transparent
-          opacity={0.015}
-          roughness={0.7}
-          depthWrite={false}
-          wireframe
-        />
-      </mesh>
-
-      <mesh scale={1.08}>
-        <sphereGeometry args={[radius, segments, segments]} />
-        <meshBasicMaterial
-          ref={atmosphereRef}
-          color="#22d3ee"
-          transparent
-          opacity={0.025}
-          side={THREE.BackSide}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
         />
       </mesh>
 
       <mesh position={[-7.5, 2.8, -3]}>
         <sphereGeometry args={[0.55, 24, 24]} />
-        <meshStandardMaterial color="#526273" roughness={0.95} />
+        <meshStandardMaterial color="#8a8279" roughness={0.95} />
       </mesh>
     </group>
   );
