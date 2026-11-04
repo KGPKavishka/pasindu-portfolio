@@ -8,6 +8,7 @@ import JourneyScene from "@/components/Journey/JourneyScene";
 import JourneyHUD from "@/components/Journey/JourneyHUD";
 import HelmetFrame from "@/components/Journey/HelmetFrame";
 import RadioTranscript from "@/components/Journey/RadioTranscript";
+import EvaManifest from "@/components/Journey/EvaManifest";
 import JourneyContentOverlay from "@/components/Journey/JourneyContentOverlay";
 
 import Navbar from "../components/Navbar";
@@ -52,6 +53,7 @@ export default function Home() {
       <HelmetFrame />
       <JourneyHUD />
       <RadioTranscript />
+      <EvaManifest />
       <Navbar isPoweredOn={!isLoading} />
 
       <main className="relative z-10 min-h-screen bg-transparent text-white">

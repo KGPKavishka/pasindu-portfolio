@@ -15,6 +15,7 @@ import CreativeModal from "@/components/CreativeModal";
 import TerminalPanel from "@/components/UI/TerminalPanel";
 import { useJourney } from "./JourneyController";
 import type { JourneyPhaseId } from "./journeyConfig";
+import { missionStats } from "./missionStats";
 import { activateJourneyProject } from "./projectActivation";
 
 const projectsByPhase = {
@@ -134,12 +135,7 @@ function ProjectPanel({
 }
 
 function CityPanel({ reduceMotion }: { reduceMotion: boolean | null }) {
-  const metrics = [
-    ["600+", "Internship hours"],
-    ["4+", "Major projects"],
-    ["20+", "Technologies"],
-    ["1", "Research project"],
-  ];
+  const metrics = missionStats.map(({ value, label }) => [value, label]);
 
   return (
     <div className="p-5">

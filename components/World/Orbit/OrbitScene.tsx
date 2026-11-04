@@ -8,6 +8,8 @@ import * as THREE from "three";
 import { useJourney } from "@/components/Journey/JourneyController";
 import OrbitPlanet from "./OrbitPlanet";
 import StationTruss from "./StationTruss";
+import Tether from "./Tether";
+import { createStationEnvironment } from "./stationEnvironment";
 import {
   type OrbitVisibility,
   createOrbitLayout,
@@ -19,12 +21,13 @@ const { smoothstep } = THREE.MathUtils;
 const SUN_LIGHT_INTENSITY = 3.4;
 
 /**
- * Opening "orbit" shot of the journey: a giant planet with a sunrise at its
- * limb and the station truss the astronaut is working on. Everything hands
- * over to the planet approach and stops rendering once the camera leaves it.
+ * The orbit view of the journey: a giant planet with a sunrise at its limb and
+ * the station truss the astronaut is working on. It stays on screen through the
+ * spacewalk, then dissolves into the planet approach.
  */
 export default function OrbitScene() {
   const { size } = useThree();
+  const gl = useThree((state) => state.gl);
   const { currentPhase, progress } = useJourney();
   const reduceMotion = useReducedMotion();
   const sunLightRef = useRef<THREE.DirectionalLight>(null);
@@ -40,6 +43,12 @@ export default function OrbitScene() {
     () => createOrbitLayout(size.width, size.height),
     [size.width, size.height]
   );
+  const environment = useMemo(
+    () => createStationEnvironment(gl, layout.sun.direction, layout.planet.direction),
+    [gl, layout.sun.direction, layout.planet.direction]
+  );
+
+  useEffect(() => () => environment.dispose(), [environment]);
 
   useEffect(() => {
     isReadyRef.current = currentPhase.id !== "loading";
@@ -67,11 +76,11 @@ export default function OrbitScene() {
     state.intro = reduceMotion
       ? Number(revealStartRef.current !== null)
       : smoothstep(elapsed, 0, 2.4);
-    // The station dissolves first, then the planet and sun hand over to the
-    // planet-approach shot (which fades in a touch later, so the two overlap
-    // only briefly).
-    state.station = 1 - smoothstep(journeyProgress, 0.025, 0.05);
-    state.scenery = 1 - smoothstep(journeyProgress, 0.045, 0.068);
+    // The station stays through the whole spacewalk and dissolves first; then
+    // the planet and sun hand over to the planet-approach shot, which fades in
+    // underneath (see Planet.tsx).
+    state.station = 1 - smoothstep(journeyProgress, 0.105, 0.128);
+    state.scenery = 1 - smoothstep(journeyProgress, 0.118, 0.142);
 
     if (!reduceMotion) state.time += Math.min(delta, 0.05);
 
@@ -92,7 +101,7 @@ export default function OrbitScene() {
   return (
     <>
       {/* Sun: a single hard light. Kept in the scene at zero intensity once the
-          opening ends, so the light count (and compiled shaders) never change. */}
+          orbit view ends, so the light count (and compiled shaders) never change. */}
       <directionalLight
         ref={sunLightRef}
         position={layout.sun.position}
@@ -101,7 +110,8 @@ export default function OrbitScene() {
       />
 
       <OrbitPlanet layout={layout} visibility={visibility} />
-      <StationTruss layout={layout} visibility={visibility} />
+      <StationTruss layout={layout} visibility={visibility} environment={environment} />
+      <Tether layout={layout} visibility={visibility} environment={environment} />
     </>
   );
 }

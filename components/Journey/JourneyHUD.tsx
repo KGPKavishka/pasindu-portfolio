@@ -13,7 +13,7 @@ interface HudMessage {
   status?: string;
 }
 
-const hudMessages: Record<JourneyPhaseId, HudMessage> = {
+const hudMessages: Partial<Record<JourneyPhaseId, HudMessage>> = {
   loading: {
     system: "SYSTEM INITIALIZING",
     heading: "LOADING JOURNEY",
@@ -86,13 +86,13 @@ const hudMessages: Record<JourneyPhaseId, HudMessage> = {
 
 interface PhasePanelProps {
   phaseId: JourneyPhaseId;
+  message: HudMessage;
 }
 
-function PhasePanel({ phaseId }: PhasePanelProps) {
+function PhasePanel({ phaseId, message }: PhasePanelProps) {
   const reduceMotion = useReducedMotion();
   const [systemComplete, setSystemComplete] = useState(false);
   const [headingComplete, setHeadingComplete] = useState(false);
-  const message = hudMessages[phaseId];
   const contentReady = message.heading ? headingComplete : systemComplete;
 
   return (
@@ -147,11 +147,18 @@ function PhasePanel({ phaseId }: PhasePanelProps) {
   );
 }
 
+// Phases whose story is told by the radio transcript instead of this panel.
+const radioPhases: ReadonlySet<JourneyPhaseId> = new Set([
+  "loading",
+  "space",
+  "spacewalk",
+]);
+
 export default function JourneyHUD() {
   const { currentPhase } = useJourney();
+  const message = hudMessages[currentPhase.id];
 
-  // The radio transcript owns the opening (space) phase.
-  if (currentPhase.id === "loading" || currentPhase.id === "space") return null;
+  if (radioPhases.has(currentPhase.id) || !message) return null;
 
   return (
     <div
@@ -163,6 +170,7 @@ export default function JourneyHUD() {
         <PhasePanel
           key={currentPhase.id}
           phaseId={currentPhase.id}
+          message={message}
         />
       </AnimatePresence>
     </div>

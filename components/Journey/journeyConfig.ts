@@ -1,6 +1,7 @@
 export const journeyPhaseIds = [
   "loading",
   "space",
+  "spacewalk",
   "planet-approach",
   "planet-surface",
   "city",
@@ -56,21 +57,27 @@ export const journeyPhases = [
   { id: "loading", label: "Loading", start: 0, end: 0 },
   {
     id: "space",
-    label: "Outer Space",
+    label: "Orbit",
     start: 0,
-    end: 0.08,
+    end: 0.04,
     sectionId: "home",
+  },
+  {
+    id: "spacewalk",
+    label: "Spacewalk",
+    start: 0.04,
+    end: 0.14,
   },
   {
     id: "planet-approach",
     label: "Planet Approach",
-    start: 0.08,
-    end: 0.16,
+    start: 0.14,
+    end: 0.18,
   },
   {
     id: "planet-surface",
     label: "Planet Surface",
-    start: 0.16,
+    start: 0.18,
     end: 0.24,
   },
   {

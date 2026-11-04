@@ -42,7 +42,7 @@ export default function Planet() {
   }, [gl, isCompact]);
 
   useFrame((_, delta) => {
-    const fade = THREE.MathUtils.smoothstep(progress.get(), 0.052, 0.07);
+    const fade = THREE.MathUtils.smoothstep(progress.get(), 0.138, 0.154);
 
     if (groupRef.current) groupRef.current.visible = fade > 0.001;
     if (fade <= 0.001) return;

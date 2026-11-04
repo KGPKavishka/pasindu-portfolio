@@ -1,6 +1,6 @@
 "use client";
 
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -11,55 +11,9 @@ import {
   seededRandom,
 } from "./orbitLayout";
 
-const X_AXIS = new THREE.Vector3(1, 0, 0);
 const Y_AXIS = new THREE.Vector3(0, 1, 0);
 
 type Segment = readonly [THREE.Vector3, THREE.Vector3];
-
-/** Small HDR environment: a hot sun, warm bounce from the planet, near-black space. */
-function createStationEnvironment(
-  renderer: THREE.WebGLRenderer,
-  sunDirection: THREE.Vector3,
-  planetDirection: THREE.Vector3
-) {
-  const scene = new THREE.Scene();
-  const hdr = (color: string, scale: number) =>
-    new THREE.MeshBasicMaterial({
-      color: new THREE.Color(color).multiplyScalar(scale),
-      side: THREE.DoubleSide,
-      toneMapped: false,
-    });
-
-  scene.background = new THREE.Color("#020202");
-
-  const sun = new THREE.Mesh(new THREE.SphereGeometry(1.4, 16, 16), hdr("#fff4e2", 60));
-
-  sun.position.copy(sunDirection).multiplyScalar(18);
-  scene.add(sun);
-
-  const bounce = new THREE.Mesh(new THREE.CircleGeometry(16, 32), hdr("#b08a68", 1.1));
-
-  bounce.position.copy(planetDirection).multiplyScalar(12);
-  bounce.lookAt(0, 0, 0);
-  scene.add(bounce);
-
-  const fill = new THREE.Mesh(new THREE.SphereGeometry(30, 16, 16), hdr("#d9b79a", 0.025));
-
-  scene.add(fill);
-
-  const generator = new THREE.PMREMGenerator(renderer);
-  const target = generator.fromScene(scene, 0.03);
-
-  generator.dispose();
-  scene.traverse((object) => {
-    if (object instanceof THREE.Mesh) {
-      object.geometry.dispose();
-      object.material.dispose();
-    }
-  });
-
-  return target.texture;
-}
 
 function createSolarTexture() {
   const canvas = document.createElement("canvas");
@@ -142,36 +96,23 @@ const scratch = {
   direction: new THREE.Vector3(),
 };
 
-export default function StationTruss({ layout, visibility }: OrbitLayerProps) {
-  const { isCompact, planet, sun } = layout;
-  const renderer = useThree((state) => state.gl);
+interface StationTrussProps extends OrbitLayerProps {
+  environment: THREE.Texture;
+}
+
+export default function StationTruss({
+  layout,
+  visibility,
+  environment,
+}: StationTrussProps) {
+  const { station, handrail } = layout;
   const rootRef = useRef<THREE.Group>(null);
   const segmentRef = useRef<THREE.InstancedMesh>(null);
   const nodeRef = useRef<THREE.InstancedMesh>(null);
 
-  const bays = isCompact ? 10 : 14;
-  const length = isCompact ? 16 : 22;
+  const { bays, length, half } = station;
   const bay = length / bays;
-  const half = 0.4;
-  const truss = useMemo(() => buildTrussSegments(bays, bay, half), [bays, bay]);
-
-  // Truss enters from the upper-left corner and runs away toward the upper-centre.
-  const frame = useMemo(() => {
-    const start = layout.place(layout.isPortrait ? -22 : -42, layout.isPortrait ? 22 : 17, 3.4);
-    const end = layout.place(layout.isPortrait ? -6 : -13, layout.isPortrait ? 27 : 16, 3.4 + length);
-    const direction = end.clone().sub(start).normalize();
-    const quaternion = new THREE.Quaternion()
-      .setFromUnitVectors(X_AXIS, direction)
-      .multiply(new THREE.Quaternion().setFromAxisAngle(X_AXIS, 0.5));
-
-    return { start, quaternion };
-  }, [layout, length]);
-
-  const environment = useMemo(
-    () =>
-      createStationEnvironment(renderer, sun.direction, planet.direction),
-    [renderer, sun.direction, planet.direction]
-  );
+  const truss = useMemo(() => buildTrussSegments(bays, bay, half), [bays, bay, half]);
   const solarTexture = useMemo(() => createSolarTexture(), []);
 
   const materials = useMemo(() => {
@@ -200,11 +141,10 @@ export default function StationTruss({ layout, visibility }: OrbitLayerProps) {
 
   useEffect(
     () => () => {
-      environment.dispose();
       solarTexture.dispose();
       Object.values(materials).forEach((material) => material.dispose());
     },
-    [environment, solarTexture, materials]
+    [solarTexture, materials]
   );
 
   useLayoutEffect(() => {
@@ -257,7 +197,7 @@ export default function StationTruss({ layout, visibility }: OrbitLayerProps) {
 
   return (
     <group ref={rootRef} visible={false}>
-      <group position={frame.start} quaternion={frame.quaternion}>
+      <group position={station.start} quaternion={station.quaternion}>
         <instancedMesh
           ref={segmentRef}
           args={[undefined, undefined, truss.segments.length]}
@@ -334,10 +274,7 @@ export default function StationTruss({ layout, visibility }: OrbitLayerProps) {
       </group>
 
       {/* EVA handrail close to the lens. */}
-      <group
-        position={layout.place(layout.isPortrait ? 12 : 30, layout.isPortrait ? -26 : -19, 2.2)}
-        rotation={[0.2, -0.5, 0.9]}
-      >
+      <group position={handrail.position} rotation={handrail.rotation}>
         <mesh material={materials.gold}>
           <cylinderGeometry args={[0.024, 0.024, 0.9, 12]} />
         </mesh>

@@ -15,14 +15,26 @@ const target = (
   yOffset = 3.2
 ): JourneyVector => [point[0], point[1] + yOffset, point[2]];
 
-/** Extra x aim for the opening shot on narrow screens (keeps the planet in frame). */
-export const compactOpeningTargetShiftX = 1.6;
+/**
+ * Camera pose of the opening shot (orbit, hatch open). The orbit scene is laid
+ * out relative to this pose, and the spacewalk path starts from it.
+ */
+export const openingCameraPose = {
+  position: [0, 0.2, 12],
+  target: [-6, 1.2, -32],
+} as const satisfies { position: JourneyVector; target: JourneyVector };
 
+/** Progress at which the spacewalk hands over to the first static keyframe below. */
+export const spacewalkEndProgress = 0.14;
+
+/**
+ * Keyframes from the end of the spacewalk onward. The orbit/spacewalk part of
+ * the path (progress 0 – spacewalkEndProgress) follows the station truss, which
+ * is placed per screen shape, so it is built at runtime from the orbit layout
+ * (see createSpacewalkKeyframes) and prepended by JourneyCameraRig.
+ */
 export const journeyCameraKeyframes = [
-  { progress: 0, position: [0, 0.2, 12], target: [-6, 1.2, -32], moment: "travel" },
-  { progress: 0.03, position: [0.1, 0.28, 10], target: [-3, 0.7, -31], moment: "travel" },
-  { progress: 0.06, position: [0.3, 0.38, 7], target: target(journeyWorld.planet, 0.2), moment: "approach" },
-  { progress: 0.1, position: [0.8, 0.45, 1], target: target(journeyWorld.planet, 0.15), moment: "focus" },
+  { progress: 0.14, position: [-2.2, 3.6, -3], target: target(journeyWorld.planet, 0.2), moment: "approach" },
   { progress: 0.16, position: [1.2, 0.2, -16], target: target(journeyWorld.planet, 0.1), moment: "departure" },
   { progress: 0.18, position: [4, 0.55, -21], target: [1, -0.7, -36], moment: "approach" },
   { progress: 0.205, position: [7, 1.2, -32], target: [0.5, -1.6, -54], moment: "focus" },

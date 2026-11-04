@@ -18,6 +18,8 @@ import {
 
 /** How long the last boot line stays up before fading. */
 const BOOT_HOLD_MS = 4500;
+/** Journey progress at which the opening (boot) dialogue is cut off for good. */
+const BOOT_END_PROGRESS = 0.045;
 const BAR_DELAYS = [0, 0.18, 0.36, 0.09, 0.27];
 
 type BootBeat = StoryBeat & { trigger: { type: "boot"; delay: number } };
@@ -77,6 +79,9 @@ export default function RadioTranscript({
   );
   const [typedId, setTypedId] = useState<string | null>(null);
   const timers = useRef<number[]>([]);
+  // Boot dialogue belongs to the opening shot; once the visitor scrolls on, it
+  // is over for good (a late timer must not revive it further down the page).
+  const bootEnded = useRef(false);
 
   useEffect(() => {
     const pending = timers.current;
@@ -88,7 +93,9 @@ export default function RadioTranscript({
     if (!isReady || bootBeats.length === 0) return;
 
     const timer = window.setTimeout(
-      () => setBootIndex(0),
+      () => {
+        if (!bootEnded.current) setBootIndex(0);
+      },
       bootBeats[0].trigger.delay * 1000
     );
 
@@ -99,6 +106,11 @@ export default function RadioTranscript({
     const id = findScrollBeatId(value);
 
     setScrollBeatId((previous) => (previous === id ? previous : id));
+
+    if (!bootEnded.current && value >= BOOT_END_PROGRESS) {
+      bootEnded.current = true;
+      setBootIndex(bootBeats.length);
+    }
   });
 
   const handleTyped = (beat: StoryBeat, index: number) => {
@@ -109,7 +121,11 @@ export default function RadioTranscript({
     const next = bootBeats[index + 1];
     const wait = next ? next.trigger.delay * 1000 : BOOT_HOLD_MS;
 
-    timers.current.push(window.setTimeout(() => setBootIndex(index + 1), wait));
+    timers.current.push(
+      window.setTimeout(() => {
+        if (!bootEnded.current) setBootIndex(index + 1);
+      }, wait)
+    );
   };
 
   const scrollBeat = scrollBeats.find((beat) => beat.id === scrollBeatId);

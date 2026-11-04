@@ -64,4 +64,34 @@ export const storyBeats: readonly StoryBeat[] = [
     line: "Copy. Hatch is yours.",
     trigger: { type: "boot", delay: 1.2 },
   },
+
+  // Act 2 — Spacewalk. The manifest figures are the ones in missionStats.ts.
+  {
+    id: "walk-control-manifest",
+    act: 2,
+    speaker: "CONTROL",
+    line: "Give me your manifest on the way down.",
+    trigger: { type: "scroll", from: 0.055, to: 0.085 },
+  },
+  {
+    id: "walk-pk-manifest",
+    act: 2,
+    speaker: "PK",
+    line: "Six hundred plus internship hours. Four major projects. Twenty-plus technologies. One research project.",
+    trigger: { type: "scroll", from: 0.085, to: 0.115 },
+  },
+  {
+    id: "walk-control-fullload",
+    act: 2,
+    speaker: "CONTROL",
+    line: "Full load. Where are you headed?",
+    trigger: { type: "scroll", from: 0.115, to: 0.135 },
+  },
+  {
+    id: "walk-pk-outpost",
+    act: 2,
+    speaker: "PK",
+    line: "The outpost. Everything I've built is down there.",
+    trigger: { type: "scroll", from: 0.135, to: 0.165 },
+  },
 ];

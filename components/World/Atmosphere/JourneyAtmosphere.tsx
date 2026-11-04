@@ -42,7 +42,7 @@ export default function JourneyAtmosphere() {
 
   useFrame(() => {
     const journeyProgress = progress.get();
-    const approachMix = THREE.MathUtils.smoothstep(journeyProgress, 0.06, 0.15);
+    const approachMix = THREE.MathUtils.smoothstep(journeyProgress, 0.12, 0.18);
     const entryIn = THREE.MathUtils.smoothstep(journeyProgress, 0.14, 0.2);
     const entryOut = THREE.MathUtils.smoothstep(journeyProgress, 0.2, 0.27);
     const entryMix = entryIn * (1 - entryOut);
