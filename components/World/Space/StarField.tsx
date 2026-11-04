@@ -72,16 +72,14 @@ function PointLayer({
     if (!pointsRef.current || !materialRef.current) return;
 
     pointsRef.current.rotation.y = clock.getElapsedTime() * drift;
+    // Stars are gone before the landing site appears (under the entry plasma).
     const atmosphericEntry = THREE.MathUtils.smoothstep(
       progress.get(),
-      0.14,
-      0.27
+      0.17,
+      0.2
     );
-    materialRef.current.opacity = THREE.MathUtils.lerp(
-      opacity,
-      opacity * 0.04,
-      atmosphericEntry
-    );
+    materialRef.current.opacity = opacity * (1 - atmosphericEntry);
+    pointsRef.current.visible = atmosphericEntry < 0.999;
   });
 
   return (

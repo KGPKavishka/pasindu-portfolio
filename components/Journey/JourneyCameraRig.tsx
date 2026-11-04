@@ -60,15 +60,50 @@ function adjustForCompact(keyframe: JourneyCameraKeyframe): JourneyCameraKeyfram
 
 const { smoothstep } = THREE.MathUtils;
 
+// High-frequency noise from a few incommensurate sines (cheap, no allocation).
+function shakeNoise(time: number, channel: number) {
+  return (
+    Math.sin(time * 17.3 + channel * 1.7) +
+    Math.sin(time * 29.1 + channel * 3.1) * 0.6 +
+    Math.sin(time * 47.7 + channel * 5.3) * 0.3
+  ) / 1.9;
+}
+
+/**
+ * Cabin vibration from atmospheric entry until touchdown. It always rumbles a
+ * little while the lander is falling, and grows with how fast the visitor is
+ * scrolling (the lander shakes harder the faster it descends).
+ */
+function getRumble(progress: number, scrollSpeed: number) {
+  const envelope =
+    smoothstep(progress, 0.172, 0.195) *
+    (1 - 0.7 * smoothstep(progress, 0.205, 0.235)) *
+    (1 - smoothstep(progress, 0.244, 0.25));
+
+  return envelope * (0.4 + 0.6 * THREE.MathUtils.clamp(scrollSpeed * 5, 0, 1));
+}
+
+/** Damped bounce of the touchdown: one firm thump, then still. */
+function getTouchdownThud(progress: number) {
+  const since = progress - 0.248;
+
+  if (since <= 0 || since > 0.02) return 0;
+
+  return -0.07 * Math.exp(-since / 0.0045) * Math.sin(since / 0.0016);
+}
+
 export default function JourneyCameraRig() {
   const { camera, size } = useThree();
-  const { progress } = useJourney();
+  const { progress, velocity } = useJourney();
   const reduceMotion = useReducedMotion();
   const pointer = useJourneyPointer();
   const cameraRef = useRef(camera);
   const desiredPosition = useRef(new THREE.Vector3());
   const desiredTarget = useRef(new THREE.Vector3(0, 0, -24));
   const lookTarget = useRef(new THREE.Vector3(0, 0, -24));
+  const smoothedPosition = useRef(new THREE.Vector3());
+  const shakeOffset = useRef(new THREE.Vector3());
+  const isPlaced = useRef(false);
   const segmentIndex = useRef(0);
   const isCompact = size.width < 768;
 
@@ -172,7 +207,14 @@ export default function JourneyCameraRig() {
       desiredTarget.current.y += offsetY;
     }
 
-    camera.position.lerp(
+    // The smoothed path is kept apart from the shake, so the smoothing never
+    // filters the rumble away.
+    if (!isPlaced.current) {
+      smoothedPosition.current.copy(camera.position);
+      isPlaced.current = true;
+    }
+
+    smoothedPosition.current.lerp(
       desiredPosition.current,
       1 - Math.exp(-(reduceMotion ? 10 : isCompact ? 3.6 : 3) * reducedDelta)
     );
@@ -180,7 +222,31 @@ export default function JourneyCameraRig() {
       desiredTarget.current,
       1 - Math.exp(-3.2 * reducedDelta)
     );
+
+    const rumble = reduceMotion
+      ? 0
+      : getRumble(journeyProgress, Math.abs(velocity.get()));
+    const thud = reduceMotion ? 0 : getTouchdownThud(journeyProgress);
+
+    camera.position.copy(smoothedPosition.current);
+
+    if (rumble > 0 || thud !== 0) {
+      camera.position.add(
+        shakeOffset.current.set(
+          shakeNoise(time, 0) * 0.06 * rumble,
+          shakeNoise(time, 1) * 0.05 * rumble + thud,
+          shakeNoise(time, 2) * 0.03 * rumble
+        )
+      );
+    }
+
     camera.lookAt(lookTarget.current);
+
+    if (rumble > 0) {
+      camera.rotateZ(shakeNoise(time, 3) * 0.007 * rumble);
+      camera.rotateX(shakeNoise(time, 4) * 0.004 * rumble);
+      camera.rotateY(shakeNoise(time, 5) * 0.004 * rumble);
+    }
 
     if (eva > 0) {
       // Slow drift in roll (~0.7°) and a faint breathing nod (~0.2°, ~4 s).

@@ -9,6 +9,7 @@ import {
   journeySunDirection,
   journeyWorld,
 } from "@/components/Journey/journeyWorldConfig";
+import { descent } from "@/components/World/Landing/landingConfig";
 import {
   createPlanetUniforms,
   getPlanetAlbedo,
@@ -42,10 +43,14 @@ export default function Planet() {
   }, [gl, isCompact]);
 
   useFrame((_, delta) => {
-    const fade = THREE.MathUtils.smoothstep(progress.get(), 0.138, 0.154);
+    const journeyProgress = progress.get();
+    const fade = THREE.MathUtils.smoothstep(journeyProgress, 0.138, 0.154);
+    // The camera has crossed the surface and the landing site has taken over
+    // (all under the entry plasma): from here the planet is not drawn at all.
+    const isVisible = fade > 0.001 && journeyProgress < descent.planetHidden;
 
-    if (groupRef.current) groupRef.current.visible = fade > 0.001;
-    if (fade <= 0.001) return;
+    if (groupRef.current) groupRef.current.visible = isVisible;
+    if (!isVisible) return;
 
     if (materialRef.current) materialRef.current.uniforms.uOpacity.value = fade;
     if (planetRef.current) planetRef.current.rotation.y += delta * 0.018;

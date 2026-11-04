@@ -9,6 +9,8 @@ import JourneyHUD from "@/components/Journey/JourneyHUD";
 import HelmetFrame from "@/components/Journey/HelmetFrame";
 import RadioTranscript from "@/components/Journey/RadioTranscript";
 import EvaManifest from "@/components/Journey/EvaManifest";
+import DescentEffects from "@/components/Journey/DescentEffects";
+import LanderCabin from "@/components/Journey/LanderCabin";
 import JourneyContentOverlay from "@/components/Journey/JourneyContentOverlay";
 
 import Navbar from "../components/Navbar";
@@ -50,6 +52,8 @@ export default function Home() {
     <JourneyController isLoading={isLoading}>
       <LoadingScreen isLoading={isLoading} />
       <JourneyScene />
+      <DescentEffects />
+      <LanderCabin />
       <HelmetFrame />
       <JourneyHUD />
       <RadioTranscript />

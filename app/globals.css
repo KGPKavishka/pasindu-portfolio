@@ -152,6 +152,38 @@ body {
   }
 }
 
+/* Atmospheric entry (DescentEffects) */
+@keyframes plasma-streak {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(420px);
+  }
+}
+
+@keyframes plasma-flicker {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(0.9);
+  }
+}
+
+@keyframes dust-drift {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(-300px, 120px);
+  }
+}
+
 /* Radio transcript voice indicator (animated while a line is being spoken) */
 @keyframes radio-bar {
   0%,

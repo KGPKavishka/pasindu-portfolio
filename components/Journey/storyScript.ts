@@ -92,6 +92,31 @@ export const storyBeats: readonly StoryBeat[] = [
     act: 2,
     speaker: "PK",
     line: "The outpost. Everything I've built is down there.",
-    trigger: { type: "scroll", from: 0.135, to: 0.165 },
+    trigger: { type: "scroll", from: 0.135, to: 0.162 },
+  },
+
+  // Act 3 — Descent. Silence follows touchdown, on purpose.
+  {
+    id: "descent-control-entry",
+    act: 3,
+    speaker: "CONTROL",
+    line: "Entry interface in three… two… one.",
+    trigger: { type: "scroll", from: 0.166, to: 0.192 },
+  },
+  {
+    id: "descent-pk-holding",
+    act: 3,
+    speaker: "PK",
+    line: "Holding steady.",
+    trigger: { type: "scroll", from: 0.192, to: 0.224 },
+  },
+
+  // Act 4 — Landfall.
+  {
+    id: "landfall-pk-boots",
+    act: 4,
+    speaker: "PK",
+    line: "Boots on the surface. Outpost in sight.",
+    trigger: { type: "scroll", from: 0.262, to: 0.296 },
   },
 ];

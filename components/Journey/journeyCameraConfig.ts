@@ -35,12 +35,14 @@ export const spacewalkEndProgress = 0.14;
  */
 export const journeyCameraKeyframes = [
   { progress: 0.14, position: [-2.2, 3.6, -3], target: target(journeyWorld.planet, 0.2), moment: "approach" },
-  { progress: 0.16, position: [1.2, 0.2, -16], target: target(journeyWorld.planet, 0.1), moment: "departure" },
-  { progress: 0.18, position: [4, 0.55, -21], target: [1, -0.7, -36], moment: "approach" },
-  { progress: 0.205, position: [7, 1.2, -32], target: [0.5, -1.6, -54], moment: "focus" },
-  { progress: 0.22, position: [4, 2.8, -46], target: [0, -2.2, -70], moment: "departure" },
-  { progress: 0.245, position: [0.8, 3.2, -62], target: [0, -1.2, -88], moment: "departure" },
-  { progress: 0.275, position: [0, 3.8, -78], target: target(journeyWorld.cityEntrance, 3.2), moment: "approach" },
+  // Descent: dive toward the planet, cross its surface under the entry plasma
+  // (the planet is hidden from there on), then arrive at eye height on the
+  // landing plain, which rises up to meet the camera (see LandingWorld).
+  { progress: 0.165, position: [0.2, 1.6, -11.5], target: [1, 0, -28], moment: "approach" },
+  { progress: 0.19, position: [0.6, 0.5, -19.5], target: [1, -0.2, -28], moment: "focus" },
+  { progress: 0.205, position: [0.92, -0.1, -24.6], target: [1, -0.6, -40], moment: "departure" },
+  { progress: 0.25, position: [0.95, -1.3, -24.6], target: [1, -1.1, -45], moment: "focus" },
+  { progress: 0.28, position: [0.95, -1.3, -24.6], target: [1, -1, -45], moment: "focus" },
   { progress: 0.3, position: [0, 4, -90], target: target(journeyWorld.cityCore, 3.6), moment: "focus" },
   { progress: 0.32, position: [0, 3.5, -105], target: [0, 0.4, -124], moment: "departure" },
   { progress: 0.335, position: [-0.4, 3.35, -111], target: [-4, 0.4, -126], moment: "approach" },

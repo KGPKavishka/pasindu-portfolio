@@ -152,6 +152,9 @@ const radioPhases: ReadonlySet<JourneyPhaseId> = new Set([
   "loading",
   "space",
   "spacewalk",
+  "planet-approach",
+  "planet-surface",
+  "landfall",
 ]);
 
 export default function JourneyHUD() {

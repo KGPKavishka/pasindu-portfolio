@@ -136,7 +136,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" aria-label="Orbit and spacewalk" className="relative min-h-[440vh]">
+    <section id="home" aria-label="Orbit, spacewalk and landing" className="relative min-h-[515vh]">
       <div className="sticky top-0 flex h-screen items-end overflow-hidden px-6 pb-16 pt-28 sm:px-10 sm:pb-20 lg:px-16 lg:pb-24">
         <motion.div
           style={{ opacity: introOpacity, y: introY, scale: introScale }}

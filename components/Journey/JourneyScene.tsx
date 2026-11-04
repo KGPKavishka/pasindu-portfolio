@@ -15,6 +15,7 @@ import ContactLandmarks from "@/components/World/Landmarks/ContactLandmarks";
 import JourneyAtmosphere from "@/components/World/Atmosphere/JourneyAtmosphere";
 import JourneyCameraRig from "./JourneyCameraRig";
 import WorldGate from "./WorldGate";
+import LandingWorld from "@/components/World/Landing/LandingWorld";
 
 export default function JourneyScene() {
   return (
@@ -41,7 +42,8 @@ export default function JourneyScene() {
         <SpaceEnvironment />
         <OrbitScene />
         <Planet />
-        <WorldGate from={0.16}>
+        <LandingWorld />
+        <WorldGate from={0.28}>
           <PlanetSurface />
           <JourneyTransitRoute />
           <CityEnvironment />

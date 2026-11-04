@@ -24,7 +24,7 @@ export default function HelmetFrame() {
       initial={{ opacity: 0 }}
       animate={{ opacity: isPoweredOn ? 1 : 0 }}
       transition={{ duration: reduceMotion ? 0 : 1.8, ease: "easeOut" }}
-      className="pointer-events-none fixed inset-0 z-40 overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-[43] overflow-hidden"
     >
       {/* Optical falloff toward the edge of the glass; breathes very slowly. */}
       <motion.div

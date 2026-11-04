@@ -15,17 +15,17 @@ export default function JourneyAtmosphere() {
   const colors = useMemo(
     () => ({
       space: new THREE.Color("#050505"),
-      atmosphere: new THREE.Color("#063346"),
-      surface: new THREE.Color("#03151c"),
+      atmosphere: new THREE.Color("#1a120d"),
+      surface: new THREE.Color("#140e0a"),
       city: new THREE.Color("#021116"),
       creative: new THREE.Color("#100819"),
       future: new THREE.Color("#07091a"),
       complete: new THREE.Color("#010509"),
       current: new THREE.Color("#050505"),
       spaceLight: new THREE.Color("#e9e6df"),
-      atmosphereLight: new THREE.Color("#67e8f9"),
-      surfaceLight: new THREE.Color("#bdefff"),
-      currentLight: new THREE.Color("#7dd3fc"),
+      atmosphereLight: new THREE.Color("#ffe3c2"),
+      surfaceLight: new THREE.Color("#ffe3c2"),
+      currentLight: new THREE.Color("#e9e6df"),
     }),
     []
   );
@@ -48,6 +48,11 @@ export default function JourneyAtmosphere() {
     const entryMix = entryIn * (1 - entryOut);
     const surfaceMix = THREE.MathUtils.smoothstep(journeyProgress, 0.2, 0.28);
     const cityMix = THREE.MathUtils.smoothstep(journeyProgress, 0.18, 0.32);
+    // The landing site brings its own sun and sky; these lights step aside while
+    // it is on screen and return for the city world that follows.
+    const landingMix =
+      THREE.MathUtils.smoothstep(journeyProgress, 0.19, 0.208) *
+      (1 - THREE.MathUtils.smoothstep(journeyProgress, 0.285, 0.31));
     const creativeMix = THREE.MathUtils.smoothstep(journeyProgress, 0.72, 0.85);
     const futureMix = THREE.MathUtils.smoothstep(journeyProgress, 0.84, 0.92);
     const completeMix = THREE.MathUtils.smoothstep(journeyProgress, 0.92, 1);
@@ -75,12 +80,18 @@ export default function JourneyAtmosphere() {
     }
 
     if (ambientRef.current && directionalRef.current) {
-      ambientRef.current.intensity = THREE.MathUtils.lerp(0.08, 0.24, entryIn);
-      directionalRef.current.intensity = THREE.MathUtils.lerp(
-        THREE.MathUtils.lerp(0, 1.15, approachMix),
-        1.55,
-        entryMix
+      ambientRef.current.intensity = THREE.MathUtils.lerp(
+        THREE.MathUtils.lerp(0.08, 0.24, entryIn),
+        0.1,
+        landingMix
       );
+      directionalRef.current.intensity =
+        THREE.MathUtils.lerp(
+          THREE.MathUtils.lerp(0, 1.15, approachMix),
+          1.55,
+          entryMix
+        ) *
+        (1 - landingMix);
       colors.currentLight
         .copy(colors.spaceLight)
         .lerp(colors.atmosphereLight, entryIn)
