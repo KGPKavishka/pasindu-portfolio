@@ -68,27 +68,43 @@ export function LandingTerrain() {
   const farHillsRef = useRef<THREE.Mesh>(null);
   const map = useMemo(() => getGroundMap(gl), [gl]);
 
-  const groundUniforms = useMemo(
-    () => ({
-      uMap: { value: map },
-      uSun: landingUniforms.sun,
-      uSunColor: landingUniforms.sunColor,
-      uHaze: landingUniforms.haze,
-      uZenith: landingUniforms.zenith,
-      uFade: landingUniforms.fade,
-      uMacro: { value: 12.5 },
-      uDetail: { value: 4.8 },
-    }),
+  // Materials are built here (not through a JSX `uniforms` prop) because r3f
+  // copies the `{ value }` wrappers of that prop, which detaches the shared
+  // fade/altitude numbers from landingUniforms and freezes them.
+  const groundMaterial = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uMap: { value: map },
+          uSun: landingUniforms.sun,
+          uSunColor: landingUniforms.sunColor,
+          uHaze: landingUniforms.haze,
+          uZenith: landingUniforms.zenith,
+          uFade: landingUniforms.fade,
+          uMacro: { value: 9 },
+          uDetail: { value: 3.6 },
+        },
+        vertexShader: groundVertexShader,
+        fragmentShader: groundFragmentShader,
+        transparent: true,
+      }),
     [map]
   );
-  const hillsUniforms = useMemo(
-    () => ({
-      uHaze: landingUniforms.haze,
-      uSun: landingUniforms.sun,
-      uSunColor: landingUniforms.sunColor,
-      uFade: landingUniforms.fade,
-      uTint: { value: new THREE.Color("#4a3629") },
-    }),
+  const hillsMaterial = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uHaze: landingUniforms.haze,
+          uSun: landingUniforms.sun,
+          uSunColor: landingUniforms.sunColor,
+          uFade: landingUniforms.fade,
+          uTint: { value: new THREE.Color("#4a3629") },
+        },
+        vertexShader: hillsVertexShader,
+        fragmentShader: hillsFragmentShader,
+        side: THREE.DoubleSide,
+        transparent: true,
+      }),
     []
   );
   const nearHills = useMemo(() => createHillsGeometry(640, 46, 1.3), []);
@@ -96,6 +112,8 @@ export function LandingTerrain() {
 
   useEffect(() => () => nearHills.dispose(), [nearHills]);
   useEffect(() => () => farHills.dispose(), [farHills]);
+  useEffect(() => () => groundMaterial.dispose(), [groundMaterial]);
+  useEffect(() => () => hillsMaterial.dispose(), [hillsMaterial]);
 
   useFrame(({ camera }) => {
     for (const hills of [nearHillsRef.current, farHillsRef.current]) {
@@ -111,31 +129,14 @@ export function LandingTerrain() {
     <>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, GROUND_Y, 0]} renderOrder={1}>
         <circleGeometry args={[GROUND_RADIUS, 72]} />
-        <shaderMaterial
-          uniforms={groundUniforms}
-          vertexShader={groundVertexShader}
-          fragmentShader={groundFragmentShader}
-          transparent
-        />
+        <primitive object={groundMaterial} attach="material" />
       </mesh>
 
       <mesh ref={farHillsRef} geometry={farHills} renderOrder={1} frustumCulled={false}>
-        <shaderMaterial
-          uniforms={hillsUniforms}
-          vertexShader={hillsVertexShader}
-          fragmentShader={hillsFragmentShader}
-          side={THREE.DoubleSide}
-          transparent
-        />
+        <primitive object={hillsMaterial} attach="material" />
       </mesh>
       <mesh ref={nearHillsRef} geometry={nearHills} renderOrder={1} frustumCulled={false}>
-        <shaderMaterial
-          uniforms={hillsUniforms}
-          vertexShader={hillsVertexShader}
-          fragmentShader={hillsFragmentShader}
-          side={THREE.DoubleSide}
-          transparent
-        />
+        <primitive object={hillsMaterial} attach="material" />
       </mesh>
     </>
   );
@@ -144,18 +145,28 @@ export function LandingTerrain() {
 /** Camera-following sky dome; drawn first so everything else covers it. */
 export function LandingSky() {
   const meshRef = useRef<THREE.Mesh>(null);
-  const uniforms = useMemo(
-    () => ({
-      uSun: landingUniforms.sun,
-      uSunColor: landingUniforms.sunColor,
-      uHaze: landingUniforms.haze,
-      uZenith: landingUniforms.zenith,
-      uBase: landingUniforms.base,
-      uAltitude: landingUniforms.altitude,
-      uFade: landingUniforms.fade,
-    }),
+  const material = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uSun: landingUniforms.sun,
+          uSunColor: landingUniforms.sunColor,
+          uHaze: landingUniforms.haze,
+          uZenith: landingUniforms.zenith,
+          uBase: landingUniforms.base,
+          uAltitude: landingUniforms.altitude,
+          uFade: landingUniforms.fade,
+        },
+        vertexShader: skyVertexShader,
+        fragmentShader: skyFragmentShader,
+        side: THREE.BackSide,
+        depthWrite: false,
+        depthTest: false,
+      }),
     []
   );
+
+  useEffect(() => () => material.dispose(), [material]);
 
   useFrame(({ camera, scene }) => {
     const mesh = meshRef.current;
@@ -173,14 +184,7 @@ export function LandingSky() {
   return (
     <mesh ref={meshRef} renderOrder={-100} frustumCulled={false}>
       <sphereGeometry args={[400, 32, 16]} />
-      <shaderMaterial
-        uniforms={uniforms}
-        vertexShader={skyVertexShader}
-        fragmentShader={skyFragmentShader}
-        side={THREE.BackSide}
-        depthWrite={false}
-        depthTest={false}
-      />
+      <primitive object={material} attach="material" />
     </mesh>
   );
 }

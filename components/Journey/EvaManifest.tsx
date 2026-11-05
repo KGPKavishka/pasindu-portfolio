@@ -46,13 +46,16 @@ export default function EvaManifest() {
 
       <ul className="mt-3 space-y-3 border-l border-caution/40 pl-4">
         {missionStats.map((stat, index) => {
-          const isShown = reduceMotion || index < revealed;
+          // Never branch the rendered output on reduceMotion: it is null on the
+          // server and true on the client, which breaks hydration. Reduced motion
+          // only removes the transition (lines still lock in as PK reads them).
+          const isShown = index < revealed;
 
           return (
             <motion.li
               key={stat.label}
               initial={false}
-              animate={{ opacity: isShown ? 1 : 0, x: isShown || reduceMotion ? 0 : 10 }}
+              animate={{ opacity: isShown ? 1 : 0, x: isShown ? 0 : 10 }}
               transition={{ duration: reduceMotion ? 0 : 0.5, ease: "easeOut" }}
               className="flex items-baseline gap-4"
             >

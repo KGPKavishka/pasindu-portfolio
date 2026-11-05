@@ -11,8 +11,8 @@ export const descent = {
   /** Altitude starts to fall / touchdown. */
   start: 0.196,
   touchdown: 0.25,
-  /** Landing world hands over to the old city world. */
-  worldOut: [0.285, 0.31],
+  /** Landing world hands over to the old city world (replaced in P4). */
+  worldOut: [0.283, 0.298],
 } as const;
 
 /** Altitude (world units) the landing plain starts at when it appears. */

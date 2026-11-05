@@ -16,7 +16,7 @@ const FORWARD_ANGLE = Math.PI / 2; // anchor looks toward -z
 
 // Lumpy boulder: displaced icosahedron, smoothed normals.
 function createRockGeometry(seed: number) {
-  const base = new THREE.IcosahedronGeometry(1, 2);
+  const base = new THREE.IcosahedronGeometry(1, 3);
 
   base.deleteAttribute("normal");
   base.deleteAttribute("uv");
@@ -96,23 +96,34 @@ interface Rock {
 
 function scatterRocks(count: number): Rock[] {
   const rocks: Rock[] = [];
+  let attempt = 0;
 
-  for (let index = 0; index < count; index += 1) {
-    const seed = index * 3.31 + 7;
+  while (rocks.length < count && attempt < count * 6) {
+    const seed = attempt * 3.31 + 7;
+
+    attempt += 1;
+
     // Mostly ahead of the lander, some to the sides and behind.
     const spread = seededRandom(seed) < 0.78 ? 1.0 : 2.6;
-    const angle = FORWARD_ANGLE + (seededRandom(seed + 1) - 0.5) * 2 * 1.3 * spread;
-    const radius = 7 + 175 * Math.pow(seededRandom(seed + 2), 1.8);
-    const small = Math.pow(seededRandom(seed + 3), 4.2);
-    // Distant rocks are scaled up so they still read at that distance.
-    const size = (0.16 + 3.4 * small) * (1 + radius / 90);
+    const offset = (seededRandom(seed + 1) - 0.5) * 2 * 1.3 * spread;
+    const angle = FORWARD_ANGLE + offset;
+    const radius = 9 + 175 * Math.pow(seededRandom(seed + 2), 1.8);
+
+    // Keep the lane straight ahead clear so the horizon (and, later, the outpost)
+    // stays visible from the hatch.
+    if (Math.abs(offset) < 0.32 && radius < 70) continue;
+
+    const small = Math.pow(seededRandom(seed + 3), 4.5);
+    // Distant rocks are scaled up a little so they still read at that distance,
+    // but nothing near the lander may rise above eye level.
+    const size = (0.1 + 1.35 * small) * (1 + radius / 130);
 
     rocks.push({
       x: ANCHOR.x + Math.cos(angle) * radius,
       z: ANCHOR.z - Math.sin(angle) * radius,
       size,
       yaw: seededRandom(seed + 4) * Math.PI * 2,
-      tint: 0.72 + seededRandom(seed + 5) * 0.42,
+      tint: 0.7 + seededRandom(seed + 5) * 0.5,
       seed,
     });
   }
@@ -171,6 +182,8 @@ export default function LandingRocks({ isCompact }: { isCompact: boolean }) {
 
     if (!rockMesh || !shadowMesh) return;
 
+    rockMesh.count = rocks.length;
+    shadowMesh.count = rocks.length;
     // Shadows fall away from the sun, along the ground.
     const sun = landingUniforms.sun.value;
     const horizontal = Math.hypot(sun.x, sun.z);

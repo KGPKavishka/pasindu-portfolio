@@ -133,7 +133,8 @@ export default function LanderCabin() {
               "repeating-linear-gradient(-45deg, #ff4f00 0 10px, #17181b 10px 20px)",
           }}
         />
-        <div className="flex flex-1 items-center gap-8 sm:gap-14">
+        {/* Readouts sit high in the console so the radio subtitle below never overlaps them. */}
+        <div className="flex flex-1 items-start gap-8 pt-3 sm:gap-14 sm:pt-4">
           <Readout label="Altitude" value={altitude} />
           <Readout label="Velocity" value={speed} />
           <Readout label="G-load" value={gText} />

@@ -12,11 +12,11 @@ import { useJourney } from "./JourneyController";
 
 // Vertical streaks of hot gas, rasterised once and slid down the screen.
 const STREAKS =
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='f' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.006 0.11' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.64  0 0 0 0 0.26  0 0 0 2.4 -0.62'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>\")";
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='f' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.006 0.11' numOctaves='2' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.64  0 0 0 0 0.26  0 0 0 2.4 -0.62'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>\")";
 
 // Soft billows of dust, drifted slowly.
 const BILLOWS =
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='f' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.0045' numOctaves='3' seed='9'/><feColorMatrix values='0 0 0 0 0.86  0 0 0 0 0.68  0 0 0 0 0.52  0 0 0 2.1 -0.55'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>\")";
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='f' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.0045' numOctaves='3' seed='9' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.86  0 0 0 0 0.68  0 0 0 0 0.52  0 0 0 2.1 -0.55'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>\")";
 
 /**
  * What the visitor sees through the lander window while entering the
@@ -59,11 +59,22 @@ export default function DescentEffects() {
           />
 
           <motion.div style={{ opacity: streaks }} className="absolute inset-0 mix-blend-screen">
+            {/* Streaks pour past the glass: strongest at the edges, clear in the middle. */}
             <div
-              className={`absolute inset-x-0 -top-[420px] h-[calc(100%+420px)] ${reduceMotion ? "" : "animate-[plasma-streak_0.5s_linear_infinite]"
-                }`}
-              style={{ backgroundImage: STREAKS, backgroundSize: "420px 420px" }}
-            />
+              className="absolute inset-0"
+              style={{
+                maskImage:
+                  "radial-gradient(ellipse 75% 70% at 50% 50%, transparent 12%, #000 78%)",
+                WebkitMaskImage:
+                  "radial-gradient(ellipse 75% 70% at 50% 50%, transparent 12%, #000 78%)",
+              }}
+            >
+              <div
+                className={`absolute inset-x-0 -top-[420px] h-[calc(100%+420px)] ${reduceMotion ? "" : "animate-[plasma-streak_0.5s_linear_infinite]"
+                  }`}
+                style={{ backgroundImage: STREAKS, backgroundSize: "420px 420px" }}
+              />
+            </div>
           </motion.div>
 
           <motion.div style={{ opacity: fill }} className="absolute inset-0">
@@ -81,11 +92,17 @@ export default function DescentEffects() {
 
       {dustActive && (
         <motion.div style={{ opacity: dust }} className="absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_80%_at_50%_58%,rgba(214,176,140,0.9),rgba(190,150,115,0.82)_55%,rgba(150,112,84,0.7)_100%)]" />
+          {/* Thruster dust rises from the ground and thins toward the sky. */}
+          <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(205,165,128,0.92),rgba(205,165,128,0.62)_45%,rgba(205,165,128,0.14)_85%,transparent)]" />
           <div
-            className={`absolute -inset-[300px] opacity-70 ${reduceMotion ? "" : "animate-[dust-drift_14s_linear_infinite]"
+            className={`absolute -inset-[300px] opacity-55 ${reduceMotion ? "" : "animate-[dust-drift_14s_linear_infinite]"
               }`}
-            style={{ backgroundImage: BILLOWS, backgroundSize: "600px 600px" }}
+            style={{
+              backgroundImage: BILLOWS,
+              backgroundSize: "600px 600px",
+              maskImage: "linear-gradient(0deg, #000 30%, transparent 85%)",
+              WebkitMaskImage: "linear-gradient(0deg, #000 30%, transparent 85%)",
+            }}
           />
         </motion.div>
       )}

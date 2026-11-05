@@ -1,326 +1,78 @@
-# Portfolio Digital Journey — Copilot Instructions
+# Portfolio — "EVA: Mission Log of Pasindu Kavishka" — AI Instructions
 
-## Project Purpose
+Source of truth for the plan: `docs/DESIGN_PLAN.md` (what/why) and
+`docs/PROGRESS_AND_ROADMAP.md` (where we are / what's left). Read both before working.
+This file supersedes the old "Digital City" concept and the cyan/teal colour direction.
 
-This is Pasindu Kavishka's personal portfolio built with:
+## Project
 
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-- React Three Fiber
-- Three.js
-- @react-three/drei
+Pasindu Kavishka's personal portfolio. Stack: Next.js 16 · React 19 · TypeScript ·
+Tailwind 4 · Framer Motion · React Three Fiber · Three.js · @react-three/drei.
 
-The goal is to transform the current portfolio into one continuous cinematic Digital City journey.
+Next.js here is newer than most training data: read `node_modules/next/dist/docs/` before
+using unfamiliar APIs (see `AGENTS.md`).
 
-The experience should feel like:
+## Concept
 
-Loading → Outer Space → Planet Approach → Planet Surface → Digital City → Project Districts → Experience Tower → Data Center → Creative Studio → Future Lab → Contact Center → Footer
+The visitor sees everything through the helmet visor of an astronaut (Pasindu). Journey:
+orbit sunrise (hero) → spacewalk (stats) → descent & entry → landfall → outpost whose
+structures are the work (HealthBridge Med-Lab, Ezy Map Logistics Depot, KV Audio Hangar,
+StoryBloom Greenhouse) → Crew Habitat (internship) → Power Grid (skills as power output) →
+Quarters (creative works) → Observatory (learning goals, blue Martian sunset) → Comms Mast
+(contact, dusk) → Night (station passes overhead, log ends).
 
-Scrolling represents traveling through this world, not navigating ordinary independent webpage sections.
+Story is told by radio: **PK** (first person) and **CONTROL** (Mission Control). All lines
+live in `components/Journey/storyScript.ts`.
 
-## Critical Preservation Rules
+Core idea: **"I build things"** — projects are structures built on another world.
 
-- `main` is the production source of truth.
-- `develop` is the testing/integration branch.
-- `feature/digital-city-journey` is the current development branch.
-- Do NOT modify `main` or `develop`.
-- Do NOT merge or copy the old `feature/digital-city-space` branch wholesale.
-- Existing finalized portfolio content must be preserved.
-- Existing data files remain the source of truth for portfolio content.
-- Do not delete existing components unless explicitly instructed.
-- Do not replace existing portfolio sections with placeholder content.
-- Do not rewrite large parts of the application when a smaller change is sufficient.
-- Before modifying an existing component, inspect its current implementation.
-- Preserve existing functionality unless the task explicitly requires changing it.
+## Visual rules (realistic, NOT neon)
 
-## Existing Portfolio Content
+- Palette: void `#050505`, sunlight `#FFF4E2`, suit white `#E9E6DF`, visor gold `#C9A45C`,
+  regolith `#B08A68 / #8C6A4F / #3E2F25`, dust haze `#D9B79A`, blue hour `#6F8FAF`,
+  caution amber `#E8A33D` (HUD highlights), International Orange `#FF4F00` (**buttons only**),
+  nominal green `#8DB580` (sparingly).
+- HUD = suit white + amber. No cyan/teal, no neon glows, no glassmorphism, no purple.
+- 3D: filmic tone mapping, one directional sun, PBR-style materials, instancing, warm haze.
+- Post-processing (decided): `@react-three/postprocessing` **only** for a high-threshold
+  selective Bloom (sun, horizon rim, beacons), switched off by drei `PerformanceMonitor`
+  when fps drops. Grain, vignette, visor frame and HUD text stay in CSS/SVG/HTML.
 
-Important existing components include:
+## Content rules
 
-- Hero
-- Stats
-- CityOverview
-- ExperienceTower
-- DataCenter
-- CreativeStudio
-- FutureLab
-- ContactCenter
-- Footer
-- Navbar
-- LoadingScreen
-- ScrollProgress
-- BackToTop
-
-Important data files include:
-
-- data/contactData.ts
-- data/creativeData.ts
-- data/experienceData.ts
-- data/futureData.ts
-- data/portfolioData.ts
-- data/skillsData.ts
-
-These data files are authoritative.
-
-Do not replace their content with invented content.
-
-## Digital Journey Design
-
-The final journey order is:
-
-1. Loading Screen
-2. Outer Space
-3. Planet Approach
-4. Planet Surface / Landing
-5. Digital City Entrance
-6. HealthBridge District
-7. Ezy Map District
-8. KV Audio District
-9. Story Bloom District
-10. Experience Tower
-11. Data Center
-12. Creative Studio
-13. Future Lab
-14. Contact Center
-15. Footer / Journey Complete
-
-The experience should feel like one continuous cinematic environment.
-
-Use:
-
-- forward camera travel
-- smooth transitions
-- occasional cinematic turns
-- focus moments at important landmarks
-- environmental storytelling
-- futuristic HUD elements
-- terminal/typewriter effects for important system messages
-- subtle cyan/teal futuristic lighting
-- dark space/city atmosphere
-
-Do not make the experience feel like ordinary webpage sections stacked vertically.
+- Facts come only from `data/*.ts` and `components/Journey/missionStats.ts`. Never invent
+  projects, numbers, education, achievements or personal info.
+- No About/education data exists; any bio line must be supplied by the user.
+- Narration may change voice, never facts. Story lines reference data, not copy it.
 
 ## Architecture
 
-Use a centralized journey controller.
-
-Conceptually:
-
-Browser Scroll
-→ Journey Controller
-→ progress / velocity / current phase / active landmark
-→ Camera + World + UI
-
-Do NOT make every 3D component independently read `window.scrollY`.
-
-Prefer a clean architecture such as:
-
-components/
-  Journey/
-    JourneyScene
-    JourneyController
-    JourneyProgress
-    JourneyHUD
-
-  World/
-    Space/
-    Planet/
-    Surface/
-    City/
-    Districts/
-    Experience/
-    Data/
-    Creative/
-    Future/
-    Contact/
-
-  UI/
-    Typewriter
-    HUDPanel
-    InformationPanel
-    ProjectPanel
-
-Create only the folders/components actually needed at each implementation stage.
-
-Do not create the entire architecture with placeholder files at once.
-
-## Current 3D Foundation
-
-The current branch already contains:
-
-- React Three Fiber
-- Three.js
-- @react-three/drei
-- components/Journey/JourneyScene.tsx
-
-The current JourneyScene contains a minimal test scene used to verify that React Three Fiber is working.
-
-Do not remove the working 3D foundation unless the implementation specifically requires replacing it.
-
-## Old Digital City Prototype
-
-The old branch is:
-
-`feature/digital-city-space`
-
-It is a prototype/reference only.
-
-Useful concepts may be reused after inspection, including:
-
-- SceneCanvas
-- CameraRig
-- ScrollController
-- Stars3D
-- Atmosphere
-- Lights
-- Planet
-- CityGround
-- CityCore
-- CityWindows
-- CityNeonStrips
-- CityEnergyRoutes
-- district concepts
-- ExperienceTower
-- DataCenter
-- CreativeDistrict
-- JourneyHUD
-
-However:
-
-- Do not cherry-pick the old commits.
-- Do not copy the old page implementation wholesale.
-- Do not copy old data files over the current data files.
-- Do not copy the old package-lock.
-- Do not blindly copy old components without understanding them.
-- Rebuild or adapt useful concepts into the new architecture.
-
-## Development Method
-
-Work incrementally.
-
-For every implementation phase:
-
-1. Inspect relevant existing files.
-2. Explain the intended changes briefly.
-3. Make only the changes required for that phase.
-4. Run appropriate checks.
-5. Fix errors related to the current phase.
-6. Review the diff.
-7. Stop before starting the next major phase.
-
-Do not silently continue into unrelated phases.
-
-Never make large unrelated refactors.
-
-## Git Safety
-
-Do not:
-
-- commit changes
-- push changes
-- merge branches
-- checkout another branch
-- reset the repository
-- delete branches
-
-unless explicitly instructed by the user.
-
-The user controls Git history.
-
-## Performance
-
-This is a portfolio website and must remain performant.
-
-Prefer:
-
-- instancing where appropriate
-- lightweight geometry
-- reasonable particle counts
-- lazy loading where appropriate
-- reusable materials
-- avoiding unnecessary per-frame React state updates
-- `useFrame` for animation that belongs in the render loop
-- avoiding expensive procedural textures unless necessary
-
-The scene must work on desktop and mobile.
-
-Mobile should simplify effects and geometry rather than becoming a completely different portfolio.
-
-## UI Layering
-
-Existing portfolio content must remain readable above the 3D environment.
-
-3D is the environment.
-
-UI is the information layer.
-
-Do not allow 3D elements to randomly cover important text, buttons, navigation, or controls.
-
-Use deliberate z-index and pointer-event behavior.
-
-## Content
-
-Do not invent portfolio projects, technologies, statistics, experience, education, achievements, or personal information.
-
-Use existing project data and content as the source of truth.
-
-The visual presentation can change, but the factual content must remain correct.
-
-## Verification
-
-After meaningful changes:
-
-- run TypeScript checks when appropriate
-- run the development server when visual verification is needed
-- inspect browser console errors
-- inspect Git diff
-- verify existing functionality has not been broken
-
-Never assume a change works without verification.
-
-## Current Development Strategy
-
-The implementation should proceed in small phases.
-
-Phase 1:
-Establish the clean Journey foundation and centralized journey state.
-
-Phase 2:
-Build Outer Space.
-
-Phase 3:
-Build Planet Approach.
-
-Phase 4:
-Build Planet Surface / Landing.
-
-Phase 5:
-Build Digital City.
-
-Phase 6:
-Integrate project districts.
-
-Phase 7:
-Integrate Experience Tower and Data Center.
-
-Phase 8:
-Integrate Creative Studio and Future Lab.
-
-Phase 9:
-Integrate Contact Center and Footer.
-
-Phase 10:
-Polish transitions, HUD, typewriter effects, audio, mobile performance, accessibility, and SEO.
-
-Do not implement multiple major phases unless explicitly requested.
-
-## Important Working Principle
-
-The goal is not to replace the existing portfolio.
-
-The goal is to evolve the existing portfolio into a continuous cinematic 3D journey while preserving its finalized content and functionality.
-
-When uncertain about an existing feature, inspect it before changing it.
+- `JourneyController` is the single source of progress/velocity/phase. Components must
+  NOT read `window.scrollY` themselves.
+- Timeline: `components/Journey/journeyConfig.ts`; camera path: `journeyCameraConfig.ts`.
+- 3D worlds in `components/World/<Act>/`; visor/UI layers in `components/Journey/`.
+- Design tokens: `app/globals.css` (`@theme inline`).
+- Reuse `ProjectModal` / `CreativeModal` content and behaviour (restyle as dossier in P5/P7).
+- Use `useFrame` for animation; avoid per-frame React state updates.
+
+## Working method
+
+1. Inspect relevant files first; explain intended changes briefly.
+2. One phase at a time (P0–P10). Do not start the next phase before the user approves.
+3. Do not delete existing components until the phase that replaces them is approved.
+4. Verify: `npx tsc --noEmit -p tsconfig.json`, `npx eslint app components`, run the dev
+   server, check browser console, and visually check desktop 1440×900, laptop 1280×720
+   and phone 390×844.
+5. Reduced motion must be respected everywhere (no shake/bob/flicker).
+6. Performance budget: 60 fps desktop, 30+ fps mid-range phones, textures ≤ ~6 MB total.
+
+## Git safety
+
+Do not commit, push, merge, checkout other branches, reset or delete branches unless the
+user explicitly asks. Current branch: `final-process-part-01`. Never touch `main`/`develop`.
+
+## Environment notes
+
+- Node is pinned by Volta (22.23.3) in `package.json`.
+- Windows/PowerShell: use `npm.cmd` if script execution blocks `npm`.
+</Content>

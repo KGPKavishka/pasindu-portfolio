@@ -43,7 +43,7 @@ export default function JourneyScene() {
         <OrbitScene />
         <Planet />
         <LandingWorld />
-        <WorldGate from={0.28}>
+        <WorldGate from={0.29}>
           <PlanetSurface />
           <JourneyTransitRoute />
           <CityEnvironment />

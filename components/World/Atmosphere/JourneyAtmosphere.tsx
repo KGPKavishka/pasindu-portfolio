@@ -25,6 +25,7 @@ export default function JourneyAtmosphere() {
       spaceLight: new THREE.Color("#e9e6df"),
       atmosphereLight: new THREE.Color("#ffe3c2"),
       surfaceLight: new THREE.Color("#ffe3c2"),
+      landingFill: new THREE.Color("#d9a97f"),
       currentLight: new THREE.Color("#e9e6df"),
     }),
     []
@@ -52,7 +53,7 @@ export default function JourneyAtmosphere() {
     // it is on screen and return for the city world that follows.
     const landingMix =
       THREE.MathUtils.smoothstep(journeyProgress, 0.19, 0.208) *
-      (1 - THREE.MathUtils.smoothstep(journeyProgress, 0.285, 0.31));
+      (1 - THREE.MathUtils.smoothstep(journeyProgress, 0.283, 0.298));
     const creativeMix = THREE.MathUtils.smoothstep(journeyProgress, 0.72, 0.85);
     const futureMix = THREE.MathUtils.smoothstep(journeyProgress, 0.84, 0.92);
     const completeMix = THREE.MathUtils.smoothstep(journeyProgress, 0.92, 1);
@@ -82,9 +83,13 @@ export default function JourneyAtmosphere() {
     if (ambientRef.current && directionalRef.current) {
       ambientRef.current.intensity = THREE.MathUtils.lerp(
         THREE.MathUtils.lerp(0.08, 0.24, entryIn),
-        0.1,
+        // Dusty sky bounce fills the shadow side of the boulders.
+        1.1,
         landingMix
       );
+      ambientRef.current.color
+        .copy(colors.spaceLight)
+        .lerp(colors.landingFill, landingMix);
       directionalRef.current.intensity =
         THREE.MathUtils.lerp(
           THREE.MathUtils.lerp(0, 1.15, approachMix),
