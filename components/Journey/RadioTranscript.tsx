@@ -137,10 +137,16 @@ export default function RadioTranscript({
   const activeBootIndex = activeBeat && activeBeat === bootBeat ? bootIndex : -1;
   const isTyping = activeBeat !== undefined && typedId !== activeBeat.id;
 
+  const isOrbitIntro = currentPhase.id === "space" || activeBeat === bootBeat;
+
   return (
     <div
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-0 top-[88px] z-[44] flex justify-center px-6 md:top-auto md:bottom-9"
+      className={`pointer-events-none fixed inset-x-0 z-[44] flex ${
+        isOrbitIntro
+          ? "top-[88px] justify-center px-6 md:top-auto md:bottom-9"
+          : "bottom-6 justify-start pl-6 pr-[76px] sm:bottom-8 sm:justify-center sm:px-20 md:bottom-9"
+      }`}
     >
       <AnimatePresence mode="wait">
         {activeBeat && (

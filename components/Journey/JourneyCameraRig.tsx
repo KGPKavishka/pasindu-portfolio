@@ -49,11 +49,17 @@ function interpolateVector(
   );
 }
 
-// Narrow screens pull the path toward the centre line and lift it slightly.
+// Narrow screens pull the path toward the centre line; lift only above-surface shots.
 function adjustForCompact(keyframe: JourneyCameraKeyframe): JourneyCameraKeyframe {
+  const isSurface = keyframe.progress >= 0.25;
+
   return {
     ...keyframe,
-    position: [keyframe.position[0] * 0.58, keyframe.position[1] + 0.35, keyframe.position[2]],
+    position: [
+      keyframe.position[0] * 0.58,
+      keyframe.position[1] + (isSurface ? 0 : 0.35),
+      keyframe.position[2],
+    ],
     target: [keyframe.target[0] * 0.82, keyframe.target[1], keyframe.target[2]],
   };
 }
@@ -186,25 +192,47 @@ export default function JourneyCameraRig() {
     // EVA presence: a free-floating body never holds perfectly still. Strongest
     // in orbit and the spacewalk, gone once the descent begins.
     const eva = reduceMotion ? 0 : 1 - smoothstep(journeyProgress, 0.15, 0.19);
+    // Surface walk: once boots are on the ground and the hatch opens, walking
+    // cadence and subtle head-look resume.
+    const surfaceWalk = reduceMotion ? 0 : smoothstep(journeyProgress, 0.275, 0.295);
 
     if (eva > 0) {
       desiredPosition.current.x += Math.sin(time * 0.09) * 0.05 * eva;
     }
 
-    // Head-look: translating the camera makes near objects swing against the
-    // pointer while distant stars barely move.
-    const headLook = reduceMotion
+    if (surfaceWalk > 0) {
+      // Walking head-bob: driven by distance along -z so footsteps match travel
+      // and naturally settle when dwelling at a structure.
+      const isFocusDwell =
+        start.moment === "focus" && Math.abs(segmentProgress - 0.5) < 0.35;
+      const dwellDamp = isFocusDwell ? 0.3 : 1;
+      const scrollBoost = THREE.MathUtils.clamp(Math.abs(velocity.get()) * 6, 0.22, 1);
+      const stepPhase = desiredPosition.current.z * 1.35 + time * 1.1;
+      const bobAmplitude = 0.038 * surfaceWalk * dwellDamp * scrollBoost;
+
+      desiredPosition.current.y += Math.abs(Math.sin(stepPhase)) * bobAmplitude;
+      desiredPosition.current.x += Math.cos(stepPhase * 0.5) * bobAmplitude * 0.45;
+    }
+
+    // Head-look: in orbit it translates the camera slightly; on the surface it
+    // turns the astronaut's head toward the pointer.
+    const orbitLook = reduceMotion
       ? 0
       : 1 - smoothstep(journeyProgress, 0.12, 0.16);
 
-    if (headLook > 0) {
-      const offsetX = pointer.x * 0.42 * headLook;
-      const offsetY = pointer.y * 0.24 * headLook;
+    if (orbitLook > 0) {
+      const offsetX = pointer.x * 0.42 * orbitLook;
+      const offsetY = pointer.y * 0.24 * orbitLook;
 
       desiredPosition.current.x += offsetX;
       desiredPosition.current.y += offsetY;
       desiredTarget.current.x += offsetX;
       desiredTarget.current.y += offsetY;
+    }
+
+    if (surfaceWalk > 0) {
+      desiredTarget.current.x += pointer.x * 1.15 * surfaceWalk;
+      desiredTarget.current.y += pointer.y * 0.55 * surfaceWalk;
     }
 
     // The smoothed path is kept apart from the shake, so the smoothing never
@@ -220,7 +248,7 @@ export default function JourneyCameraRig() {
     );
     lookTarget.current.lerp(
       desiredTarget.current,
-      1 - Math.exp(-3.2 * reducedDelta)
+      1 - Math.exp(-(reduceMotion ? 10 : 3.2) * reducedDelta)
     );
 
     const rumble = reduceMotion

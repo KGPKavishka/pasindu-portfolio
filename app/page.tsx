@@ -7,6 +7,8 @@ import JourneyController from "@/components/Journey/JourneyController";
 import JourneyScene from "@/components/Journey/JourneyScene";
 import JourneyHUD from "@/components/Journey/JourneyHUD";
 import HelmetFrame from "@/components/Journey/HelmetFrame";
+import HeadingTape from "@/components/Journey/HeadingTape";
+import OutpostSiteMap from "@/components/Journey/OutpostSiteMap";
 import RadioTranscript from "@/components/Journey/RadioTranscript";
 import EvaManifest from "@/components/Journey/EvaManifest";
 import DescentEffects from "@/components/Journey/DescentEffects";
@@ -55,6 +57,8 @@ export default function Home() {
       <DescentEffects />
       <LanderCabin />
       <HelmetFrame />
+      <HeadingTape />
+      <OutpostSiteMap />
       <JourneyHUD />
       <RadioTranscript />
       <EvaManifest />

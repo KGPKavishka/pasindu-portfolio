@@ -64,6 +64,7 @@ function createHillsGeometry(radius: number, amplitude: number, seed: number) {
 /** The plain, with two rings of distant ridges that always stay on the horizon. */
 export function LandingTerrain() {
   const gl = useThree((state) => state.gl);
+  const groundRef = useRef<THREE.Mesh>(null);
   const nearHillsRef = useRef<THREE.Mesh>(null);
   const farHillsRef = useRef<THREE.Mesh>(null);
   const map = useMemo(() => getGroundMap(gl), [gl]);
@@ -98,7 +99,7 @@ export function LandingTerrain() {
           uSun: landingUniforms.sun,
           uSunColor: landingUniforms.sunColor,
           uFade: landingUniforms.fade,
-          uTint: { value: new THREE.Color("#4a3629") },
+          uTint: landingUniforms.hillsTint,
         },
         vertexShader: hillsVertexShader,
         fragmentShader: hillsFragmentShader,
@@ -116,18 +117,25 @@ export function LandingTerrain() {
   useEffect(() => () => hillsMaterial.dispose(), [hillsMaterial]);
 
   useFrame(({ camera }) => {
+    const centerX = camera.position.x - landingOffset.x;
+    const centerZ = camera.position.z - landingOffset.z;
+
+    groundRef.current?.position.set(centerX, GROUND_Y, centerZ);
+
     for (const hills of [nearHillsRef.current, farHillsRef.current]) {
-      hills?.position.set(
-        camera.position.x - landingOffset.x,
-        GROUND_Y,
-        camera.position.z - landingOffset.z
-      );
+      hills?.position.set(centerX, GROUND_Y, centerZ);
     }
   });
 
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, GROUND_Y, 0]} renderOrder={1}>
+      <mesh
+        ref={groundRef}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, GROUND_Y, 0]}
+        renderOrder={1}
+        frustumCulled={false}
+      >
         <circleGeometry args={[GROUND_RADIUS, 72]} />
         <primitive object={groundMaterial} attach="material" />
       </mesh>
@@ -156,6 +164,7 @@ export function LandingSky() {
           uBase: landingUniforms.base,
           uAltitude: landingUniforms.altitude,
           uFade: landingUniforms.fade,
+          uSunGlow: landingUniforms.sunGlow,
         },
         vertexShader: skyVertexShader,
         fragmentShader: skyFragmentShader,

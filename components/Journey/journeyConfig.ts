@@ -89,14 +89,14 @@ export const journeyPhases = [
   },
   {
     id: "city",
-    label: "Digital City",
+    label: "Outpost Overview",
     start: 0.28,
     end: 0.32,
     sectionId: "projects",
   },
   {
     id: "healthbridge",
-    label: "HealthBridge District",
+    label: "HealthBridge Med-Lab",
     start: 0.32,
     end: 0.4,
     sectionId: "district-healthbridge",
@@ -104,7 +104,7 @@ export const journeyPhases = [
   },
   {
     id: "ezy-map",
-    label: "Ezy Map District",
+    label: "Ezy Map Logistics Depot",
     start: 0.4,
     end: 0.47,
     sectionId: "district-ezy-map",
@@ -112,7 +112,7 @@ export const journeyPhases = [
   },
   {
     id: "kv-audio",
-    label: "KV Audio District",
+    label: "KV Audio Hangar",
     start: 0.47,
     end: 0.54,
     sectionId: "district-kv-audio",
@@ -120,7 +120,7 @@ export const journeyPhases = [
   },
   {
     id: "story-bloom",
-    label: "Story Bloom District",
+    label: "StoryBloom Greenhouse",
     start: 0.54,
     end: 0.61,
     sectionId: "district-story-bloom",
@@ -128,7 +128,7 @@ export const journeyPhases = [
   },
   {
     id: "experience",
-    label: "Experience Tower",
+    label: "Crew Habitat",
     start: 0.61,
     end: 0.69,
     sectionId: "experience",
@@ -136,7 +136,7 @@ export const journeyPhases = [
   },
   {
     id: "data",
-    label: "Data Center",
+    label: "Power Grid",
     start: 0.69,
     end: 0.77,
     sectionId: "skills",
@@ -144,7 +144,7 @@ export const journeyPhases = [
   },
   {
     id: "creative",
-    label: "Creative Studio",
+    label: "Off-Shift Quarters",
     start: 0.77,
     end: 0.85,
     sectionId: "creative",
@@ -152,7 +152,7 @@ export const journeyPhases = [
   },
   {
     id: "future",
-    label: "Future Lab",
+    label: "Ridge Observatory",
     start: 0.85,
     end: 0.92,
     sectionId: "future",
@@ -160,7 +160,7 @@ export const journeyPhases = [
   },
   {
     id: "contact",
-    label: "Contact Center",
+    label: "Comms Mast",
     start: 0.92,
     end: 0.98,
     sectionId: "contact",
@@ -168,7 +168,7 @@ export const journeyPhases = [
   },
   {
     id: "complete",
-    label: "Journey Complete",
+    label: "Night — Log End",
     start: 0.98,
     end: 1,
     sectionId: "journey-complete",

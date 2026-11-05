@@ -15,7 +15,6 @@ import CreativeModal from "@/components/CreativeModal";
 import TerminalPanel from "@/components/UI/TerminalPanel";
 import { useJourney } from "./JourneyController";
 import type { JourneyPhaseId } from "./journeyConfig";
-import { missionStats } from "./missionStats";
 import { activateJourneyProject } from "./projectActivation";
 
 const projectsByPhase = {
@@ -26,7 +25,6 @@ const projectsByPhase = {
 } as const;
 
 const panelSide: Partial<Record<JourneyPhaseId, "left" | "right">> = {
-  city: "left",
   healthbridge: "right",
   "ezy-map": "left",
   "kv-audio": "right",
@@ -131,34 +129,6 @@ function ProjectPanel({
         </Stage>
       </div>
     </>
-  );
-}
-
-function CityPanel({ reduceMotion }: { reduceMotion: boolean | null }) {
-  const metrics = missionStats.map(({ value, label }) => [value, label]);
-
-  return (
-    <div className="p-5">
-      <Stage delay={0.45} reduceMotion={reduceMotion}>
-        <Header eyebrow="Transit hub // online" title="Digital City" />
-        <p className="mt-2 text-xs leading-5 text-white/60">
-          Explore the projects, experiences, skills and future innovations that make up my software engineering city.
-        </p>
-      </Stage>
-      <Stage delay={0.62} reduceMotion={reduceMotion}>
-        <p className="mt-3 font-mono text-[9px] uppercase text-cyan-100/55">
-          Four project districts // experience // data // creative // future
-        </p>
-      </Stage>
-      <Stage delay={0.78} reduceMotion={reduceMotion} className="mt-3 grid grid-cols-2 gap-2">
-        {metrics.map(([value, label]) => (
-          <div key={label} className="border-l border-cyan-200/25 pl-2">
-            <p className="font-mono text-sm text-cyan-100">{value}</p>
-            <p className="text-[9px] uppercase text-white/45">{label}</p>
-          </div>
-        ))}
-      </Stage>
-    </div>
   );
 }
 
@@ -367,7 +337,6 @@ export default function JourneyContentOverlay() {
     content = <ProjectPanel phaseId={phaseId as keyof typeof projectsByPhase} reduceMotion={reduceMotion} />;
   } else if (side) {
     switch (phaseId) {
-      case "city": content = <CityPanel reduceMotion={reduceMotion} />; break;
       case "experience": content = <ExperiencePanel reduceMotion={reduceMotion} />; break;
       case "data": content = <DataPanel reduceMotion={reduceMotion} />; break;
       case "creative": content = <CreativePanel reduceMotion={reduceMotion} onSelect={setSelectedWork} />; break;

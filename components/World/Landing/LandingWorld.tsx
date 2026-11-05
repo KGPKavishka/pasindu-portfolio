@@ -13,17 +13,17 @@ import {
   landingFade,
   landingOffset,
   landingUniforms,
+  updateTimeOfDay,
 } from "./landingConfig";
 
-const SUN_LIGHT_INTENSITY = 3.2;
 /** Sideways glide (world units) the plain carries while the lander descends. */
 const GLIDE = { x: 26, z: -38 };
 
 /**
- * The landing site: sky, a plain with distant ridges, boulders and a low
- * morning sun. It appears underneath the entry plasma, then the *ground rises
- * to meet the camera* (altitude falls to zero at touchdown), so the camera path
- * itself stays a simple, smooth curve.
+ * The landing site and surface plain: sky, a plain with distant ridges,
+ * boulders and a time-of-day sun. It appears underneath the entry plasma, then
+ * the *ground rises to meet the camera* (altitude falls to zero at touchdown),
+ * and remains active across the surface walk from morning through nightfall.
  */
 export default function LandingWorld() {
   const { size } = useThree();
@@ -37,6 +37,7 @@ export default function LandingWorld() {
     const fade = landingFade(journeyProgress);
     const altitude = descentAltitude(journeyProgress);
     const high = altitude / START_ALTITUDE;
+    const lighting = updateTimeOfDay(journeyProgress);
 
     landingUniforms.fade.value = fade;
     landingUniforms.altitude.value = high;
@@ -49,7 +50,13 @@ export default function LandingWorld() {
     }
 
     if (sunLightRef.current) {
-      sunLightRef.current.intensity = SUN_LIGHT_INTENSITY * fade;
+      sunLightRef.current.intensity = lighting.sunIntensity * fade;
+      sunLightRef.current.color.copy(landingUniforms.sunColor.value);
+      sunLightRef.current.position.set(
+        landingUniforms.sun.value.x * 100,
+        landingUniforms.sun.value.y * 100,
+        landingUniforms.sun.value.z * 100
+      );
     }
   });
 

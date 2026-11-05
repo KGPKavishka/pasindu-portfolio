@@ -111,12 +111,19 @@ export const storyBeats: readonly StoryBeat[] = [
     trigger: { type: "scroll", from: 0.192, to: 0.224 },
   },
 
-  // Act 4 — Landfall.
+  // Act 4 — Landfall & Outpost Overview.
   {
     id: "landfall-pk-boots",
     act: 4,
     speaker: "PK",
     line: "Boots on the surface. Outpost in sight.",
-    trigger: { type: "scroll", from: 0.262, to: 0.296 },
+    trigger: { type: "scroll", from: 0.258, to: 0.288 },
+  },
+  {
+    id: "landfall-control-sitemap",
+    act: 4,
+    speaker: "CONTROL",
+    line: "Nine structures on your visor. Walk the line when ready.",
+    trigger: { type: "scroll", from: 0.288, to: 0.318 },
   },
 ];

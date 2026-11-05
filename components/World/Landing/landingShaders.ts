@@ -199,6 +199,7 @@ const skyFragmentShader = /* glsl */ `
   uniform vec3 uBase;
   uniform float uAltitude;
   uniform float uFade;
+  uniform float uSunGlow;
   varying vec3 vDirection;
 
   void main() {
@@ -213,9 +214,10 @@ const skyFragmentShader = /* glsl */ `
     color += uHaze * exp(-max(elevation, 0.0) * 26.0) * 0.55 * (0.3 + uAltitude);
 
     float s = max(dot(direction, uSun), 0.0);
-    float disc = smoothstep(0.99985, 0.99997, s);
+    float aboveHorizon = smoothstep(-0.04, 0.03, uSun.y);
+    float disc = smoothstep(0.99985, 0.99997, s) * aboveHorizon;
 
-    color += uSunColor * (disc * 9.0 + pow(s, 70.0) * 0.45 + pow(s, 7.0) * 0.14);
+    color += uSunColor * uSunGlow * (disc * 9.0 + pow(s, 70.0) * 0.45 + pow(s, 7.0) * 0.14);
     color = 1.0 - exp(-color * 1.3);
     gl_FragColor = vec4(mix(uBase, color, uFade), 1.0);
     #include <colorspace_fragment>

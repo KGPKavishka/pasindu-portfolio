@@ -98,29 +98,47 @@ function scatterRocks(count: number): Rock[] {
   const rocks: Rock[] = [];
   let attempt = 0;
 
-  while (rocks.length < count && attempt < count * 6) {
+  while (rocks.length < count && attempt < count * 8) {
     const seed = attempt * 3.31 + 7;
 
     attempt += 1;
 
-    // Mostly ahead of the lander, some to the sides and behind.
-    const spread = seededRandom(seed) < 0.78 ? 1.0 : 2.6;
-    const offset = (seededRandom(seed + 1) - 0.5) * 2 * 1.3 * spread;
-    const angle = FORWARD_ANGLE + offset;
-    const radius = 9 + 175 * Math.pow(seededRandom(seed + 2), 1.8);
+    const alongCorridor = attempt > count * 0.62;
+    let x = 0;
+    let z = 0;
+    let size = 0.25;
 
-    // Keep the lane straight ahead clear so the horizon (and, later, the outpost)
-    // stays visible from the hatch.
-    if (Math.abs(offset) < 0.32 && radius < 70) continue;
+    if (alongCorridor) {
+      // Scatter rocks along the outpost walk corridor (z = -60 to -310) on the
+      // flanks, keeping the central walking path and structure pads clear.
+      const side = seededRandom(seed) < 0.5 ? -1 : 1;
+      const lateral = 11.5 + seededRandom(seed + 1) * 44;
+      x = side * lateral;
+      z = -62 - seededRandom(seed + 2) * 248;
+      const small = Math.pow(seededRandom(seed + 3), 4.2);
+      size = 0.14 + 1.25 * small;
+    } else {
+      // Mostly ahead of the lander, some to the sides and behind.
+      const spread = seededRandom(seed) < 0.78 ? 1.0 : 2.6;
+      const offset = (seededRandom(seed + 1) - 0.5) * 2 * 1.3 * spread;
+      const angle = FORWARD_ANGLE + offset;
+      const radius = 9 + 175 * Math.pow(seededRandom(seed + 2), 1.8);
 
-    const small = Math.pow(seededRandom(seed + 3), 4.5);
-    // Distant rocks are scaled up a little so they still read at that distance,
-    // but nothing near the lander may rise above eye level.
-    const size = (0.1 + 1.35 * small) * (1 + radius / 130);
+      // Keep the lane straight ahead clear so the horizon (and the outpost)
+      // stays visible from the hatch.
+      if (Math.abs(offset) < 0.32 && radius < 85) continue;
+
+      const small = Math.pow(seededRandom(seed + 3), 4.5);
+      // Distant rocks are scaled up a little so they still read at that distance,
+      // but nothing near the lander may rise above eye level.
+      size = (0.1 + 1.35 * small) * (1 + radius / 130);
+      x = ANCHOR.x + Math.cos(angle) * radius;
+      z = ANCHOR.z - Math.sin(angle) * radius;
+    }
 
     rocks.push({
-      x: ANCHOR.x + Math.cos(angle) * radius,
-      z: ANCHOR.z - Math.sin(angle) * radius,
+      x,
+      z,
       size,
       yaw: seededRandom(seed + 4) * Math.PI * 2,
       tint: 0.7 + seededRandom(seed + 5) * 0.5,
