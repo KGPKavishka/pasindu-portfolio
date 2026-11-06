@@ -15,20 +15,9 @@ import CreativeModal from "@/components/CreativeModal";
 import TerminalPanel from "@/components/UI/TerminalPanel";
 import { useJourney } from "./JourneyController";
 import type { JourneyPhaseId } from "./journeyConfig";
-import { activateJourneyProject } from "./projectActivation";
 
-const projectsByPhase = {
-  healthbridge: "healthbridge",
-  "ezy-map": "ezymap",
-  "kv-audio": "kvaudio",
-  "story-bloom": "storybloom",
-} as const;
-
+// Project phases (Acts 5–8) are presented by ProjectCallouts, not by a panel here.
 const panelSide: Partial<Record<JourneyPhaseId, "left" | "right">> = {
-  healthbridge: "right",
-  "ezy-map": "left",
-  "kv-audio": "right",
-  "story-bloom": "left",
   experience: "left",
   data: "right",
   creative: "right",
@@ -79,56 +68,6 @@ function TechTag({ children }: { children: React.ReactNode }) {
     <span className="terminal-chip px-2 py-1">
       {children}
     </span>
-  );
-}
-
-function ProjectPanel({
-  phaseId,
-  reduceMotion,
-}: {
-  phaseId: keyof typeof projectsByPhase;
-  reduceMotion: boolean | null;
-}) {
-  const project = projects.find((item) => item.id === projectsByPhase[phaseId]);
-  if (!project) return null;
-
-  return (
-    <>
-      <Stage delay={1.05} reduceMotion={reduceMotion}>
-        <div className="terminal-image-frame relative aspect-[16/8] overflow-hidden border-b border-cyan-200/15">
-          <Image
-            src={project.heroImage}
-            alt={`${project.title} project preview`}
-            fill
-            priority
-            sizes="(max-width: 640px) calc(100vw - 2rem), 352px"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#020711]/90 via-transparent to-transparent" />
-        </div>
-      </Stage>
-      <div className="p-4 sm:p-5">
-        <Stage delay={1.2} reduceMotion={reduceMotion}>
-          <Header eyebrow={`${project.id} // project archive`} title={project.title} />
-          <p className="terminal-meta mt-1">{project.subtitle}</p>
-          <p className="terminal-copy mt-2">{project.description}</p>
-        </Stage>
-        <Stage delay={1.4} reduceMotion={reduceMotion} className="mt-3 flex flex-wrap gap-1.5">
-          {project.technologies.slice(0, 3).map((technology) => (
-            <TechTag key={technology}>{technology}</TechTag>
-          ))}
-        </Stage>
-        <Stage delay={1.6} reduceMotion={reduceMotion}>
-          <button
-            type="button"
-            onClick={() => activateJourneyProject(project.id)}
-            className="terminal-control mt-3"
-          >
-            View project details
-          </button>
-        </Stage>
-      </div>
-    </>
   );
 }
 
@@ -333,9 +272,7 @@ export default function JourneyContentOverlay() {
   const side = panelSide[phaseId];
 
   let content: React.ReactNode = null;
-  if (side && phaseId in projectsByPhase) {
-    content = <ProjectPanel phaseId={phaseId as keyof typeof projectsByPhase} reduceMotion={reduceMotion} />;
-  } else if (side) {
+  if (side) {
     switch (phaseId) {
       case "experience": content = <ExperiencePanel reduceMotion={reduceMotion} />; break;
       case "data": content = <DataPanel reduceMotion={reduceMotion} />; break;

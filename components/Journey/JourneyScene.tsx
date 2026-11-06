@@ -8,7 +8,7 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import SpaceEnvironment from "@/components/World/Space/SpaceEnvironment";
 import OrbitScene from "@/components/World/Orbit/OrbitScene";
 import Planet from "@/components/World/Planet/Planet";
-import ProjectDistricts from "@/components/World/Districts/ProjectDistricts";
+import ProjectStructures from "@/components/World/Outpost/ProjectStructures";
 import ProfessionalLandmarks from "@/components/World/Landmarks/ProfessionalLandmarks";
 import CreativeFutureLandmarks from "@/components/World/Landmarks/CreativeFutureLandmarks";
 import ContactLandmarks from "@/components/World/Landmarks/ContactLandmarks";
@@ -52,7 +52,7 @@ export default function JourneyScene() {
         <Planet />
         <LandingWorld />
         <WorldGate from={0.27}>
-          <ProjectDistricts />
+          <ProjectStructures />
           <ProfessionalLandmarks />
           <CreativeFutureLandmarks />
           <ContactLandmarks />

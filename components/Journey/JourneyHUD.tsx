@@ -34,26 +34,7 @@ const hudMessages: Partial<Record<JourneyPhaseId, HudMessage>> = {
     system: "OUTPOST TELEMETRY",
     heading: "SITE MAP ONLINE",
   },
-  healthbridge: {
-    system: "STRUCTURE DETECTED",
-    heading: "HEALTHBRIDGE MED-LAB",
-    status: "ACCESSING MISSION FILE...",
-  },
-  "ezy-map": {
-    system: "STRUCTURE DETECTED",
-    heading: "EZY MAP LOGISTICS DEPOT",
-    status: "ACCESSING MISSION FILE...",
-  },
-  "kv-audio": {
-    system: "STRUCTURE DETECTED",
-    heading: "KV AUDIO EQUIPMENT HANGAR",
-    status: "ACCESSING MISSION FILE...",
-  },
-  "story-bloom": {
-    system: "STRUCTURE DETECTED",
-    heading: "STORYBLOOM GREENHOUSE",
-    status: "ACCESSING MISSION FILE...",
-  },
+  // Project phases (healthbridge … story-bloom) are carried by ProjectCallouts.
   experience: {
     system: "STRUCTURE DETECTED",
     heading: "CREW HABITAT",

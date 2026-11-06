@@ -145,7 +145,7 @@ export default function RadioTranscript({
       className={`pointer-events-none fixed inset-x-0 z-[44] flex ${
         isOrbitIntro
           ? "top-[88px] justify-center px-6 md:top-auto md:bottom-9"
-          : "bottom-6 justify-start pl-6 pr-[76px] sm:bottom-8 sm:justify-center sm:px-20 md:bottom-9"
+          : "bottom-4 justify-start pl-5 pr-[72px] sm:bottom-8 sm:justify-center sm:px-20 md:bottom-9"
       }`}
     >
       <AnimatePresence mode="wait">
@@ -156,7 +156,7 @@ export default function RadioTranscript({
             animate={{ opacity: 1, y: 0 }}
             exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
             transition={{ duration: reduceMotion ? 0 : 0.4 }}
-            className="flex max-w-xl items-baseline gap-3 font-radio text-[15px] leading-snug text-suit [text-shadow:0_1px_14px_rgba(0,0,0,0.9)] sm:text-base"
+            className="flex max-w-xl items-baseline gap-2.5 font-radio text-[13px] leading-snug text-suit [text-shadow:0_1px_14px_rgba(0,0,0,0.9)] sm:gap-3 sm:text-base"
           >
             <span
               className={`font-hud text-[10px] font-medium uppercase tracking-[0.24em] ${activeBeat.speaker === "PK" ? "text-caution" : "text-suit/60"
@@ -167,7 +167,7 @@ export default function RadioTranscript({
 
             <TypewriterText
               text={activeBeat.line}
-              speed={32}
+              speed={activeBeat.line.length > 120 ? 14 : 32}
               restartKey={activeBeat.id}
               cursorClassName="text-caution"
               showCursor={isTyping}

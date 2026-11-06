@@ -1,14 +1,37 @@
 import { Project } from "../types/project";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { createPortal } from "react-dom";
+
+import { outpostStructures } from "./Journey/journeyWorldConfig";
 
 interface Props {
   project: Project;
   onClose: () => void;
 }
 
+const lightboxButton =
+  "absolute flex h-10 w-10 items-center justify-center border border-suit/50 bg-void/85 font-hud text-lg text-suit transition-colors hover:border-signal hover:bg-signal hover:text-sunlight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution";
+
+function SectionHeading({ index, children }: { index: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-4 flex items-center gap-3">
+      <span className="bg-signal px-2 py-0.5 font-hud text-[10px] font-semibold tracking-[0.2em] text-sunlight">
+        {index}
+      </span>
+      <h3 className="font-hud text-[12px] font-semibold uppercase tracking-[0.24em] text-[#141414]">
+        {children}
+      </h3>
+      <span aria-hidden="true" className="h-px flex-1 bg-black/25" />
+    </div>
+  );
+}
+
+/**
+ * Mission file: the full project record, presented as a printed technical
+ * dossier (paper-white sheet, black type, International Orange tabs).
+ */
 export default function ProjectModal({
   project,
   onClose,
@@ -16,6 +39,9 @@ export default function ProjectModal({
 
   const [selectedImage, setSelectedImage] =
     useState<number | null>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const fileCode =
+    outpostStructures.find((item) => item.id === project.id)?.code ?? "FILE";
 
   const showPreviousImage = () => {
     if (!project.screenshots || selectedImage === null) return;
@@ -62,6 +88,7 @@ export default function ProjectModal({
     const originalOverflow = document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
 
     return () => {
       document.body.style.overflow = originalOverflow;
@@ -77,25 +104,15 @@ export default function ProjectModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="
-        fixed
-        inset-0
-        z-50
-        bg-black/80
-        backdrop-blur-sm
-        flex
-        items-center
-        justify-center
-        p-6
-      "
+      className="fixed inset-0 z-[95] flex items-center justify-center bg-void/85 p-3 sm:p-6"
       onClick={onClose}
     >
 
       <motion.div
         initial={{
           opacity: 0,
-          scale: 0.96,
-          y: 16,
+          scale: 0.97,
+          y: 18,
         }}
         animate={{
           opacity: 1,
@@ -110,315 +127,218 @@ export default function ProjectModal({
         transition={{
           type: "spring",
           stiffness: 320,
-          damping: 28,
+          damping: 30,
           mass: 0.8,
         }}
         onClick={(e) => e.stopPropagation()}
-        className="terminal-panel interface-dialog max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto bg-[#f3f0e8] text-[#141414] shadow-[0_30px_90px_rgba(0,0,0,0.65)]"
       >
 
         {/* Header */}
-        <div className="border-b border-cyan-300/15 p-5 sm:p-8">
+        <div className="border-b-2 border-[#141414] px-5 pb-5 pt-0 sm:px-8">
 
-          <div className="flex items-start justify-between">
+          <div className="flex items-stretch justify-between gap-4">
 
-            <div>
-
-              <div className="font-mono text-2xl text-cyan-100">
-                {project.emoji}
-              </div>
-
-              <h2 id={`project-${project.id}-title`} className="terminal-title mt-3 text-xl sm:text-2xl">
-                {project.title}
-              </h2>
-
-              <p className="terminal-meta mt-2 text-cyan-100">
-                {project.subtitle}
-              </p>
-
+            <div className="flex items-center gap-3 bg-signal px-3 py-1.5 font-hud text-[10px] font-semibold uppercase tracking-[0.24em] text-sunlight">
+              <span>Mission file</span>
+              <span aria-hidden="true" className="text-sunlight/60">{"//"}</span>
+              <span>{fileCode}</span>
             </div>
 
             <button
+              ref={closeRef}
               type="button"
               aria-label={`Close ${project.title} project details`}
               onClick={onClose}
-                className="terminal-control h-10 w-10 min-h-10 p-0 text-lg"
+              className="mt-2 flex h-9 w-9 items-center justify-center border border-[#141414] font-hud text-base transition-colors hover:bg-signal hover:text-sunlight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#141414]"
             >
               ✕
             </button>
 
           </div>
 
+          <h2
+            id={`project-${project.id}-title`}
+            className="mt-5 font-hud text-2xl font-semibold uppercase tracking-[0.08em] sm:text-3xl"
+          >
+            {project.title}
+          </h2>
+
+          <p className="mt-2 font-radio text-base text-[#3a3a38]">
+            {project.subtitle}
+          </p>
+
+          {project.category && (
+            <p className="mt-3 inline-block border border-[#141414] px-2 py-0.5 font-hud text-[10px] uppercase tracking-[0.2em]">
+              Category: {project.category}
+            </p>
+          )}
+
         </div>
 
-        <div className="space-y-8 p-5 sm:p-8">
+        <div className="space-y-9 p-5 sm:p-8">
 
           {/* Hero Image */}
           {project.heroImage && (
-            <div
-              className="
-                relative
-                h-52 sm:h-72
-                overflow-hidden
-                terminal-image-frame
-                bg-[#0f172a]
-              "
-            >
-              <Image
-                src={project.heroImage}
-                alt={project.title}
-                fill
-                priority
-                sizes="(max-width: 768px) calc(100vw - 3rem), 896px"
-                className="
-                  object-cover
-                  transition-transform
-                  duration-500
-                  hover:scale-105
-                "
-              />
-
-              {/* Dark Overlay */}
+            <figure>
               <div
                 className="
-                  absolute
-                  inset-0
-                  bg-gradient-to-t
-                  from-[#050816]/70
-                  via-transparent
-                  to-transparent
-                "
-              />
-
-              {/* Project Title Overlay */}
-              <div
-                className="
-                  absolute
-                  bottom-6
-                  left-6
+                  relative
+                  h-52 sm:h-72
+                  overflow-hidden
+                  border border-[#141414]
+                  bg-[#d9d4c7]
                 "
               >
-                <span
-                    className="terminal-chip px-3 py-2"
-                >
-                  {project.title}
-                </span>
+                <Image
+                  src={project.heroImage}
+                  alt={project.title}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) calc(100vw - 3rem), 896px"
+                  className="object-cover"
+                />
               </div>
-
-            </div>
+              <figcaption className="mt-2 font-hud text-[10px] uppercase tracking-[0.2em] text-[#5a5a56]">
+                Fig. 0 — {project.title}
+              </figcaption>
+            </figure>
           )}
 
           {/* Overview */}
-          <div>
-
-                <h3 className="mb-3">
-              Overview
-            </h3>
-
-            <p className="text-gray-300 leading-8">
+          <section>
+            <SectionHeading index="01">Overview</SectionHeading>
+            <p className="font-radio text-[15px] leading-7 text-[#222220]">
               {project.description}
             </p>
-
-          </div>
+          </section>
 
           {/* Technologies */}
-          <div>
-
-                <h3 className="mb-3">
-              Technologies
-            </h3>
-
-            <div className="flex flex-wrap gap-3">
-
+          <section>
+            <SectionHeading index="02">Technologies</SectionHeading>
+            <ul className="flex flex-wrap gap-2.5">
               {project.technologies.map((tech) => (
-                <span
+                <li
                   key={tech}
-                    className="terminal-chip px-2.5 py-1.5"
+                  className="border border-[#141414] px-2.5 py-1 font-hud text-[11px] uppercase tracking-[0.12em]"
                 >
                   {tech}
-                </span>
+                </li>
               ))}
-
-            </div>
-
-          </div>
+            </ul>
+          </section>
 
           {/* Architecture */}
-          <div>
-
-            <h3 className="mb-3">
-              Architecture
-            </h3>
-
-            <div className="space-y-3">
-
-              {project.architecture.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3"
-                >
-                  <span className="text-cyan-400">
-                    →
+          <section>
+            <SectionHeading index="03">Architecture</SectionHeading>
+            <ol className="space-y-2">
+              {project.architecture.map((item, index) => (
+                <li key={item} className="flex items-center gap-3 font-radio text-[15px] text-[#222220]">
+                  <span className="w-7 font-hud text-[11px] font-semibold text-signal">
+                    {String(index + 1).padStart(2, "0")}
                   </span>
-
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
-                </div>
+                  <span className="border-b border-dotted border-black/40 pb-0.5">{item}</span>
+                </li>
               ))}
-
-            </div>
-
-          </div>
+            </ol>
+          </section>
 
           {/* Features */}
-          <div>
-
-            <h3 className="mb-3">
-              Key Features
-            </h3>
-
-            <div className="space-y-3">
-
+          <section>
+            <SectionHeading index="04">Key features</SectionHeading>
+            <ul className="space-y-2.5">
               {project.features.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3"
-                >
-                  <span className="text-emerald-400">
-                    ✓
-                  </span>
-
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
-                </div>
+                <li key={item} className="flex items-start gap-3 font-radio text-[15px] text-[#222220]">
+                  <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 bg-[#141414]" />
+                  {item}
+                </li>
               ))}
-
-            </div>
-
-          </div>
+            </ul>
+          </section>
 
           {/* Challenges */}
-          <div>
-
-            <h3 className="mb-3">
-              Challenges
-            </h3>
-
-            <div className="space-y-3">
-
+          <section>
+            <SectionHeading index="05">Challenges</SectionHeading>
+            <ul className="space-y-2.5">
               {project.challenges.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3"
-                >
-                  <span className="text-orange-400">
-                    •
+                <li key={item} className="flex items-start gap-3 font-radio text-[15px] text-[#222220]">
+                  <span aria-hidden="true" className="mt-0.5 font-hud text-sm font-semibold text-signal">
+                    !
                   </span>
-
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
-                </div>
+                  {item}
+                </li>
               ))}
-
-            </div>
-
-          </div>
+            </ul>
+          </section>
 
           {/* Lessons */}
-          <div>
-
-            <h3 className="text-2xl font-bold mb-4">
-              Lessons Learned
-            </h3>
-
-            <div className="space-y-3">
-
+          <section>
+            <SectionHeading index="06">Lessons learned</SectionHeading>
+            <ul className="space-y-2.5">
               {project.lessons.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3"
-                >
-                  <span className="text-violet-400">
-                    ★
+                <li key={item} className="flex items-start gap-3 font-radio text-[15px] text-[#222220]">
+                  <span aria-hidden="true" className="mt-0.5 font-hud text-sm font-semibold text-[#141414]">
+                    →
                   </span>
-
-                  <span className="text-gray-300">
-                    {item}
-                  </span>
-                </div>
+                  {item}
+                </li>
               ))}
-
-            </div>
-
-          </div>
+            </ul>
+          </section>
 
           {/* Screenshots */}
           {project.screenshots && project.screenshots.length > 0 && (
-            <div>
+            <section>
 
-              <h3 className="mb-4">
-                Project Gallery
-              </h3>
+              <SectionHeading index="07">Project gallery</SectionHeading>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
 
                 {project.screenshots.map((image, index) => (
-                  <button
-                    type="button"
-                    key={index}
-                    aria-label={`Open ${project.title} screenshot ${index + 1}`}
-                    onClick={() => setSelectedImage(index)}
-                    className="
-                      group
-                      block
-                      relative
-                      h-52
-                      w-full
-                      overflow-hidden
-                      rounded-2xl
-                      border
-                      border-white/10
-                      bg-[#101827]
-                      focus-visible:outline-2
-                      focus-visible:outline-offset-2
-                      focus-visible:outline-cyan-300
-                    "
-                  >
-
-                    <Image
-                      src={image}
-                      alt={`${project.title} Screenshot ${index + 1}`}
-                      fill
-                      sizes="(max-width: 768px) calc(100vw - 4rem), 33vw"
+                  <figure key={image}>
+                    <button
+                      type="button"
+                      aria-label={`Open ${project.title} screenshot ${index + 1}`}
+                      onClick={() => setSelectedImage(index)}
                       className="
-                        object-cover
-                        transition-transform
-                        duration-500
-                        group-hover:scale-110
+                        group
+                        relative
+                        block
+                        h-52
+                        w-full
+                        overflow-hidden
+                        border
+                        border-[#141414]
+                        bg-[#d9d4c7]
+                        focus-visible:outline-2
+                        focus-visible:outline-offset-2
+                        focus-visible:outline-signal
                       "
-                    />
+                    >
 
-                    <div
-                      className="
-                        absolute
-                        inset-0
-                        bg-black/20
-                        opacity-0
-                        transition-opacity
-                        duration-300
-                        group-hover:opacity-100
-                      "
-                    />
+                      <Image
+                        src={image}
+                        alt={`${project.title} Screenshot ${index + 1}`}
+                        fill
+                        sizes="(max-width: 768px) calc(100vw - 4rem), 33vw"
+                        className="
+                          object-cover
+                          transition-transform
+                          duration-500
+                          group-hover:scale-105
+                        "
+                      />
 
-                  </button>
+                    </button>
+                    <figcaption className="mt-1.5 font-hud text-[10px] uppercase tracking-[0.2em] text-[#5a5a56]">
+                      Fig. {index + 1}
+                    </figcaption>
+                  </figure>
                 ))}
 
               </div>
 
-            </div>
+            </section>
           )}
 
           {/* Full Screen Image Viewer */}
@@ -428,12 +348,11 @@ export default function ProjectModal({
               className="
                 fixed
                 inset-0
-                z-[60]
+                z-[100]
                 flex
                 items-center
                 justify-center
-                bg-black/90
-                backdrop-blur-sm
+                bg-void/92
                 p-6
               "
             >
@@ -457,7 +376,7 @@ export default function ProjectModal({
                   type="button"
                   aria-label="Previous screenshot"
                   onClick={showPreviousImage}
-                  className="terminal-control absolute left-4 top-1/2 h-10 w-10 min-h-10 -translate-y-1/2 p-0 text-xl"
+                  className={`${lightboxButton} left-4 top-1/2 -translate-y-1/2`}
                 >
                   ‹
                 </button>
@@ -465,7 +384,7 @@ export default function ProjectModal({
                   type="button"
                   aria-label="Next screenshot"
                   onClick={showNextImage}
-                  className="terminal-control absolute right-4 top-1/2 h-10 w-10 min-h-10 -translate-y-1/2 p-0 text-xl"
+                  className={`${lightboxButton} right-4 top-1/2 -translate-y-1/2`}
                 >
                   ›
                 </button>
@@ -475,13 +394,13 @@ export default function ProjectModal({
                   type="button"
                   aria-label="Close screenshot viewer"
                   onClick={() => setSelectedImage(null)}
-                  className="terminal-control absolute right-4 top-4 h-10 w-10 min-h-10 p-0"
+                  className={`${lightboxButton} right-4 top-4`}
                 >
                   ✕
                 </button>
 
                 <div
-                  className="terminal-chip absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2"
+                  className="absolute bottom-6 left-1/2 -translate-x-1/2 border border-suit/50 bg-void/85 px-4 py-2 font-hud text-[11px] tracking-[0.2em] text-suit"
                 >
                   {selectedImage! + 1} / {project.screenshots.length}
                 </div>
@@ -491,18 +410,33 @@ export default function ProjectModal({
           )}
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-4 pt-4">
+          {(project.github || project.demo) && (
+            <div className="flex flex-wrap gap-4 border-t-2 border-[#141414] pt-6">
 
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="terminal-control"
-            >
-              View GitHub
-            </a>
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-signal px-5 py-3 font-hud text-[11px] font-semibold uppercase tracking-[0.22em] text-sunlight transition-colors hover:bg-[#ff6a26] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#141414]"
+                >
+                  View GitHub <span aria-hidden="true">↗</span>
+                </a>
+              )}
 
-          </div>
+              {project.demo && (
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-[#141414] px-5 py-3 font-hud text-[11px] font-semibold uppercase tracking-[0.22em] transition-colors hover:bg-[#141414] hover:text-[#f3f0e8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#141414]"
+                >
+                  Live demo <span aria-hidden="true">↗</span>
+                </a>
+              )}
+
+            </div>
+          )}
 
         </div>
 

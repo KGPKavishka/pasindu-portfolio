@@ -49,18 +49,24 @@ function interpolateVector(
   );
 }
 
-// Narrow screens pull the path toward the centre line; lift only above-surface shots.
+// Narrow screens pull the path toward the centre line; step back on surface
+// structure stops so portrait viewports frame the full building above the callout.
 function adjustForCompact(keyframe: JourneyCameraKeyframe): JourneyCameraKeyframe {
   const isSurface = keyframe.progress >= 0.25;
+  const isOutpostStop = keyframe.progress >= 0.32 && keyframe.progress < 0.98;
 
   return {
     ...keyframe,
     position: [
       keyframe.position[0] * 0.58,
       keyframe.position[1] + (isSurface ? 0 : 0.35),
-      keyframe.position[2],
+      keyframe.position[2] + (isOutpostStop ? 5.2 : 0),
     ],
-    target: [keyframe.target[0] * 0.82, keyframe.target[1], keyframe.target[2]],
+    target: [
+      keyframe.target[0] * 0.82,
+      keyframe.target[1] + (isOutpostStop ? -0.45 : 0),
+      keyframe.target[2],
+    ],
   };
 }
 
@@ -242,13 +248,16 @@ export default function JourneyCameraRig() {
       isPlaced.current = true;
     }
 
+    const posLerpRate = reduceMotion ? 10 : isCompact ? 3.8 : 3.4;
+    const lookLerpRate = reduceMotion ? 10 : journeyProgress >= 0.25 ? 4.8 : 3.2;
+
     smoothedPosition.current.lerp(
       desiredPosition.current,
-      1 - Math.exp(-(reduceMotion ? 10 : isCompact ? 3.6 : 3) * reducedDelta)
+      1 - Math.exp(-posLerpRate * reducedDelta)
     );
     lookTarget.current.lerp(
       desiredTarget.current,
-      1 - Math.exp(-(reduceMotion ? 10 : 3.2) * reducedDelta)
+      1 - Math.exp(-lookLerpRate * reducedDelta)
     );
 
     const rumble = reduceMotion
