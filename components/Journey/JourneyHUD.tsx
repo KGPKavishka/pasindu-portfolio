@@ -34,17 +34,7 @@ const hudMessages: Partial<Record<JourneyPhaseId, HudMessage>> = {
     system: "OUTPOST TELEMETRY",
     heading: "SITE MAP ONLINE",
   },
-  // Project phases (healthbridge … story-bloom) are carried by ProjectCallouts.
-  experience: {
-    system: "STRUCTURE DETECTED",
-    heading: "CREW HABITAT",
-    status: "ACCESSING CREW LOG...",
-  },
-  data: {
-    system: "STRUCTURE DETECTED",
-    heading: "POWER GRID // SOLAR ARRAYS",
-    status: "READING GRID TELEMETRY...",
-  },
+  // Surface stops (Acts 5–10: projects, experience, data) are carried by ProjectCallouts.
   creative: {
     system: "INTERIOR MODULE",
     heading: "OFF-SHIFT QUARTERS",

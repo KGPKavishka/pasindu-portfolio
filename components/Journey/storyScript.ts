@@ -208,4 +208,36 @@ export const storyBeats: readonly StoryBeat[] = [
     line: "StoryBloom. A Flutter storytelling app prototype with a modern, responsive interface.",
     trigger: { type: "scroll", from: 0.565, to: 0.61 },
   },
+
+  // Act 9 — Crew Habitat (Internship from data/experienceData.ts).
+  {
+    id: "hab-control-ask",
+    act: 9,
+    speaker: "CONTROL",
+    line: "Tell me about your first crew mission.",
+    trigger: { type: "scroll", from: 0.612, to: 0.635 },
+  },
+  {
+    id: "hab-pk-answer",
+    act: 9,
+    speaker: "PK",
+    line: "Backend Developer Intern at Pure Heart Family, February to May 2026. I worked on Ezy Map.",
+    trigger: { type: "scroll", from: 0.635, to: 0.688 },
+  },
+
+  // Act 10 — Power Grid / Solar Arrays (Skills from data/skillsData.ts).
+  {
+    id: "grid-control-ask",
+    act: 10,
+    speaker: "CONTROL",
+    line: "Grid readings?",
+    trigger: { type: "scroll", from: 0.692, to: 0.715 },
+  },
+  {
+    id: "grid-pk-answer",
+    act: 10,
+    speaker: "PK",
+    line: "Frontend at ninety. Backend and database at eighty-five. Cloud at seventy-five. AI and research at sixty-five.",
+    trigger: { type: "scroll", from: 0.715, to: 0.768 },
+  },
 ];

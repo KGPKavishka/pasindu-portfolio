@@ -11,7 +11,7 @@ const PLANT_X = [-3, -1.8, -0.6, 0.6, 1.8, 3];
 export default function Greenhouse() {
   return (
     <group>
-      <OutpostPad radius={7.2} />
+      <OutpostPad radius={6.8} />
 
       {/* Dome: glazing plus an aluminium lattice, on a base ring */}
       <mesh position={[0, 0.3, DOME_Z]} material={m.aluminium}>
@@ -66,11 +66,11 @@ export default function Greenhouse() {
       </mesh>
 
       {/* Water tank and folding solar panel */}
-      <mesh position={[-5.4, 1.35, -1.4]} material={m.panelWhite}>
-        <cylinderGeometry args={[0.9, 0.9, 2.4, 24]} />
+      <mesh position={[-3.9, 1.25, -2.6]} material={m.panelWhite}>
+        <cylinderGeometry args={[0.72, 0.72, 2.2, 24]} />
       </mesh>
-      <mesh position={[-4.4, 0.8, -1.4]} rotation={[0, 0, HALF_PI]} material={m.aluminium}>
-        <cylinderGeometry args={[0.09, 0.09, 1.6, 8]} />
+      <mesh position={[-3.1, 0.8, -2.1]} rotation={[0, 0, HALF_PI]} material={m.aluminium}>
+        <cylinderGeometry args={[0.08, 0.08, 1.2, 8]} />
       </mesh>
       <group position={[5.4, 1.3, -1.2]} rotation={[-0.5, -0.2, 0]}>
         <mesh material={m.aluminium}>

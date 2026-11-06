@@ -175,7 +175,7 @@ export default function JourneyCameraRig() {
             0,
             1
           );
-    const reducedDelta = Math.min(delta, 0.05);
+    const reducedDelta = Math.min(delta, 0.12);
 
     interpolateVector(
       previous.position,
@@ -248,8 +248,13 @@ export default function JourneyCameraRig() {
       isPlaced.current = true;
     }
 
-    const posLerpRate = reduceMotion ? 10 : isCompact ? 3.8 : 3.4;
-    const lookLerpRate = reduceMotion ? 10 : journeyProgress >= 0.25 ? 4.8 : 3.2;
+    const distanceToDesired = smoothedPosition.current.distanceTo(
+      desiredPosition.current
+    );
+    const catchUpBoost = distanceToDesired > 12 ? 14 : 0;
+    const posLerpRate = (reduceMotion ? 16 : isCompact ? 6.5 : 6.0) + catchUpBoost;
+    const lookLerpRate =
+      (reduceMotion ? 16 : journeyProgress >= 0.25 ? 7.5 : 4.5) + catchUpBoost;
 
     smoothedPosition.current.lerp(
       desiredPosition.current,

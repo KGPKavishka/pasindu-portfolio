@@ -7,19 +7,14 @@ import { useState } from "react";
 
 import { contactItems } from "@/data/contactData";
 import { creativeWorks } from "@/data/creativeData";
-import { experiences } from "@/data/experienceData";
 import { futureSkills } from "@/data/futureData";
-import { projects } from "@/data/portfolioData";
-import { skills } from "@/data/skillsData";
 import CreativeModal from "@/components/CreativeModal";
 import TerminalPanel from "@/components/UI/TerminalPanel";
 import { useJourney } from "./JourneyController";
 import type { JourneyPhaseId } from "./journeyConfig";
 
-// Project phases (Acts 5–8) are presented by ProjectCallouts, not by a panel here.
+// Acts 5–10 (projects, experience, data) are presented by ProjectCallouts, not by a panel here.
 const panelSide: Partial<Record<JourneyPhaseId, "left" | "right">> = {
-  experience: "left",
-  data: "right",
   creative: "right",
   future: "left",
   contact: "right",
@@ -60,90 +55,6 @@ function Header({ eyebrow, title }: { eyebrow: string; title: string }) {
         {title}
       </h2>
     </>
-  );
-}
-
-function TechTag({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="terminal-chip px-2 py-1">
-      {children}
-    </span>
-  );
-}
-
-function ExperiencePanel({ reduceMotion }: { reduceMotion: boolean | null }) {
-  const experience = experiences[0];
-  const relatedProject = projects.find((project) => project.id === "ezymap");
-  return (
-    <div className="p-5">
-      {relatedProject && (
-        <Stage delay={1.05} reduceMotion={reduceMotion}>
-          <div className="terminal-image-frame relative mb-3 aspect-[16/7] overflow-hidden border-b border-cyan-200/15">
-            <Image
-              src={relatedProject.heroImage}
-              alt={`${relatedProject.title} internship project preview`}
-              fill
-              priority
-              sizes="(max-width: 640px) calc(100vw - 2rem), 352px"
-              className="object-cover"
-            />
-          </div>
-        </Stage>
-      )}
-      <Stage delay={1.05} reduceMotion={reduceMotion}>
-        <Header eyebrow="Experience archive // 01" title={experience.company} />
-        <p className="terminal-meta mt-1">{experience.role}</p>
-        <p className="terminal-meta mt-1 text-white/50">{experience.duration}</p>
-        <p className="terminal-kicker mt-1">Project // {experience.project}</p>
-        <div className="mt-3 border-l border-cyan-200/35 pl-3">
-          <p className="terminal-copy">{experience.description}</p>
-        </div>
-        <p className="terminal-meta mt-3 text-emerald-200/80">600+ hours completed</p>
-      </Stage>
-      <Stage delay={1.4} reduceMotion={reduceMotion} className="mt-3 flex flex-wrap gap-1.5">
-        {experience.technologies.slice(0, 4).map((technology) => (
-          <TechTag key={technology}>{technology}</TechTag>
-        ))}
-      </Stage>
-      <Stage delay={1.6} reduceMotion={reduceMotion}>
-        <details className="mt-3 text-xs text-white/55">
-          <summary className="cursor-pointer font-mono text-[10px] uppercase text-cyan-100/75">Responsibilities</summary>
-          <ul className="mt-2 space-y-1 pl-3">
-            {experience.achievements.map((item) => <li key={item}>{item}</li>)}
-          </ul>
-        </details>
-      </Stage>
-    </div>
-  );
-}
-
-function DataPanel({ reduceMotion }: { reduceMotion: boolean | null }) {
-  return (
-    <div className="p-5">
-      <Stage delay={1.05} reduceMotion={reduceMotion}>
-        <Header eyebrow="Systems index // live" title="Data Center" />
-      </Stage>
-      <Stage delay={1.25} reduceMotion={reduceMotion} className="mt-3 space-y-2.5">
-        {skills.map((skill) => (
-          <div key={skill.id}>
-            <div className="flex justify-between gap-3 font-mono text-[9px] uppercase text-white/70">
-              <span>{skill.title}</span><span>{skill.level}%</span>
-            </div>
-            <div
-              className="mt-1 h-1 bg-white/10"
-              role="progressbar"
-              aria-label={`${skill.title} proficiency`}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={skill.level}
-            >
-              <div className="h-full bg-cyan-200/75" style={{ width: `${skill.level}%` }} />
-            </div>
-            <p className="terminal-meta mt-1 truncate text-white/40">{skill.technologies.join(" // ")}</p>
-          </div>
-        ))}
-      </Stage>
-    </div>
   );
 }
 
@@ -274,8 +185,6 @@ export default function JourneyContentOverlay() {
   let content: React.ReactNode = null;
   if (side) {
     switch (phaseId) {
-      case "experience": content = <ExperiencePanel reduceMotion={reduceMotion} />; break;
-      case "data": content = <DataPanel reduceMotion={reduceMotion} />; break;
       case "creative": content = <CreativePanel reduceMotion={reduceMotion} onSelect={setSelectedWork} />; break;
       case "future": content = <FuturePanel reduceMotion={reduceMotion} />; break;
       case "contact": content = <ContactPanel reduceMotion={reduceMotion} />; break;

@@ -1,10 +1,12 @@
 "use client";
 
 import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
+import CrewHabitat from "./CrewHabitat";
 import EquipmentHangar from "./EquipmentHangar";
 import Greenhouse from "./Greenhouse";
 import LogisticsDepot from "./LogisticsDepot";
 import MedLab from "./MedLab";
+import PowerGrid from "./PowerGrid";
 
 /** Turn each structure slightly toward the walking corridor (x = 0). */
 function yawToCorridor(x: number) {
@@ -12,7 +14,7 @@ function yawToCorridor(x: number) {
 }
 
 /**
- * The four project structures of the outpost (Acts 5–8). Positions come from
+ * Outpost surface structures built across Acts 5–10. Positions come from
  * journeyWorld; the pads stand on the ground plane (journeyWorld.groundY).
  */
 export default function ProjectStructures() {
@@ -43,6 +45,18 @@ export default function ProjectStructures() {
         rotation={[0, yawToCorridor(journeyWorld.storybloom[0]), 0]}
       >
         <Greenhouse />
+      </group>
+      <group
+        position={[journeyWorld.experience[0], y, journeyWorld.experience[2]]}
+        rotation={[0, 0.08, 0]}
+      >
+        <CrewHabitat />
+      </group>
+      <group
+        position={[journeyWorld.data[0], y, journeyWorld.data[2]]}
+        rotation={[0, yawToCorridor(journeyWorld.data[0]), 0]}
+      >
+        <PowerGrid />
       </group>
     </group>
   );
