@@ -145,7 +145,7 @@ export default function RadioTranscript({
       className={`pointer-events-none fixed inset-x-0 z-[44] flex ${
         isOrbitIntro
           ? "top-[88px] justify-center px-6 md:top-auto md:bottom-9"
-          : "bottom-4 justify-start pl-5 pr-[72px] sm:bottom-8 sm:justify-center sm:px-20 md:bottom-9"
+          : "bottom-4 justify-start pl-14 pr-16 sm:bottom-8 sm:justify-center sm:px-20 md:bottom-9"
       }`}
     >
       <AnimatePresence mode="wait">

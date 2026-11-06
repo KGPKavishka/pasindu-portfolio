@@ -87,6 +87,16 @@ export const outpostMaterials = {
     emissiveIntensity: 1.1,
     roughness: 0.5,
   }),
+  warmBulkhead: new THREE.MeshStandardMaterial({
+    color: "#3d352e",
+    roughness: 0.85,
+    metalness: 0.05,
+  }),
+  paperSheet: new THREE.MeshStandardMaterial({
+    color: "#f3f0e8",
+    roughness: 0.82,
+    metalness: 0.02,
+  }),
   glassDome: new THREE.MeshStandardMaterial({
     color: "#d7e6da",
     roughness: 0.1,

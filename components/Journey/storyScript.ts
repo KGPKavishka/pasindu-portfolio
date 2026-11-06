@@ -240,4 +240,36 @@ export const storyBeats: readonly StoryBeat[] = [
     line: "Frontend at ninety. Backend and database at eighty-five. Cloud at seventy-five. AI and research at sixty-five.",
     trigger: { type: "scroll", from: 0.715, to: 0.768 },
   },
+
+  // Act 11 — Off-Shift Quarters (Creative works from data/creativeData.ts).
+  {
+    id: "qtr-control-ask",
+    act: 11,
+    speaker: "CONTROL",
+    line: "You're off shift. What's on the bulkhead wall?",
+    trigger: { type: "scroll", from: 0.772, to: 0.794 },
+  },
+  {
+    id: "qtr-pk-answer",
+    act: 11,
+    speaker: "PK",
+    line: "Off-shift, I draw. Pencil portraits, paintings, digital illustrations, UI wireframes, brand logos, and the HealthBridge research poster.",
+    trigger: { type: "scroll", from: 0.794, to: 0.848 },
+  },
+
+  // Act 12 — Ridge Observatory (Learning targets from data/futureData.ts).
+  {
+    id: "obs-control-ask",
+    act: 12,
+    speaker: "CONTROL",
+    line: "Blue sunset over the ridge. What's the observatory tracking?",
+    trigger: { type: "scroll", from: 0.852, to: 0.874 },
+  },
+  {
+    id: "obs-pk-answer",
+    act: 12,
+    speaker: "PK",
+    line: "Tracking what's next. AI engineering, machine learning, cloud computing, system design, Docker, Kubernetes, AWS, and large language models.",
+    trigger: { type: "scroll", from: 0.874, to: 0.918 },
+  },
 ];

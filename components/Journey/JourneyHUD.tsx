@@ -34,17 +34,7 @@ const hudMessages: Partial<Record<JourneyPhaseId, HudMessage>> = {
     system: "OUTPOST TELEMETRY",
     heading: "SITE MAP ONLINE",
   },
-  // Surface stops (Acts 5–10: projects, experience, data) are carried by ProjectCallouts.
-  creative: {
-    system: "INTERIOR MODULE",
-    heading: "OFF-SHIFT QUARTERS",
-    status: "ACCESSING PERSONAL ARCHIVE...",
-  },
-  future: {
-    system: "RIDGE MODULE",
-    heading: "DEEP-SKY OBSERVATORY",
-    status: "TRACKING SIGNAL LOCK...",
-  },
+  // Surface stops (Acts 5–12: projects, experience, data, creative, future) are carried by ProjectCallouts.
   contact: {
     system: "UPLINK ARRAY",
     heading: "LONG-RANGE COMMS MAST",

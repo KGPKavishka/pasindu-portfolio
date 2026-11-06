@@ -6,9 +6,14 @@ import {
   useMotionValueEvent,
   useReducedMotion,
 } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
+import CreativeModal from "@/components/CreativeModal";
+import { creativeWorks } from "@/data/creativeData";
 import { experiences } from "@/data/experienceData";
+import { futureSkills } from "@/data/futureData";
 import { projects } from "@/data/portfolioData";
 import { skills } from "@/data/skillsData";
 import { useJourney } from "./JourneyController";
@@ -25,6 +30,8 @@ const CALLOUT_IDS = [
   "storybloom",
   "experience",
   "data",
+  "creative",
+  "future",
 ] as const;
 type CalloutId = (typeof CALLOUT_IDS)[number];
 
@@ -35,11 +42,26 @@ const panelSide: Record<CalloutId, "left" | "right"> = {
   storybloom: "left",
   experience: "left",
   data: "right",
+  creative: "right",
+  future: "left",
 };
 
 /** The callout is up while the camera dwells at its structure. */
 const BEFORE = 0.026;
 const AFTER = 0.034;
+
+const PINNED_CREATIVE_IDS = [
+  "digital-art-1",
+  "art-1",
+  "painting-1",
+  "portfolio-wireframe",
+  "healthbridge-poster",
+  "logo-1",
+] as const;
+
+const pinnedCreativeWorks = PINNED_CREATIVE_IDS.map((id) =>
+  creativeWorks.find((work) => work.id === id)
+).filter((work): work is (typeof creativeWorks)[number] => Boolean(work));
 
 type CalloutSpec =
   | {
@@ -59,6 +81,19 @@ type CalloutSpec =
       id: "data";
       outpost: OutpostStructureSpec;
       skills: typeof skills;
+    }
+  | {
+      kind: "creative";
+      id: "creative";
+      outpost: OutpostStructureSpec;
+      works: typeof pinnedCreativeWorks;
+      totalCount: number;
+    }
+  | {
+      kind: "future";
+      id: "future";
+      outpost: OutpostStructureSpec;
+      targets: typeof futureSkills;
     };
 
 const specs: CalloutSpec[] = CALLOUT_IDS.map((id): CalloutSpec | null => {
@@ -72,6 +107,25 @@ const specs: CalloutSpec[] = CALLOUT_IDS.map((id): CalloutSpec | null => {
 
   if (id === "data") {
     return { kind: "data", id, outpost, skills };
+  }
+
+  if (id === "creative") {
+    return {
+      kind: "creative",
+      id,
+      outpost,
+      works: pinnedCreativeWorks,
+      totalCount: creativeWorks.length,
+    };
+  }
+
+  if (id === "future") {
+    return {
+      kind: "future",
+      id,
+      outpost,
+      targets: futureSkills,
+    };
   }
 
   const project = projects.find((item) => item.id === id);
@@ -93,10 +147,10 @@ function stripSkillEmoji(title: string): string {
 }
 
 /**
- * AR callouts for the surface structures (docs/DESIGN_PLAN.md §5.5 & §2 Acts 5–10):
+ * AR callouts for the surface structures (docs/DESIGN_PLAN.md §5.5 & §2 Acts 5–12):
  * a thin leader line from a compact data block to the structure at the centre
  * of the visor, with facts strictly from data/portfolioData.ts, data/experienceData.ts,
- * and data/skillsData.ts.
+ * data/skillsData.ts, data/creativeData.ts, and data/futureData.ts.
  */
 export default function ProjectCallouts() {
   const { progress } = useJourney();
@@ -104,6 +158,9 @@ export default function ProjectCallouts() {
   const [activeId, setActiveId] = useState<CalloutId | null>(() =>
     findActiveId(progress.get())
   );
+  const [selectedWork, setSelectedWork] = useState<
+    (typeof creativeWorks)[number] | null
+  >(null);
 
   useMotionValueEvent(progress, "change", (value) => {
     const next = findActiveId(value);
@@ -114,34 +171,54 @@ export default function ProjectCallouts() {
   const active = specs.find((item) => item.id === activeId);
 
   return (
-    <div
-      data-layer="project-callouts"
-      className="pointer-events-none fixed inset-0 z-[43]"
-    >
-      <AnimatePresence mode="wait">
-        {active && (
-          <motion.div
-            key={active.id}
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduceMotion ? undefined : { opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.35 }}
-            className="absolute inset-0"
-          >
-            <Callout spec={active} side={panelSide[active.id]} />
-          </motion.div>
+    <>
+      <div
+        data-layer="project-callouts"
+        className="pointer-events-none fixed inset-0 z-[43]"
+      >
+        <AnimatePresence mode="wait">
+          {active && (
+            <motion.div
+              key={active.id}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={reduceMotion ? undefined : { opacity: 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.35 }}
+              className="absolute inset-0"
+            >
+              <Callout
+                spec={active}
+                side={panelSide[active.id]}
+                onSelectWork={setSelectedWork}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <AnimatePresence>
+        {selectedWork && (
+          <CreativeModal
+            image={selectedWork.image}
+            title={selectedWork.title}
+            category={selectedWork.category}
+            description={selectedWork.description}
+            tools={selectedWork.tools}
+            onClose={() => setSelectedWork(null)}
+          />
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
 
 interface CalloutProps {
   spec: CalloutSpec;
   side: "left" | "right";
+  onSelectWork: (work: (typeof creativeWorks)[number]) => void;
 }
 
-function Callout({ spec, side }: CalloutProps) {
+function Callout({ spec, side, onSelectWork }: CalloutProps) {
   const isRight = side === "right";
   const { code, structure } = spec.outpost;
 
@@ -150,7 +227,11 @@ function Callout({ spec, side }: CalloutProps) {
       ? `${spec.project.title} mission summary`
       : spec.kind === "experience"
         ? `${spec.experience.company} crew habitat log`
-        : "Power Grid solar array telemetry";
+        : spec.kind === "data"
+          ? "Power Grid solar array telemetry"
+          : spec.kind === "creative"
+            ? "Off-Shift Quarters creative archive"
+            : "Ridge Observatory signal-lock telemetry";
 
   return (
     <>
@@ -201,6 +282,14 @@ function Callout({ spec, side }: CalloutProps) {
           <ExperienceBody experience={spec.experience} />
         )}
         {spec.kind === "data" && <DataBody skillsList={spec.skills} />}
+        {spec.kind === "creative" && (
+          <CreativeBody
+            works={spec.works}
+            totalCount={spec.totalCount}
+            onSelect={onSelectWork}
+          />
+        )}
+        {spec.kind === "future" && <FutureBody targets={spec.targets} />}
       </aside>
     </>
   );
@@ -366,6 +455,113 @@ function DataBody({ skillsList }: { skillsList: typeof skills }) {
             </div>
           );
         })}
+      </div>
+    </>
+  );
+}
+
+function CreativeBody({
+  works,
+  totalCount,
+  onSelect,
+}: {
+  works: typeof pinnedCreativeWorks;
+  totalCount: number;
+  onSelect: (work: (typeof creativeWorks)[number]) => void;
+}) {
+  return (
+    <>
+      <h2 className="mt-1 font-hud text-base font-semibold uppercase tracking-[0.1em] text-sunlight sm:mt-2 sm:text-xl">
+        Off-Shift Quarters
+      </h2>
+      <p className="mt-0.5 font-hud text-[9.5px] uppercase tracking-[0.16em] text-suit/65 sm:mt-1 sm:text-[10px]">
+        {totalCount} Works Pinned <span className="text-caution/60">·</span> Art
+        · UI · Research · Logo
+      </p>
+
+      <div className="mt-2 grid grid-cols-3 gap-2 border-t border-suit/15 pt-2 sm:mt-3 sm:gap-2.5 sm:pt-3">
+        {works.map((work, index) => (
+          <button
+            key={work.id}
+            type="button"
+            onClick={() => onSelect(work)}
+            aria-label={`Inspect ${work.title}, ${work.category}`}
+            className={`${
+              index >= 3 ? "hidden sm:block" : "block"
+            } group min-w-0 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution`}
+          >
+            <span className="relative block aspect-square overflow-hidden border border-suit/25 bg-void transition-colors group-hover:border-caution">
+              <Image
+                src={work.image}
+                alt={work.title}
+                fill
+                sizes="105px"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </span>
+            <span className="mt-1 block truncate font-hud text-[8.5px] uppercase tracking-[0.14em] text-caution">
+              {work.category}
+            </span>
+            <span className="block truncate font-radio text-[10.5px] text-suit/85 group-hover:text-sunlight">
+              {work.title}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <Link
+        href="/creative"
+        className="mt-2.5 inline-flex items-center gap-2 bg-signal px-3.5 py-2 font-hud text-[10px] font-semibold uppercase tracking-[0.22em] text-sunlight transition-colors duration-200 hover:bg-[#ff6a26] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution sm:mt-3.5 sm:px-4 sm:py-2.5 sm:text-[11px]"
+      >
+        Open full archive ({totalCount}) <span aria-hidden="true">→</span>
+      </Link>
+    </>
+  );
+}
+
+function FutureBody({ targets }: { targets: typeof futureSkills }) {
+  return (
+    <>
+      <h2 className="mt-1 font-hud text-base font-semibold uppercase tracking-[0.1em] text-sunlight sm:mt-2 sm:text-xl">
+        Signal Lock Telemetry
+      </h2>
+      <p className="mt-0.5 font-hud text-[9.5px] uppercase tracking-[0.16em] text-suit/65 sm:mt-1 sm:text-[10px]">
+        {targets.length} Active Targets{" "}
+        <span className="text-caution/60">·</span> Blue-Hour Pass
+      </p>
+
+      <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5 border-t border-suit/15 pt-2 sm:mt-3 sm:grid-cols-1 sm:gap-y-2 sm:pt-3">
+        {targets.map((skill, index) => (
+          <div key={skill.id} title={skill.description}>
+            <div className="flex items-baseline justify-between gap-1.5 font-hud text-[9.5px] uppercase tracking-[0.12em] sm:text-[10px]">
+              <span className="truncate text-sunlight">
+                <span className="mr-1 text-caution/75">
+                  0{index + 1}
+                </span>
+                {skill.title}
+              </span>
+              <span className="shrink-0 tabular-nums text-caution">
+                {skill.progress}%
+              </span>
+            </div>
+            <div
+              className="mt-0.5 h-1 bg-suit/15 sm:mt-1"
+              role="progressbar"
+              aria-label={`${skill.title} signal lock`}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={skill.progress}
+            >
+              <div
+                className="h-full bg-caution"
+                style={{ width: `${skill.progress}%` }}
+              />
+            </div>
+            <p className="mt-0.5 hidden truncate font-radio text-[10.5px] text-suit/65 sm:block">
+              {skill.description}
+            </p>
+          </div>
+        ))}
       </div>
     </>
   );
