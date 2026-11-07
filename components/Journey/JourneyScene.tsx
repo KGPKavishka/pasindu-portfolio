@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { PerformanceMonitor } from "@react-three/drei";
+import { AdaptiveDpr, PerformanceMonitor } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 
 import SpaceEnvironment from "@/components/World/Space/SpaceEnvironment";
@@ -15,7 +15,9 @@ import WorldGate from "./WorldGate";
 import LandingWorld from "@/components/World/Landing/LandingWorld";
 
 export default function JourneyScene() {
-  const [bloomEnabled, setBloomEnabled] = useState(true);
+  const [bloomEnabled, setBloomEnabled] = useState(
+    () => typeof window === "undefined" || window.innerWidth >= 768
+  );
 
   return (
     <div
@@ -32,10 +34,12 @@ export default function JourneyScene() {
         gl={{
           antialias: true,
           alpha: false,
+          powerPreference: "high-performance",
         }}
       >
         <color attach="background" args={["#050505"]} />
 
+        <AdaptiveDpr pixelated={false} />
         <PerformanceMonitor
           flipflops={2}
           onDecline={() => setBloomEnabled(false)}

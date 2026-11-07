@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, Volume2, VolumeX, X } from "lucide-react";
 import {
   AnimatePresence,
   MotionConfig,
@@ -184,6 +184,8 @@ interface NavbarProps {
   isSummaryMode?: boolean;
   webglSupported?: boolean;
   onToggleSummary?: () => void;
+  isAudioEnabled?: boolean;
+  onToggleAudio?: () => void;
 }
 
 export default function Navbar({
@@ -191,6 +193,8 @@ export default function Navbar({
   isSummaryMode = false,
   webglSupported = true,
   onToggleSummary,
+  isAudioEnabled = false,
+  onToggleAudio,
 }: NavbarProps) {
   const [activeSection, setActiveSection] =
     useState<WaypointId>("projects");
@@ -350,7 +354,7 @@ export default function Navbar({
                     aria-hidden="true"
                     className="mt-0.5 truncate text-[10px] tracking-[0.14em] text-suit/70"
                   >
-                    <span className="md:hidden xl:inline">EVA-01{" // "}</span>
+                    <span className="hidden min-[1380px]:inline">EVA-01{" // "}</span>
                     SUIT:{" "}
                     <span className="text-nominal">NOMINAL</span>
                   </p>
@@ -428,8 +432,34 @@ export default function Navbar({
 
               <motion.div
                 variants={flankVariants}
-                className="hidden items-center justify-end gap-2.5 md:flex xl:gap-3.5"
+                className="hidden items-center justify-end gap-2 md:flex xl:gap-3"
               >
+                {onToggleAudio && !isSummaryMode && (
+                  <button
+                    type="button"
+                    aria-pressed={isAudioEnabled}
+                    aria-label={
+                      isAudioEnabled
+                        ? "Mute suit audio soundscape"
+                        : "Enable suit audio soundscape"
+                    }
+                    onClick={onToggleAudio}
+                    className={`inline-flex items-center gap-1.5 whitespace-nowrap border px-2 py-1.5 text-[10px] font-medium uppercase tracking-[0.12em] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution ${
+                      isAudioEnabled
+                        ? "border-signal bg-signal text-sunlight hover:bg-[#ff6a26]"
+                        : "border-suit/30 bg-void/70 text-suit/85 hover:border-caution hover:text-sunlight"
+                    }`}
+                  >
+                    {isAudioEnabled ? (
+                      <Volume2 size={12} aria-hidden="true" />
+                    ) : (
+                      <VolumeX size={12} aria-hidden="true" />
+                    )}
+                    <span className="hidden xl:inline">Audio:</span>
+                    <span>{isAudioEnabled ? "On" : "Off"}</span>
+                  </button>
+                )}
+
                 {onToggleSummary && (
                   <button
                     type="button"
@@ -460,7 +490,7 @@ export default function Navbar({
 
                 <div
                   aria-hidden="true"
-                  className="hidden items-center gap-2 border border-suit/25 bg-suit/[0.05] px-2 py-1 min-[1460px]:flex"
+                  className="hidden items-center gap-2 border border-suit/25 bg-suit/[0.05] px-2 py-1 min-[1520px]:flex"
                 >
                   <SignalBars />
                   <span className="whitespace-nowrap text-[10px] tracking-[0.14em] text-suit">
@@ -474,6 +504,30 @@ export default function Navbar({
                 variants={flankVariants}
                 className="flex items-center gap-2 md:hidden"
               >
+                {onToggleAudio && !isSummaryMode && (
+                  <button
+                    type="button"
+                    aria-pressed={isAudioEnabled}
+                    aria-label={
+                      isAudioEnabled
+                        ? "Mute suit audio soundscape"
+                        : "Enable suit audio soundscape"
+                    }
+                    onClick={onToggleAudio}
+                    className={`flex h-8 w-8 items-center justify-center border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution ${
+                      isAudioEnabled
+                        ? "border-signal bg-signal text-sunlight"
+                        : "border-suit/30 bg-void/75 text-suit/85 hover:border-caution hover:text-sunlight"
+                    }`}
+                  >
+                    {isAudioEnabled ? (
+                      <Volume2 size={14} aria-hidden="true" />
+                    ) : (
+                      <VolumeX size={14} aria-hidden="true" />
+                    )}
+                  </button>
+                )}
+
                 {onToggleSummary && (
                   <button
                     type="button"
@@ -603,26 +657,45 @@ export default function Navbar({
                   })}
                 </ul>
 
-                {onToggleSummary && (
-                  <div className="relative border-t border-suit/15 px-5 py-3">
-                    <button
-                      type="button"
-                      aria-pressed={isSummaryMode}
-                      disabled={!webglSupported && isSummaryMode}
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        onToggleSummary();
-                      }}
-                      className={`w-full border px-3 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors ${
-                        isSummaryMode
-                          ? "border-signal bg-signal text-sunlight"
-                          : "border-caution/60 bg-void/80 text-caution hover:bg-signal hover:text-sunlight"
-                      }`}
-                    >
-                      {isSummaryMode
-                        ? "[ Return to 3D EVA ]"
-                        : "[ Mission Summary // Plain View ]"}
-                    </button>
+                {(onToggleSummary || (onToggleAudio && !isSummaryMode)) && (
+                  <div className="relative flex flex-col gap-2 border-t border-suit/15 px-5 py-3">
+                    {onToggleAudio && !isSummaryMode && (
+                      <button
+                        type="button"
+                        aria-pressed={isAudioEnabled}
+                        onClick={onToggleAudio}
+                        className={`w-full border px-3 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors ${
+                          isAudioEnabled
+                            ? "border-signal bg-signal text-sunlight"
+                            : "border-suit/30 bg-void/80 text-suit/85 hover:border-caution hover:text-sunlight"
+                        }`}
+                      >
+                        {isAudioEnabled
+                          ? "[ Suit Audio: On ]"
+                          : "[ Suit Audio: Off (Muted) ]"}
+                      </button>
+                    )}
+
+                    {onToggleSummary && (
+                      <button
+                        type="button"
+                        aria-pressed={isSummaryMode}
+                        disabled={!webglSupported && isSummaryMode}
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          onToggleSummary();
+                        }}
+                        className={`w-full border px-3 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors ${
+                          isSummaryMode
+                            ? "border-signal bg-signal text-sunlight"
+                            : "border-caution/60 bg-void/80 text-caution hover:bg-signal hover:text-sunlight"
+                        }`}
+                      >
+                        {isSummaryMode
+                          ? "[ Return to 3D EVA ]"
+                          : "[ Mission Summary // Plain View ]"}
+                      </button>
+                    )}
                   </div>
                 )}
 

@@ -23,8 +23,12 @@ import { seededRandom } from "@/components/World/Orbit/orbitLayout";
 const GROUND_RADIUS = 950;
 
 /** Open ring of distant ridges; its top edge follows a sum of sines. */
-function createHillsGeometry(radius: number, amplitude: number, seed: number) {
-  const segments = 220;
+function createHillsGeometry(
+  radius: number,
+  amplitude: number,
+  seed: number,
+  segments = 220
+) {
   const positions = new Float32Array((segments + 1) * 2 * 3);
   const tops = new Float32Array((segments + 1) * 2);
   const indices: number[] = [];
@@ -64,6 +68,9 @@ function createHillsGeometry(radius: number, amplitude: number, seed: number) {
 /** The plain, with two rings of distant ridges that always stay on the horizon. */
 export function LandingTerrain() {
   const gl = useThree((state) => state.gl);
+  const isCompact = useThree((state) => state.size.width < 768);
+  const hillSegments = isCompact ? 120 : 220;
+  const groundSegments = isCompact ? 48 : 72;
   const groundRef = useRef<THREE.Mesh>(null);
   const nearHillsRef = useRef<THREE.Mesh>(null);
   const farHillsRef = useRef<THREE.Mesh>(null);
@@ -108,8 +115,14 @@ export function LandingTerrain() {
       }),
     []
   );
-  const nearHills = useMemo(() => createHillsGeometry(640, 46, 1.3), []);
-  const farHills = useMemo(() => createHillsGeometry(900, 90, 4.6), []);
+  const nearHills = useMemo(
+    () => createHillsGeometry(640, 46, 1.3, hillSegments),
+    [hillSegments]
+  );
+  const farHills = useMemo(
+    () => createHillsGeometry(900, 90, 4.6, hillSegments),
+    [hillSegments]
+  );
 
   useEffect(() => () => nearHills.dispose(), [nearHills]);
   useEffect(() => () => farHills.dispose(), [farHills]);
@@ -136,7 +149,7 @@ export function LandingTerrain() {
         renderOrder={1}
         frustumCulled={false}
       >
-        <circleGeometry args={[GROUND_RADIUS, 72]} />
+        <circleGeometry args={[GROUND_RADIUS, groundSegments]} />
         <primitive object={groundMaterial} attach="material" />
       </mesh>
 

@@ -13,6 +13,7 @@ import FutureLab from "@/components/FutureLab";
 import Hero from "@/components/Hero";
 import DescentEffects from "@/components/Journey/DescentEffects";
 import EvaManifest from "@/components/Journey/EvaManifest";
+import EvaSoundController from "@/components/Journey/EvaSoundController";
 import HeadingTape from "@/components/Journey/HeadingTape";
 import HelmetFrame from "@/components/Journey/HelmetFrame";
 import JourneyController from "@/components/Journey/JourneyController";
@@ -30,6 +31,7 @@ import Stats from "@/components/Stats";
 export default function Home() {
   const webglSupported = useWebGLSupport();
   const [isSummaryMode, setIsSummaryMode] = useState(false);
+  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const effectiveSummaryMode = isSummaryMode || !webglSupported;
@@ -103,6 +105,8 @@ export default function Home() {
         isSummaryMode={effectiveSummaryMode}
         webglSupported={webglSupported}
         onToggleSummary={toggleSummaryMode}
+        isAudioEnabled={isAudioEnabled}
+        onToggleAudio={() => setIsAudioEnabled((prev) => !prev)}
       />
 
       {effectiveSummaryMode ? (
@@ -120,6 +124,7 @@ export default function Home() {
       ) : (
         <>
           <LoadingScreen isLoading={isLoading} />
+          <EvaSoundController enabled={isAudioEnabled} />
           <JourneyScene />
           <DescentEffects />
           <LanderCabin />

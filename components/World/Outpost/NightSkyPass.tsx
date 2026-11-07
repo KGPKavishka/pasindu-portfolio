@@ -1,6 +1,6 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useReducedMotion } from "framer-motion";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -8,7 +8,6 @@ import * as THREE from "three";
 import { useJourney } from "@/components/Journey/JourneyController";
 import { seededRandom } from "@/components/World/Orbit/orbitLayout";
 
-const STAR_COUNT = 340;
 const TRACK_SEGMENTS = 48;
 
 /**
@@ -20,6 +19,9 @@ const TRACK_SEGMENTS = 48;
 export default function NightSkyPass() {
   const { progress } = useJourney();
   const reduceMotion = useReducedMotion();
+  const isCompact = useThree((state) => state.size.width < 768);
+  const starCount = isCompact ? 170 : 340;
+  const warmStarCount = isCompact ? 45 : 90;
   const groupRef = useRef<THREE.Group>(null);
   const starsMaterialRef = useRef<THREE.PointsMaterial>(null);
   const warmStarsMaterialRef = useRef<THREE.PointsMaterial>(null);
@@ -30,18 +32,17 @@ export default function NightSkyPass() {
   const trackMaterialRef = useRef<THREE.LineBasicMaterial>(null);
 
   const { coolPositions, warmPositions, trackGeometry } = useMemo(() => {
-    const cool = new Float32Array(STAR_COUNT * 3);
-    const warmCount = 90;
-    const warm = new Float32Array(warmCount * 3);
+    const cool = new Float32Array(starCount * 3);
+    const warm = new Float32Array(warmStarCount * 3);
 
-    for (let i = 0; i < STAR_COUNT; i += 1) {
+    for (let i = 0; i < starCount; i += 1) {
       const i3 = i * 3;
       cool[i3] = (seededRandom(i * 3.1 + 11) - 0.5) * 96;
       cool[i3 + 1] = 0.4 + seededRandom(i * 5.7 + 29) * 32;
       cool[i3 + 2] = -302 - seededRandom(i * 7.3 + 53) * 55;
     }
 
-    for (let i = 0; i < warmCount; i += 1) {
+    for (let i = 0; i < warmStarCount; i += 1) {
       const i3 = i * 3;
       warm[i3] = (seededRandom(i * 4.3 + 101) - 0.5) * 78;
       warm[i3 + 1] = 1.0 + seededRandom(i * 6.1 + 137) * 28;
@@ -63,7 +64,7 @@ export default function NightSkyPass() {
       warmPositions: warm,
       trackGeometry: geometry,
     };
-  }, []);
+  }, [starCount, warmStarCount]);
 
   useFrame(({ clock }) => {
     const p = progress.get();
