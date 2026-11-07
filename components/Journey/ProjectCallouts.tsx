@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import CreativeModal from "@/components/CreativeModal";
+import { contactItems } from "@/data/contactData";
 import { creativeWorks } from "@/data/creativeData";
 import { experiences } from "@/data/experienceData";
 import { futureSkills } from "@/data/futureData";
@@ -32,6 +33,7 @@ const CALLOUT_IDS = [
   "data",
   "creative",
   "future",
+  "contact",
 ] as const;
 type CalloutId = (typeof CALLOUT_IDS)[number];
 
@@ -44,6 +46,7 @@ const panelSide: Record<CalloutId, "left" | "right"> = {
   data: "right",
   creative: "right",
   future: "left",
+  contact: "right",
 };
 
 /** The callout is up while the camera dwells at its structure. */
@@ -94,6 +97,12 @@ type CalloutSpec =
       id: "future";
       outpost: OutpostStructureSpec;
       targets: typeof futureSkills;
+    }
+  | {
+      kind: "contact";
+      id: "contact";
+      outpost: OutpostStructureSpec;
+      items: typeof contactItems;
     };
 
 const specs: CalloutSpec[] = CALLOUT_IDS.map((id): CalloutSpec | null => {
@@ -128,16 +137,28 @@ const specs: CalloutSpec[] = CALLOUT_IDS.map((id): CalloutSpec | null => {
     };
   }
 
+  if (id === "contact") {
+    return {
+      kind: "contact",
+      id,
+      outpost,
+      items: contactItems,
+    };
+  }
+
   const project = projects.find((item) => item.id === id);
   return project ? { kind: "project", id, outpost, project } : null;
 }).filter((item): item is CalloutSpec => item !== null);
 
 function findActiveId(progress: number): CalloutId | null {
-  const match = specs.find(
-    ({ outpost }) =>
+  const match = specs.find(({ id, outpost }) => {
+    const afterWindow = id === "contact" ? 0.017 : AFTER;
+
+    return (
       progress >= outpost.targetProgress - BEFORE &&
-      progress <= outpost.targetProgress + AFTER
-  );
+      progress <= outpost.targetProgress + afterWindow
+    );
+  });
 
   return match?.id ?? null;
 }
@@ -231,7 +252,9 @@ function Callout({ spec, side, onSelectWork }: CalloutProps) {
           ? "Power Grid solar array telemetry"
           : spec.kind === "creative"
             ? "Off-Shift Quarters creative archive"
-            : "Ridge Observatory signal-lock telemetry";
+            : spec.kind === "future"
+              ? "Ridge Observatory signal-lock telemetry"
+              : "Comms Mast direct uplink channels";
 
   return (
     <>
@@ -290,6 +313,7 @@ function Callout({ spec, side, onSelectWork }: CalloutProps) {
           />
         )}
         {spec.kind === "future" && <FutureBody targets={spec.targets} />}
+        {spec.kind === "contact" && <ContactBody items={spec.items} />}
       </aside>
     </>
   );
@@ -563,6 +587,64 @@ function FutureBody({ targets }: { targets: typeof futureSkills }) {
           </div>
         ))}
       </div>
+    </>
+  );
+}
+
+function ContactBody({ items }: { items: typeof contactItems }) {
+  const directLinks = items.filter((item) => item.id !== "resume");
+  const resumeItem = items.find((item) => item.id === "resume");
+
+  return (
+    <>
+      <h2 className="mt-1 font-hud text-base font-semibold uppercase tracking-[0.1em] text-sunlight sm:mt-2 sm:text-xl">
+        Direct Comms Channel
+      </h2>
+      <p className="mt-0.5 font-hud text-[9.5px] uppercase tracking-[0.16em] text-nominal sm:mt-1 sm:text-[10px]">
+        {items.length} Uplink Channels Active{" "}
+        <span className="text-caution/60">·</span> Signal Clear
+      </p>
+
+      <div className="mt-2 space-y-1.5 border-t border-suit/15 pt-2 sm:mt-3 sm:space-y-2 sm:pt-3">
+        {directLinks.map((item, index) => {
+          const external = item.href.startsWith("http");
+
+          return (
+            <Link
+              key={item.id}
+              href={item.href}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noopener noreferrer" : undefined}
+              className="group flex items-center justify-between gap-3 border border-suit/20 bg-void/70 px-3 py-2 transition-colors hover:border-caution hover:bg-suit/[0.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution"
+            >
+              <span className="min-w-0">
+                <span className="block font-hud text-[9px] uppercase tracking-[0.2em] text-caution">
+                  CH-0{index + 1} {"//"} {item.title}
+                </span>
+                <span className="mt-0.5 block truncate font-radio text-xs text-suit/90 group-hover:text-sunlight sm:text-[13px]">
+                  {item.value}
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="shrink-0 font-hud text-xs text-caution transition-transform group-hover:translate-x-0.5"
+              >
+                {external ? "↗" : "→"}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+
+      {resumeItem && (
+        <a
+          href={resumeItem.href}
+          download
+          className="mt-2.5 inline-flex items-center gap-2 bg-signal px-3.5 py-2 font-hud text-[10px] font-semibold uppercase tracking-[0.22em] text-sunlight transition-colors duration-200 hover:bg-[#ff6a26] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution sm:mt-3.5 sm:px-4 sm:py-2.5 sm:text-[11px]"
+        >
+          {resumeItem.value} ({resumeItem.title}) <span aria-hidden="true">↓</span>
+        </a>
+      )}
     </>
   );
 }

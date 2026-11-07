@@ -34,16 +34,7 @@ const hudMessages: Partial<Record<JourneyPhaseId, HudMessage>> = {
     system: "OUTPOST TELEMETRY",
     heading: "SITE MAP ONLINE",
   },
-  // Surface stops (Acts 5–12: projects, experience, data, creative, future) are carried by ProjectCallouts.
-  contact: {
-    system: "UPLINK ARRAY",
-    heading: "LONG-RANGE COMMS MAST",
-    status: "COMMUNICATION CHANNEL READY...",
-  },
-  complete: {
-    system: "MISSION LOG END",
-    heading: "SIGNAL REMAINS OPEN",
-  },
+  // Surface stops (Acts 5–13) are carried by ProjectCallouts; Act 14 is carried by RadioTranscript + Footer.
 };
 
 interface PhasePanelProps {

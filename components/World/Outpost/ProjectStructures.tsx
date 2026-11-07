@@ -1,11 +1,13 @@
 "use client";
 
 import { journeyWorld } from "@/components/Journey/journeyWorldConfig";
+import CommsMast from "./CommsMast";
 import CrewHabitat from "./CrewHabitat";
 import EquipmentHangar from "./EquipmentHangar";
 import Greenhouse from "./Greenhouse";
 import LogisticsDepot from "./LogisticsDepot";
 import MedLab from "./MedLab";
+import NightSkyPass from "./NightSkyPass";
 import OffShiftQuarters from "./OffShiftQuarters";
 import PowerGrid from "./PowerGrid";
 import RidgeObservatory from "./RidgeObservatory";
@@ -16,7 +18,7 @@ function yawToCorridor(x: number) {
 }
 
 /**
- * Outpost surface structures built across Acts 5–12. Positions come from
+ * Outpost surface structures built across Acts 5–14. Positions come from
  * journeyWorld; the pads stand on the ground plane (journeyWorld.groundY).
  */
 export default function ProjectStructures() {
@@ -72,6 +74,13 @@ export default function ProjectStructures() {
       >
         <RidgeObservatory />
       </group>
+      <group
+        position={[journeyWorld.contact[0], y, journeyWorld.contact[2]]}
+        rotation={[0, -0.08, 0]}
+      >
+        <CommsMast />
+      </group>
+      <NightSkyPass />
     </group>
   );
 }

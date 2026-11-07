@@ -9,7 +9,6 @@ import SpaceEnvironment from "@/components/World/Space/SpaceEnvironment";
 import OrbitScene from "@/components/World/Orbit/OrbitScene";
 import Planet from "@/components/World/Planet/Planet";
 import ProjectStructures from "@/components/World/Outpost/ProjectStructures";
-import ContactLandmarks from "@/components/World/Landmarks/ContactLandmarks";
 import JourneyAtmosphere from "@/components/World/Atmosphere/JourneyAtmosphere";
 import JourneyCameraRig from "./JourneyCameraRig";
 import WorldGate from "./WorldGate";
@@ -51,7 +50,6 @@ export default function JourneyScene() {
         <LandingWorld />
         <WorldGate from={0.27}>
           <ProjectStructures />
-          <ContactLandmarks />
         </WorldGate>
 
         {bloomEnabled && (

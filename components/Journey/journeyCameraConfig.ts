@@ -74,8 +74,8 @@ export const journeyCameraKeyframes = [
   { progress: 0.86, position: [0.5, SURFACE_EYE_Y, -257], target: [4.5, -0.6, -273], moment: "approach" },
   { progress: 0.885, position: [1.5, SURFACE_EYE_Y, -264], target: target(journeyWorld.future, 2.2), moment: "focus" },
   { progress: 0.915, position: [0.6, SURFACE_EYE_Y, -273], target: [0, -0.7, -290], moment: "departure" },
-  { progress: 0.935, position: [0.2, SURFACE_EYE_Y, -279], target: [0, -0.4, -294], moment: "approach" },
-  { progress: 0.955, position: [0, SURFACE_EYE_Y, -286], target: target(journeyWorld.contact, 2.4), moment: "focus" },
-  { progress: 0.98, position: [0, SURFACE_EYE_Y, -298], target: [0, 0.2, -316], moment: "departure" },
-  { progress: 1, position: [0, SURFACE_EYE_Y, -309], target: journeyWorld.complete, moment: "focus" },
+  { progress: 0.935, position: [-0.4, SURFACE_EYE_Y, -279], target: [0, -0.2, -294], moment: "approach" },
+  { progress: 0.955, position: [-1.2, SURFACE_EYE_Y, -284], target: target(journeyWorld.contact, 2.4), moment: "focus" },
+  { progress: 0.98, position: [0, SURFACE_EYE_Y, -298], target: [0, 2.2, -322], moment: "departure" },
+  { progress: 1, position: [0, SURFACE_EYE_Y, -304], target: [0, 3.6, -326], moment: "focus" },
 ] as const satisfies readonly JourneyCameraKeyframe[];

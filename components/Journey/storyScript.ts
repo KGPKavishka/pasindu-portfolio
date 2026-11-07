@@ -272,4 +272,36 @@ export const storyBeats: readonly StoryBeat[] = [
     line: "Tracking what's next. AI engineering, machine learning, cloud computing, system design, Docker, Kubernetes, AWS, and large language models.",
     trigger: { type: "scroll", from: 0.874, to: 0.918 },
   },
+
+  // Act 13 — Comms Mast (Contact channels from data/contactData.ts).
+  {
+    id: "comms-control-ask",
+    act: 13,
+    speaker: "CONTROL",
+    line: "Channel's open. Who's listening?",
+    trigger: { type: "scroll", from: 0.922, to: 0.942 },
+  },
+  {
+    id: "comms-pk-answer",
+    act: 13,
+    speaker: "PK",
+    line: "You are. Send a message.",
+    trigger: { type: "scroll", from: 0.942, to: 0.976 },
+  },
+
+  // Act 14 — Night / Log End (Orbital station passes overhead).
+  {
+    id: "night-control-goodwork",
+    act: 14,
+    speaker: "CONTROL",
+    line: "Good work today, Pasindu.",
+    trigger: { type: "scroll", from: 0.978, to: 0.99 },
+  },
+  {
+    id: "night-pk-logend",
+    act: 14,
+    speaker: "PK",
+    line: "Log ends. Signal stays open.",
+    trigger: { type: "scroll", from: 0.99, to: 1.001 },
+  },
 ];
