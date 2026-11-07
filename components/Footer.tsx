@@ -51,7 +51,7 @@ export default function Footer() {
           Pasindu Kavishka
         </h2>
 
-        <p className="mt-0.5 font-hud text-[10px] uppercase tracking-[0.2em] text-suit/70">
+        <p className="mt-0.5 font-hud text-[10px] uppercase tracking-[0.2em] text-suit/80">
           Software Engineer · Signal Remains Open
         </p>
 
@@ -87,7 +87,7 @@ export default function Footer() {
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
                 download={item.id === "resume"}
-                className="font-hud text-[10px] uppercase tracking-[0.18em] text-suit/75 transition-colors hover:text-caution focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution"
+                className="font-hud text-[10px] uppercase tracking-[0.18em] text-suit/85 transition-colors hover:text-caution focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution"
               >
                 {item.title}
               </Link>
@@ -95,7 +95,7 @@ export default function Footer() {
           })}
         </nav>
 
-        <p className="mt-3 font-hud text-[9.5px] uppercase tracking-[0.2em] text-suit/45">
+        <p className="mt-3 font-hud text-[9.5px] uppercase tracking-[0.2em] text-suit/70">
           © {year} Pasindu Kavishka · All Systems Nominal
         </p>
       </div>

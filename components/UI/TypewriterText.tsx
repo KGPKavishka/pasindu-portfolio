@@ -21,7 +21,7 @@ export default function TypewriterText({
   restartKey,
   onComplete,
   showCursor = true,
-  cursorClassName = "text-emerald-300",
+  cursorClassName = "text-caution",
   className,
 }: TypewriterTextProps) {
   const reduceMotion = useReducedMotion();
@@ -71,7 +71,8 @@ export default function TypewriterText({
   }, [delay, reduceMotion, restartKey, speed, text]);
 
   return (
-    <span className={`inline-grid ${className ?? ""}`} aria-label={text}>
+    <span className={`inline-grid ${className ?? ""}`}>
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true" className="invisible col-start-1 row-start-1">
         {text}
       </span>

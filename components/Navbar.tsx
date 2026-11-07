@@ -181,9 +181,17 @@ function SignalBars() {
 
 interface NavbarProps {
   isPoweredOn?: boolean;
+  isSummaryMode?: boolean;
+  webglSupported?: boolean;
+  onToggleSummary?: () => void;
 }
 
-export default function Navbar({ isPoweredOn = true }: NavbarProps) {
+export default function Navbar({
+  isPoweredOn = true,
+  isSummaryMode = false,
+  webglSupported = true,
+  onToggleSummary,
+}: NavbarProps) {
   const [activeSection, setActiveSection] =
     useState<WaypointId>("projects");
 
@@ -340,7 +348,7 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
 
                   <p
                     aria-hidden="true"
-                    className="mt-0.5 truncate text-[10px] tracking-[0.14em] text-suit/50"
+                    className="mt-0.5 truncate text-[10px] tracking-[0.14em] text-suit/70"
                   >
                     <span className="md:hidden xl:inline">EVA-01{" // "}</span>
                     SUIT:{" "}
@@ -351,7 +359,7 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
 
               <motion.ul
                 variants={flankVariants}
-                className="hidden items-center gap-2 md:flex xl:gap-3"
+                className="hidden items-center gap-1.5 md:flex xl:gap-2.5"
               >
                 {waypoints.map((waypoint) => {
                   const isActive = activeSection === waypoint.id;
@@ -366,14 +374,14 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                           relative
                           block
                           whitespace-nowrap
-                          px-2.5
+                          px-2
                           py-2.5
                           text-[10px]
                           tracking-[0.08em]
                           outline-none
-                          focus-visible:bg-suit/[0.06]
-                          xl:px-3
-                          xl:tracking-[0.12em]
+                          focus-visible:bg-suit/[0.08]
+                          xl:px-2.5
+                          xl:tracking-[0.11em]
                         "
                       >
                         <Reticle engaged={isActive} />
@@ -381,14 +389,14 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                         <span
                           className={`relative z-10 transition-colors duration-300 ${isActive
                             ? "text-sunlight [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]"
-                            : "text-suit/65 group-hover:text-sunlight group-focus-visible:text-sunlight"
+                            : "text-suit/80 group-hover:text-sunlight group-focus-visible:text-sunlight"
                             }`}
                         >
                           [
                           <span
                             className={`transition-colors duration-300 ${isActive
                               ? "text-caution"
-                              : "text-caution/55 group-hover:text-caution"
+                              : "text-caution/75 group-hover:text-caution"
                               }`}
                           >
                             {waypoint.index}
@@ -420,22 +428,40 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
 
               <motion.div
                 variants={flankVariants}
-                aria-hidden="true"
-                className="hidden items-center justify-end gap-4 lg:flex"
+                className="hidden items-center justify-end gap-2.5 md:flex xl:gap-3.5"
               >
-                <div className="text-right leading-tight">
-                  <p className="text-[10px] tracking-[0.16em] text-suit/50">
+                {onToggleSummary && (
+                  <button
+                    type="button"
+                    aria-pressed={isSummaryMode}
+                    disabled={!webglSupported && isSummaryMode}
+                    onClick={onToggleSummary}
+                    className={`whitespace-nowrap border px-2.5 py-1.5 text-[10px] font-medium uppercase tracking-[0.12em] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution xl:tracking-[0.14em] ${
+                      isSummaryMode
+                        ? "border-signal bg-signal text-sunlight hover:bg-[#ff6a26]"
+                        : "border-caution/60 bg-void/70 text-caution hover:border-signal hover:bg-signal hover:text-sunlight"
+                    }`}
+                  >
+                    {isSummaryMode ? "Summary: On" : "Mission Summary"}
+                  </button>
+                )}
+
+                <div aria-hidden="true" className="hidden whitespace-nowrap text-right leading-tight lg:block">
+                  <p className="text-[10px] tracking-[0.14em] text-suit/70 xl:tracking-[0.16em]">
                     SYS.VER{" // "}
                     <span className="text-suit">2.6.0</span>
                   </p>
 
-                  <p className="mt-0.5 text-[11px] tracking-[0.12em] text-suit">
-                    <span className="text-suit/55">MET:</span>{" "}
+                  <p className="mt-0.5 text-[11px] tracking-[0.11em] text-suit xl:tracking-[0.12em]">
+                    <span className="text-suit/70">MET:</span>{" "}
                     <MissionElapsedTime />
                   </p>
                 </div>
 
-                <div className="hidden items-center gap-2 border border-suit/25 bg-suit/[0.05] px-2 py-1 min-[1360px]:flex">
+                <div
+                  aria-hidden="true"
+                  className="hidden items-center gap-2 border border-suit/25 bg-suit/[0.05] px-2 py-1 min-[1460px]:flex"
+                >
                   <SignalBars />
                   <span className="whitespace-nowrap text-[10px] tracking-[0.14em] text-suit">
                     COM-LINK:{" "}
@@ -446,14 +472,24 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
 
               <motion.div
                 variants={flankVariants}
-                className="flex items-center gap-3 md:hidden"
+                className="flex items-center gap-2 md:hidden"
               >
-                <p
-                  aria-hidden="true"
-                  className="hidden text-[10px] tracking-[0.12em] text-suit/80 sm:block"
-                >
-                  MET: <MissionElapsedTime />
-                </p>
+                {onToggleSummary && (
+                  <button
+                    type="button"
+                    aria-pressed={isSummaryMode}
+                    aria-label="Mission Summary"
+                    disabled={!webglSupported && isSummaryMode}
+                    onClick={onToggleSummary}
+                    className={`border px-2 py-1.5 text-[9.5px] font-medium uppercase tracking-[0.14em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caution ${
+                      isSummaryMode
+                        ? "border-signal bg-signal text-sunlight"
+                        : "border-caution/60 bg-void/75 text-caution hover:border-signal hover:bg-signal hover:text-sunlight"
+                    }`}
+                  >
+                    Summary
+                  </button>
+                )}
 
                 <button
                   type="button"
@@ -550,13 +586,13 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                             duration-300
                             ${isActive
                               ? "text-sunlight"
-                              : "text-suit/65 hover:text-sunlight"
+                              : "text-suit/80 hover:text-sunlight"
                             }
                           `}
                         >
                           <span
                             aria-hidden="true"
-                            className={isActive ? "text-caution" : "text-caution/40"}
+                            className={isActive ? "text-caution" : "text-caution/60"}
                           >
                             {isActive ? "▸" : "·"}
                           </span>
@@ -567,9 +603,32 @@ export default function Navbar({ isPoweredOn = true }: NavbarProps) {
                   })}
                 </ul>
 
+                {onToggleSummary && (
+                  <div className="relative border-t border-suit/15 px-5 py-3">
+                    <button
+                      type="button"
+                      aria-pressed={isSummaryMode}
+                      disabled={!webglSupported && isSummaryMode}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onToggleSummary();
+                      }}
+                      className={`w-full border px-3 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors ${
+                        isSummaryMode
+                          ? "border-signal bg-signal text-sunlight"
+                          : "border-caution/60 bg-void/80 text-caution hover:bg-signal hover:text-sunlight"
+                      }`}
+                    >
+                      {isSummaryMode
+                        ? "[ Return to 3D EVA ]"
+                        : "[ Mission Summary // Plain View ]"}
+                    </button>
+                  </div>
+                )}
+
                 <div
                   aria-hidden="true"
-                  className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-suit/15 px-5 py-2 text-[10px] tracking-[0.12em] text-suit/60"
+                  className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-suit/15 px-5 py-2 text-[10px] tracking-[0.12em] text-suit/70"
                 >
                   <span className="whitespace-nowrap">
                     MET: <MissionElapsedTime />

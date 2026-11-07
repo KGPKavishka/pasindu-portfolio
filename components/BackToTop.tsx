@@ -1,12 +1,11 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function BackToTop() {
   const [show, setShow] = useState(false);
-  const reduceMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +32,7 @@ export default function BackToTop() {
 
   return (
     <button
+      type="button"
       onClick={scrollToTop}
       aria-label="Return to orbit"
       className="

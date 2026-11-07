@@ -141,7 +141,9 @@ export default function RadioTranscript({
 
   return (
     <div
+      role="status"
       aria-live="polite"
+      aria-atomic="true"
       className={`pointer-events-none fixed inset-x-0 z-[44] flex ${
         isOrbitIntro
           ? "top-[88px] justify-center px-6 md:top-auto md:bottom-9"
@@ -159,7 +161,7 @@ export default function RadioTranscript({
             className="flex max-w-xl items-baseline gap-2.5 font-radio text-[13px] leading-snug text-suit [text-shadow:0_1px_14px_rgba(0,0,0,0.9)] sm:gap-3 sm:text-base"
           >
             <span
-              className={`font-hud text-[10px] font-medium uppercase tracking-[0.24em] ${activeBeat.speaker === "PK" ? "text-caution" : "text-suit/60"
+              className={`font-hud text-[10px] font-medium uppercase tracking-[0.24em] ${activeBeat.speaker === "PK" ? "text-caution" : "text-suit/80"
                 }`}
             >
               {speakerLabels[activeBeat.speaker]}
