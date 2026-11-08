@@ -11,10 +11,14 @@ import {
 import { useCallback } from "react";
 
 import { useJourney } from "./Journey/JourneyController";
+import { journeyPhases } from "./Journey/journeyConfig";
 import {
   type JourneyPointer,
   useJourneyPointer,
 } from "./Journey/journeyPointer";
+
+/** Journey progress where "Begin EVA" lands: the first radio beat of the spacewalk. */
+const BEGIN_EVA_PROGRESS = 0.065;
 
 const sequenceVariants: Variants = {
   hidden: {},
@@ -54,16 +58,16 @@ function CornerBrackets() {
             absolute
             h-2.5
             w-2.5
-            border-cyan-400
+            border-signal
             transition-all
             duration-300
             ease-out
             group-hover:translate-x-0
             group-hover:translate-y-0
-            group-hover:border-white
+            group-hover:border-sunlight
             group-focus-visible:translate-x-0
             group-focus-visible:translate-y-0
-            group-focus-visible:border-white
+            group-focus-visible:border-sunlight
             ${corner}
           `}
         />
@@ -77,13 +81,13 @@ export default function Hero() {
   const reduceMotion = useReducedMotion();
   const introOpacity = useTransform(
     progress,
-    reduceMotion ? [0, 0.08] : [0, 0.025, 0.075],
+    reduceMotion ? [0, 0.05] : [0, 0.015, 0.045],
     reduceMotion ? [1, 0] : [1, 1, 0]
   );
-  const introY = useTransform(progress, [0, 0.08], [0, reduceMotion ? 0 : -28]);
+  const introY = useTransform(progress, [0, 0.05], [0, reduceMotion ? 0 : -28]);
   const introScale = useTransform(
     progress,
-    [0, 0.08],
+    [0, 0.05],
     [1, reduceMotion ? 1 : 0.96]
   );
   const isReady = currentPhase.id !== "loading";
@@ -104,12 +108,24 @@ export default function Hero() {
 
   useJourneyPointer(reduceMotion ? undefined : followPointer);
 
-  const scrollToProjects = () => {
-    document
-      .getElementById("projects")
-      ?.scrollIntoView({
-        behavior: reduceMotion ? "instant" : "smooth",
-      });
+  // "Begin EVA" pushes off into the spacewalk rather than jumping to the city.
+  // Mirrors JourneyController: progress is linear in scroll between the top of
+  // the page and the first section stop (the city, 15% of a screen early).
+  const beginEva = () => {
+    const city = journeyPhases.find((phase) => phase.id === "city");
+    const projects = document.getElementById("projects");
+
+    if (!city || !projects) return;
+
+    const cityStop =
+      projects.getBoundingClientRect().top +
+      window.scrollY -
+      window.innerHeight * 0.15;
+
+    window.scrollTo({
+      top: cityStop * (BEGIN_EVA_PROGRESS / city.start),
+      behavior: reduceMotion ? "instant" : "smooth",
+    });
   };
 
   const downloadCV = () => {
@@ -120,7 +136,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" aria-label="Orbital gateway" className="relative min-h-[280vh]">
+    <section id="home" aria-label="Orbit, spacewalk and landing" className="relative min-h-[515vh]">
       <div className="sticky top-0 flex h-screen items-end overflow-hidden px-6 pb-16 pt-28 sm:px-10 sm:pb-20 lg:px-16 lg:pb-24">
         <motion.div
           style={{ opacity: introOpacity, y: introY, scale: introScale }}
@@ -143,26 +159,26 @@ export default function Hero() {
                 variants={riseVariants}
                 className="
                   mt-5
-                  font-mono
+                  font-hud
                   text-[11px]
                   uppercase
                   tracking-[0.2em]
-                  text-cyan-400
-                  [text-shadow:0_0_12px_rgba(34,211,238,0.55)]
+                  text-caution
+                  [text-shadow:0_1px_10px_rgba(0,0,0,0.7)]
                   sm:text-xs
                   sm:tracking-[0.32em]
                 "
               >
                 <span className="whitespace-nowrap">
                   Software Engineer{" "}
-                  <span aria-hidden="true" className="text-cyan-400/50">{"//"}</span>
+                  <span aria-hidden="true" className="text-caution/50">{"//"}</span>
                 </span>{" "}
                 <span className="whitespace-nowrap">Digital Astronaut</span>
               </motion.p>
 
               <motion.p
                 variants={riseVariants}
-                className="mt-4 max-w-md font-sans text-sm leading-relaxed text-slate-300/75 [text-shadow:0_1px_10px_rgba(0,0,0,0.6)] sm:text-[15px]"
+                className="mt-4 max-w-md font-radio text-sm leading-relaxed text-suit/75 [text-shadow:0_1px_10px_rgba(0,0,0,0.8)] sm:text-[15px]"
               >
                 Building scalable web, mobile, cloud and AI-powered solutions.
               </motion.p>
@@ -174,35 +190,34 @@ export default function Hero() {
                 <button
                   type="button"
                   tabIndex={isIntroActive ? 0 : -1}
-                  onClick={scrollToProjects}
-                  aria-label="Initiate journey"
+                  onClick={beginEva}
+                  aria-label="Begin EVA"
                   className="
                     group
                     relative
                     border
-                    border-cyan-500
-                    bg-transparent
+                    border-signal
+                    bg-void/30
                     px-6
                     py-3
                     whitespace-nowrap
-                    font-mono
+                    font-hud
                     text-[11px]
                     uppercase
                     tracking-[0.28em]
-                    text-cyan-200
-                    shadow-[0_0_24px_rgba(6,182,212,0.12)]
+                    text-suit
                     transition-colors
                     duration-300
-                    hover:bg-cyan-500/20
-                    hover:text-white
-                    focus-visible:bg-cyan-500/20
-                    focus-visible:text-white
+                    hover:bg-signal/20
+                    hover:text-sunlight
+                    focus-visible:bg-signal/20
+                    focus-visible:text-sunlight
                     focus-visible:outline-none
                     sm:text-xs
                   "
                 >
                   <CornerBrackets />
-                  [ Initiate Journey ]
+                  [ Begin EVA ]
                 </button>
 
                 <button
@@ -213,19 +228,19 @@ export default function Hero() {
                     inline-flex
                     items-center
                     gap-2
-                    font-mono
+                    font-hud
                     text-[11px]
                     uppercase
                     tracking-[0.24em]
-                    text-cyan-200/60
+                    text-suit/60
                     transition-colors
                     duration-300
-                    hover:text-white
-                    focus-visible:text-white
+                    hover:text-sunlight
+                    focus-visible:text-sunlight
                     focus-visible:outline
                     focus-visible:outline-1
                     focus-visible:outline-offset-4
-                    focus-visible:outline-cyan-400
+                    focus-visible:outline-caution
                   "
                 >
                   Download CV <span aria-hidden="true">↓</span>

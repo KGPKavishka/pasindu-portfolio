@@ -1,12 +1,11 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function BackToTop() {
   const [show, setShow] = useState(false);
-  const reduceMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,8 +32,9 @@ export default function BackToTop() {
 
   return (
     <button
+      type="button"
       onClick={scrollToTop}
-      aria-label="Back to top"
+      aria-label="Return to orbit"
       className="
       group
       fixed
@@ -47,48 +47,34 @@ export default function BackToTop() {
       flex
       h-11
       w-11
-      sm:h-14
-      sm:w-14
+      sm:h-12
+      sm:w-12
       items-center
       justify-center
 
-      rounded-full
       border
-      border-cyan-400/40
-      bg-[#07111f]/80
-      backdrop-blur-xl
+      border-suit/30
+      bg-void/85
+      backdrop-blur-md
 
-      text-cyan-300
-      shadow-lg
-      shadow-cyan-500/20
+      text-caution
 
       transition-all
       duration-300
 
-      hover:-translate-y-1
-      hover:scale-110
-      hover:border-cyan-300
-      hover:bg-cyan-500
-      hover:text-[#050816]
-      hover:shadow-xl
-      hover:shadow-cyan-400/40
+      hover:-translate-y-0.5
+      hover:border-signal
+      hover:bg-signal
+      hover:text-sunlight
+
+      focus-visible:outline
+      focus-visible:outline-1
+      focus-visible:outline-offset-2
+      focus-visible:outline-caution
 
       active:scale-95
     "
     >
-      {/* Inner Glow */}
-      <span
-        className="
-        absolute
-        inset-1
-        rounded-full
-        bg-cyan-400/5
-        transition-all
-        duration-300
-        group-hover:bg-cyan-300/20
-      "
-      />
-
       {/* Arrow */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -101,11 +87,11 @@ export default function BackToTop() {
         className="
         relative
         z-10
-        h-5
-        w-5
+        h-4
+        w-4
         transition-transform
         duration-300
-        group-hover:-translate-y-1
+        group-hover:-translate-y-0.5
       "
       >
         <path d="M12 19V5" />

@@ -32,11 +32,11 @@ export default function CreativeHeading({
 
   return (
     <>
-      <h2 className="terminal-title text-2xl sm:text-3xl">
+      <h2 className="font-hud text-2xl font-semibold uppercase tracking-[0.12em] text-sunlight sm:text-3xl">
         {title}
       </h2>
 
-      <p className="terminal-kicker mt-3 h-8 text-cyan-200">
+      <p className="mt-3 h-8 font-hud text-xs uppercase tracking-[0.22em] text-caution">
         {words[reduceMotion ? 0 : index]}
       </p>
     </>

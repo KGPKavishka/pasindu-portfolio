@@ -75,7 +75,7 @@ export default function CreativeStudio({
       <section
         id="creative"
         className="min-h-[115vh]"
-        aria-label="Creative Studio waypoint"
+        aria-label="Off-Shift Quarters waypoint"
       />
     );
   }
@@ -84,6 +84,17 @@ export default function CreativeStudio({
     <Reveal delay={0.5}>
       <section id="creative" className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-suit/20 pb-4">
+            <span className="font-hud text-[11px] uppercase tracking-[0.22em] text-caution">
+              QTR-07 // OFF-SHIFT QUARTERS ARCHIVE
+            </span>
+            <Link
+              href="/#creative"
+              className="inline-flex items-center gap-2 border border-suit/30 px-3.5 py-1.5 font-hud text-[10px] uppercase tracking-[0.2em] text-suit transition-colors hover:border-caution hover:text-sunlight"
+            >
+              ← Return to EVA Log
+            </Link>
+          </div>
 
           {/* Animated Header */}
           <CreativeHeading
@@ -91,23 +102,27 @@ export default function CreativeStudio({
             words={headingWords}
           />
 
-          <p className="terminal-copy max-w-2xl mt-4 mb-8">
+          <p className="mt-4 mb-8 max-w-2xl font-radio text-sm leading-relaxed text-suit/80">
             {description}
           </p>
 
           {/* Filter Buttons */}
-          <div className="mb-8 flex flex-wrap gap-2 border-y border-cyan-300/15 py-3">
+          <div className="mb-8 flex flex-wrap gap-2 border-y border-suit/15 py-3">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() =>
                   setActiveCategory(category)
                 }
-                className={`terminal-control ${activeCategory === category ? "border-cyan-100/70 bg-cyan-200/15 text-cyan-50" : ""}`}
+                className={`border px-3.5 py-1.5 font-hud text-[10px] uppercase tracking-[0.18em] transition-colors ${
+                  activeCategory === category
+                    ? "border-signal bg-signal text-sunlight"
+                    : "border-suit/25 bg-void/70 text-suit/75 hover:border-caution hover:text-sunlight"
+                }`}
               >
                 {category}
 
-                <span className="ml-2 opacity-70">
+                <span className="ml-2 opacity-75">
                   ({getCount(category)})
                 </span>
               </button>
@@ -123,9 +138,7 @@ export default function CreativeStudio({
             <div className="mt-14 flex justify-center">
               <Link
                 href="/creative"
-                className="
-                terminal-control
-              "
+                className="inline-flex items-center gap-2 bg-signal px-5 py-2.5 font-hud text-[11px] font-semibold uppercase tracking-[0.22em] text-sunlight transition-colors hover:bg-[#ff6a26]"
               >
                 View All Creative Works →
               </Link>
