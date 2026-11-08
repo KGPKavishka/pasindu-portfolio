@@ -39,7 +39,7 @@ export default function CityOverview() {
   }, []);
 
   return (
-    <section id="projects" aria-label="Digital City project districts">
+    <section id="projects" aria-label="Outpost project structures">
       <div className="min-h-[110vh]" aria-hidden="true" />
       {projects.map((project) => (
         <div

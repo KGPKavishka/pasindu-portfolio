@@ -43,8 +43,8 @@ export default function CreativeCard({
         break-inside-avoid
         mb-6
         overflow-hidden
-        terminal-panel
-        hover:border-cyan-400
+        border border-suit/20 border-l-2 border-l-caution bg-void/85
+        hover:border-caution
         transition-all
         duration-300
         hover:-translate-y-1
@@ -52,7 +52,7 @@ export default function CreativeCard({
         text-left
         focus-visible:outline-2
         focus-visible:outline-offset-2
-        focus-visible:outline-cyan-300
+        focus-visible:outline-caution
       "
     >
       <div className="relative overflow-hidden">
@@ -69,7 +69,7 @@ export default function CreativeCard({
             ${imageFit}
             transition
             duration-500
-            group-hover:scale-110
+            group-hover:scale-105
           `}
         />
 
@@ -78,7 +78,7 @@ export default function CreativeCard({
           className="
             absolute
             inset-0
-            bg-black/60
+            bg-void/70
             opacity-0
             group-hover:opacity-100
             transition-all
@@ -90,23 +90,20 @@ export default function CreativeCard({
         >
           <span
             className="
-              text-white
-              font-semibold
-              text-lg
-              tracking-wide
+              bg-signal px-3.5 py-2 font-hud text-xs font-semibold uppercase tracking-[0.2em] text-sunlight
             "
           >
-            View Artwork →
+            Inspect Plate →
           </span>
         </div>
       </div>
 
       <div className="p-4">
-        <p className="terminal-kicker">
+        <p className="font-hud text-[10px] uppercase tracking-[0.2em] text-caution">
           {category}
         </p>
 
-        <h3 className="terminal-title mt-1 text-sm">
+        <h3 className="mt-1 font-hud text-sm font-semibold uppercase tracking-[0.08em] text-sunlight">
           {title}
         </h3>
       </div>

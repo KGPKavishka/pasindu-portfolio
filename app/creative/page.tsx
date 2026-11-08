@@ -2,7 +2,7 @@ import CreativeStudio from "@/components/CreativeStudio";
 
 export default function CreativePage() {
     return (
-        <main className="min-h-screen bg-[#050816] text-white">
+        <main className="min-h-screen bg-void text-suit">
             <CreativeStudio
                 showViewAll={false}
                 title="Creative Archive"
