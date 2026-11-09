@@ -7,8 +7,15 @@ import * as THREE from "three";
 
 import { useJourney } from "@/components/Journey/JourneyController";
 import { seededRandom } from "@/components/World/Orbit/orbitLayout";
+import { configureStarMaterial } from "@/components/World/Space/StarField";
 
 const TRACK_SEGMENTS = 48;
+
+type ShaderLike = Parameters<THREE.Material["onBeforeCompile"]>[0];
+
+function applyNightStarShader(shader: ShaderLike) {
+  configureStarMaterial(shader, { maskPlanet: false });
+}
 
 /**
  * Dusk-to-Night sky over the outpost (Acts 13–14, progress 0.90 → 1.0):
@@ -31,15 +38,24 @@ export default function NightSkyPass() {
   const wingMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
   const trackMaterialRef = useRef<THREE.LineBasicMaterial>(null);
 
-  const { coolPositions, warmPositions, trackGeometry } = useMemo(() => {
+  const {
+    coolPositions,
+    coolScales,
+    warmPositions,
+    warmScales,
+    trackGeometry,
+  } = useMemo(() => {
     const cool = new Float32Array(starCount * 3);
+    const coolScaleValues = new Float32Array(starCount);
     const warm = new Float32Array(warmStarCount * 3);
+    const warmScaleValues = new Float32Array(warmStarCount);
 
     for (let i = 0; i < starCount; i += 1) {
       const i3 = i * 3;
       cool[i3] = (seededRandom(i * 3.1 + 11) - 0.5) * 96;
       cool[i3 + 1] = 0.4 + seededRandom(i * 5.7 + 29) * 32;
       cool[i3 + 2] = -302 - seededRandom(i * 7.3 + 53) * 55;
+      coolScaleValues[i] = 0.6 + Math.pow(seededRandom(i * 9.1 + 79), 2.4) * 1.05;
     }
 
     for (let i = 0; i < warmStarCount; i += 1) {
@@ -47,6 +63,7 @@ export default function NightSkyPass() {
       warm[i3] = (seededRandom(i * 4.3 + 101) - 0.5) * 78;
       warm[i3 + 1] = 1.0 + seededRandom(i * 6.1 + 137) * 28;
       warm[i3 + 2] = -306 - seededRandom(i * 8.9 + 173) * 48;
+      warmScaleValues[i] = 0.75 + Math.pow(seededRandom(i * 11.3 + 211), 2.0) * 1.1;
     }
 
     const trackPoints: THREE.Vector3[] = [];
@@ -61,7 +78,9 @@ export default function NightSkyPass() {
 
     return {
       coolPositions: cool,
+      coolScales: coolScaleValues,
       warmPositions: warm,
+      warmScales: warmScaleValues,
       trackGeometry: geometry,
     };
   }, [starCount, warmStarCount]);
@@ -117,16 +136,22 @@ export default function NightSkyPass() {
             attach="attributes-position"
             args={[coolPositions, 3]}
           />
+          <bufferAttribute
+            attach="attributes-aScale"
+            args={[coolScales, 1]}
+          />
         </bufferGeometry>
         <pointsMaterial
           ref={starsMaterialRef}
           color="#e9e6df"
-          size={0.14}
+          size={0.42}
           sizeAttenuation
           transparent
           opacity={0}
+          blending={THREE.AdditiveBlending}
           depthWrite={false}
           fog={false}
+          onBeforeCompile={applyNightStarShader}
         />
       </points>
 
@@ -136,16 +161,22 @@ export default function NightSkyPass() {
             attach="attributes-position"
             args={[warmPositions, 3]}
           />
+          <bufferAttribute
+            attach="attributes-aScale"
+            args={[warmScales, 1]}
+          />
         </bufferGeometry>
         <pointsMaterial
           ref={warmStarsMaterialRef}
           color="#fff4e2"
-          size={0.22}
+          size={0.68}
           sizeAttenuation
           transparent
           opacity={0}
+          blending={THREE.AdditiveBlending}
           depthWrite={false}
           fog={false}
+          onBeforeCompile={applyNightStarShader}
         />
       </points>
 
