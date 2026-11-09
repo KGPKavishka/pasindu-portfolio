@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import BackToTop from "@/components/BackToTop";
 import CityOverview from "@/components/CityOverview";
 import ContactCenter from "@/components/ContactCenter";
 import CreativeStudio from "@/components/CreativeStudio";
@@ -119,7 +118,6 @@ export default function Home() {
             webglSupported={webglSupported}
             onExitSummary={toggleSummaryMode}
           />
-          <BackToTop />
         </main>
       ) : (
         <>
@@ -151,7 +149,6 @@ export default function Home() {
             <FutureLab />
             <ContactCenter />
             <Footer />
-            <BackToTop />
           </main>
         </>
       )}
