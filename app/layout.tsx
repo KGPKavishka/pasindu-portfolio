@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     siteName: "Pasindu Kavishka Portfolio",
     images: [
       {
-        url: "/og/og-image.png?v=2",
+        url: "/og/og-newimage.png",
         width: 1200,
         height: 630,
         alt: "Pasindu Kavishka - Software Engineer",
