@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     siteName: "Pasindu Kavishka Portfolio",
     images: [
       {
-        url: "/og/og-image.png",
+        url: "/og/og-image.png?v=2",
         width: 1200,
         height: 630,
         alt: "Pasindu Kavishka - Software Engineer",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     title: "Pasindu Kavishka | Software Engineer",
     description:
       "Software Engineer specializing in web, mobile, backend, cloud, and AI-powered solutions.",
-    images: ["/og/og-image.png"],
+    images: ["/og/og-image.png?v=2"],
   },
 };
 
